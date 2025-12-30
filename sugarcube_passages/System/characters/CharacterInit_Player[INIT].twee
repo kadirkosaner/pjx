@@ -1,0 +1,131 @@
+/* ==========================================
+   PLAYER - You
+   Player Character Definition
+========================================== */
+
+/* GAME SETTINGS */
+<<set $gameSettings = {
+    trackHunger: false,
+    trackThirst: false,
+    trackBladder: false,
+    trackCalories: false,
+    skillDecay: false,
+    relationshipDecay: false
+}>>
+
+/* CORE STATS */
+<<set $energy = 100>>
+<<set $energyMax = 100>>
+<<set $mood = 100>>
+<<set $hygiene = 100>>
+<<set $health = 100>>
+<<set $money = 500>>
+<<set $arousal = 0>>
+
+/* BASIC NEEDS (Optional) */
+<<set $hunger = 0>>
+<<set $thirst = 0>>
+<<set $bladder = 0>>
+
+/* MENTAL STATS */
+<<set $intelligence = 50>>
+<<set $focus = 50>>
+<<set $creativity = 50>>
+<<set $willpower = 50>>
+
+/* SOCIAL STATS */
+<<set $charisma = 50>>
+<<set $confidence = 50>>
+<<set $reputation = 50>>
+
+/* LOOKS COMPONENTS */
+<<set $beauty = 50>>
+<<set $clothingScore = 50>>
+<<set $looks = 50>>
+
+/* FITNESS */
+<<set $upperBody = 0>>
+<<set $core = 0>>
+<<set $lowerBody = 0>>
+<<set $cardio = 0>>
+<<set $fitness = 0>>
+
+/* BODY MEASUREMENTS */
+<<set $body = {
+    height: 170,
+    weight: 65,
+    bust: 90,
+    waist: 70,
+    hips: 95,
+    muscleMass: 40,
+    bodyFat: 22,
+    appeal: 50
+}>>
+
+/* SKILLS */
+<<set $skills = {
+    social: 0,
+    tech: 0,
+    athletic: 0,
+    creativity: 0,
+    cooking: 0,
+    leadership: 0
+}>>
+
+/* CHARACTER DATA */
+<<set $characters.player = {
+    name: "Joe",
+    lastname: "Doe",
+    birthYear: 2007,
+    occupation: "Student",
+    location: "Home",
+    avatar: "assets/content/people/player/player.jpg",
+    type: "player",
+    color: "#8b5cf6",
+    stats: {
+        love: 0,
+        friendship: 0,
+        lust: 0,
+        trust: 0
+    },
+    status: "Player",
+    firstMet: "Birth",
+    info: "<p>This is you.</p>",
+    known: true,
+    traits: [
+        {
+            name: "Street Smart",
+            icon: "icon-city",
+            description: "Growing up in tough neighborhoods taught you how to read people quickly.",
+            effects: {socialGainMultiplier: 1.2}
+        },
+        {
+            name: "Wealthy Background",
+            icon: "icon-gem",
+            description: "You come from a privileged family with connections and resources.",
+            effects: {moneyGainMultiplier: 1.5, charismaGainMultiplier: 1.15}
+        },
+        {
+            name: "Athletic",
+            icon: "icon-run",
+            description: "Years of sports and training have kept you in peak condition.",
+            effects: {fitnessGainMultiplier: 1.3}
+        },
+        {
+            name: "Bookworm",
+            icon: "icon-book",
+            description: "You prefer books over people, gaining knowledge others miss.",
+            effects: {intelligenceGainMultiplier: 1.4, socialGainMultiplier: 0.9}
+        },
+        {
+            name: "Natural Charmer",
+            icon: "icon-heart",
+            description: "People are naturally drawn to your personality.",
+            effects: {charismaGainMultiplier: 1.3, relationshipGainMultiplier: 1.2}
+        }
+    ]
+}>>
+
+/* DAILY TRACKING */
+<<set $dailyCalorieIntake = 0>>
+<<set $dailyExercise = 0>>

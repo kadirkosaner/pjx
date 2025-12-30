@@ -1,3 +1,4 @@
+:: variablesTime [init]
 <<set $timeSys to {
     year: 2025,
     month: 1,

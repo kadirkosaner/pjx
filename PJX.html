@@ -1407,7 +1407,8 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
 
 /* CHARACTER DATA */
 &lt;&lt;set $characters.player = {
-    name: &quot;You&quot;,
+    name: &quot;Joe&quot;,
+    lastname:&quot;Doe&quot;,
     birthYear: 2007,
     occupation: &quot;Student&quot;,
     location: &quot;Home&quot;,
@@ -1423,7 +1424,34 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
     status: &quot;Player&quot;,
     firstMet: &quot;Birth&quot;,
     info: &quot;&lt;p&gt;This is you.&lt;/p&gt;&quot;,
-    known: true
+    known: true,
+    traits: [
+  {
+        name: &quot;Street Smart&quot;,
+        description: &quot;Growing up in tough neighborhoods taught you how to read people quickly.&quot;,
+        effects: {social: 10, awareness: 5}
+    },
+    {
+        name: &quot;Wealthy Background&quot;,
+        description: &quot;You come from a privileged family with connections and resources.&quot;,
+        effects: {money: 500, charisma: 15}
+    },
+    {
+        name: &quot;Athletic&quot;,
+        description: &quot;Years of sports and training have kept you in peak condition.&quot;,
+        effects: {energyMax: 20, health: 10}
+    },
+    {
+        name: &quot;Bookworm&quot;,
+        description: &quot;You prefer books over people, gaining knowledge others miss.&quot;,
+        effects: {intelligence: 15, social: -5}
+    },
+    {
+        name: &quot;Natural Charmer&quot;,
+        description: &quot;People are naturally drawn to your personality.&quot;,
+        effects: {charisma: 20, persuasion: 10}
+    }
+    ]
 }&gt;&gt;
 </tw-passagedata><tw-passagedata pid="35" name="CharacterInteraction" tags="" position="425,0" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* Safety check - ensure we have a valid character */

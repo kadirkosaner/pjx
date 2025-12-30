@@ -20,15 +20,15 @@ setup.locations = {
     },
     "fhUpperBath": {
         name: "Bathroom",
-        image: "assets/content/locations/bath.jpg"
+        image: "assets/content/locations/bedroom.jpg"
     },
     "fhUpperHall": {
         name: "Upper Hall",
-        image: "assets/content/locations/hallway.jpg"
+        image: "assets/content/locations/williams_house.jpg"
     },
     "fhDownstairs": {
         name: "Downstairs",
-        image: "assets/content/locations/stairs.jpg"
+        image: "assets/content/locations/williams_house.jpg"
     },
 
     // === CITY ===

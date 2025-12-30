@@ -5,63 +5,46 @@ window.RightbarInit = function (API) {
     RightbarAPI = API;
 };
 
-// Helper function to render stats
-function renderStats(stats) {
-    if (!stats || stats.length === 0) return '';
-
-    return stats.map(stat => `
-        <div class="stat-float">
-            <div class="stat-label">${stat.label}</div>
-            <div class="stat-value">${stat.value}</div>
-        </div>
-    `).join('');
-}
-
 // Rebuild on every passage render
 $(document).on(':passagerender', function () {
     if (!RightbarAPI) return;
-
-    console.log('[Rightbar] :passagerender event fired');
-    console.log('[Rightbar] State.passage:', RightbarAPI.State.passage);
 
     const vars = RightbarAPI.State.variables;
 
     // Check if current passage is Start (startscreen) - skip rightbar creation
     if (RightbarAPI.State.passage === 'Start') {
-        console.log('[Rightbar] Skipping - Start passage (startscreen)');
         $('.right-bar, .map-overlay').remove();
         return;
     }
 
     // Check State variable for UI control (flexible per-passage control)
     if (vars.hideRightbar === true) {
-        console.log('[Rightbar] Skipping - hideRightbar === true');
         $('.right-bar, .map-overlay').remove();
-        return; // Skip rightbar creation
+        return;
     }
-
-    console.log('[Rightbar] Creating rightbar...');
 
     // Remove only rightbar/map-overlay, NOT modal-overlay
     $('.right-bar, .map-overlay').remove();
 
-    // Get variables
-    // const vars = RightbarAPI.State.variables; // This line is now redundant as vars is defined above
-
-    const gameName = vars.gameName;
-    const gameVersion = vars.gameVersion;
+    const gameName = vars.gameName || "PJX Game";
+    const gameVersion = vars.gameVersion || "0.0.1";
     const imageProfile = vars.imageProfile;
     const imageMap = vars.imageMap;
     const notificationPhoneCount = vars.notificationPhoneCount || 0;
 
-    // Stats configuration
-    const stats = vars.gameStats || [
-        { label: 'Money', value: vars.money },
-        { label: 'Energy', value: vars.energy },
-        { label: 'Health', value: vars.health },
-        { label: 'Mood', value: vars.mood },
-        { label: 'Arousal', value: vars.arousal }
-    ];
+    // Stats configuration and HTML generation (inline)
+    const statsHTML = (vars.gameStats || [
+        { label: 'Money', value: vars.money || 0 },
+        { label: 'Energy', value: vars.energy || 0 },
+        { label: 'Health', value: vars.health || 0 },
+        { label: 'Mood', value: vars.mood || 0 },
+        { label: 'Arousal', value: vars.arousal || 0 }
+    ]).map(stat => `
+        <div class="stat-float">
+            <div class="stat-label">${stat.label}</div>
+            <div class="stat-value">${stat.value}</div>
+        </div>
+    `).join('');
 
     // Phone preview content
     const phonePreviewContent = notificationPhoneCount > 0 ? `
@@ -98,7 +81,7 @@ $(document).on(':passagerender', function () {
                 <img src="${imageProfile}" class="profile-image" style="${hideProfile || !imageProfile ? 'visibility: hidden;' : ''}">
                 
                 <div class="stats-section" style="${hideStats ? 'visibility: hidden;' : ''}">
-                    ${renderStats(stats)}
+                    ${statsHTML}
                 </div>
             </div>
             

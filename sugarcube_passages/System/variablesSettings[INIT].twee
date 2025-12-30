@@ -1,10 +1,16 @@
-// Initialize video settings in State.variables
+:: variablesSettings [init]
+/* ==========================================
+   VIDEO SETTINGS
+   Initialize video settings in State.variables
+========================================== */
+<<script>>
 State.variables.videoSettings = State.variables.videoSettings || {
     autoplaySet: true,
     loopSet: true,
     masterVolume: 100,
     videoVolume: 100
 };
+<</script>>
 
 /* ==========================================
    CONTENT PREFERENCES

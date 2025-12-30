@@ -1,3 +1,4 @@
+:: variablesImage [init]
 <<set $imageProfile = "assets/content/ProfilePlaceholder.png">>
 <<set $imageMap = "assets/content/map.png">>
 
