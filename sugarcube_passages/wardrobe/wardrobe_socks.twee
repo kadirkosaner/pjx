@@ -1,0 +1,42 @@
+:: [Wardrobe] Socks [init]
+<<nobr>>
+/* Socks - Regular socks, stockings, etc.
+ * 
+ * Template:
+ * { id, name, brand, desc, image, looks, quality, tags, price, shopAvailable, startOwned }
+ * 
+ * Tags: casual, formal, revealing, cute
+ * Quality: Common, Rare, Premium
+ * FUTURE: size, durability, effects, unlockCondition
+ */
+
+<<set setup.clothingData = setup.clothingData || {}>>
+<<set setup.clothingData.socks = [
+    {
+        id: "socks_white",
+        name: "White Socks",
+        brand: "Basic",
+        desc: "Simple white cotton socks.",
+        image: "assets/content/clothing/socks/socks1.jpg",
+        looks: 1,
+        quality: "Common",
+        tags: ["casual"],
+        price: 10,
+        shopAvailable: true,
+        startOwned: true
+    },
+    {
+        id: "socks_black",
+        name: "Black Socks",
+        brand: "Basic",
+        desc: "Classic black socks for formal wear.",
+        image: "assets/content/clothing/socks/socks2.jpg",
+        looks: 1,
+        quality: "Common",
+        tags: ["formal"],
+        price: 10,
+        shopAvailable: true,
+        startOwned: false
+    }
+]>>
+<</nobr>>

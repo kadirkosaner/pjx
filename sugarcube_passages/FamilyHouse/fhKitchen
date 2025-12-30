@@ -1,0 +1,19 @@
+/* ==================================================
+   FAMILY HOUSE - KITCHEN
+   Location passage only
+================================================== */
+
+<<set $location = "Kitchen">>
+<<set $previousPassage = "fhKitchen">>
+<<updateCharacterLocations>>
+
+<<narrative "Kitchen">>
+The kitchen is warm and inviting, filled with the aroma of home cooking. Sunlight streams through the window.
+<</narrative>>
+
+<<showLocationChars "kitchen">>
+
+<div class="location-actions">
+<<btn "Living Room" "fhLivingroom">>
+<<btn "Downstairs" "fhDownstairs">>
+</div>

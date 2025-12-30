@@ -1,0 +1,42 @@
+:: [Wardrobe] Tops [init]
+<<nobr>>
+/* Tops - Crop tops, t-shirts, blouses, etc.
+ * 
+ * Template:
+ * { id, name, brand, desc, image, looks, quality, tags, price, shopAvailable, startOwned }
+ * 
+ * Tags: casual, formal, revealing, sexy, sporty, elegant
+ * Quality: Common, Rare, Premium
+ * FUTURE: size, durability, effects, unlockCondition
+ */
+
+<<set setup.clothingData = setup.clothingData || {}>>
+<<set setup.clothingData.tops = [
+    {
+        id: "crop_black",
+        name: "Black Crop Top",
+        brand: "Urban Style",
+        desc: "A classic black crop top perfect for casual outings and everyday wear.",
+        image: "assets/content/clothing/tops/crop_black.jpg",
+        looks: 5,
+        quality: "Common",
+        tags: ["casual"],
+        price: 45,
+        shopAvailable: true,
+        startOwned: true
+    },
+    {
+        id: "crop_shoulder",
+        name: "Shoulder Crop",
+        brand: "Chic Avenue",
+        desc: "Off-shoulder design that adds elegance to your casual look.",
+        image: "assets/content/clothing/tops/crop_sholder.jpg",
+        looks: 8,
+        quality: "Rare",
+        tags: ["casual", "revealing"],
+        price: 85,
+        shopAvailable: true,
+        startOwned: false
+    }
+]>>
+<</nobr>>

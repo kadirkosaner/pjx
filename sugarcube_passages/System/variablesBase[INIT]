@@ -1,0 +1,69 @@
+/* ==========================================
+   BASE GAME VARIABLES
+========================================== */
+
+// Game Information
+<<set $gameName = "Deneme">>
+<<set $gameVersion = "Beta">>
+
+/* ==========================================
+   PLAYER STATISTICS
+========================================== */
+
+<<set $money = 100>>
+<<set $energy = 100>>
+<<set $health = 100>>
+<<set $mood = 100>>
+<<set $arousal = 100>>
+
+/* ==========================================
+   UI VISIBILITY SETTINGS
+========================================== */
+
+// Topbar
+<<set $hideTopbar to false>>
+<<set $hideTopbarHamburger to false>>
+<<set $hideTopbarNavLeft to false>>
+<<set $hideTopbarNavRight to false>>
+<<set $hideTopbarTimebox to false>>
+<<set $hideTopbarNotifications to false>>
+
+// Rightbar
+<<set $hideRightbar to false>>
+<<set $hideRightbarGameInfo to false>>
+<<set $hideRightbarProfile to false>>
+<<set $hideRightbarStats to false>>
+<<set $hideRightbarPhone to false>>
+<<set $hideRightbarMap to false>>
+
+/* ==========================================
+   TOPBAR NOTIFICATIONS
+========================================== */
+
+<<set $notificationEnergy = 1>>
+<<set $notificationHealth = 1>>
+<<set $notificationMood = 1>>
+<<set $notificationArousal = 1>>
+<<set $notificationCum = 1>>
+<<set $notificationHeart = 1>>
+<<set $notificationBed = 1>>
+<<set $notificationAlarm = 1>>
+<<set $notificationSchool = 1>>
+<<set $notificationWork = 1>>
+<<set $notificationClothes = 3>>
+
+/* ==========================================
+   PHONE NOTIFICATIONS
+========================================== */
+
+<<set $notificationPush = 0>>
+<<set $notificationPhoneCount = 0>>
+<<set $notificationPhoneMessages = 1>>
+<<set $notificationPhoneFotogram = 2>>
+<<set $notificationPhoneFinder = 3>>
+
+/* ==========================================
+   TAXI SYSTEM
+========================================== */
+
+<<set $taxiBaseFare = 10>>

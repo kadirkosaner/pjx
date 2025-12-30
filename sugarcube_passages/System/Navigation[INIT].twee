@@ -1,0 +1,58 @@
+:: Navigation [INIT]
+<<script>>
+setup.locations = {
+    // === HOME ===
+    "fhBedroom": {
+        name: "My Bedroom",
+        image: "assets/content/locations/bedroom.jpg"
+    },
+    "fhBrotherRoom": {
+        name: "Brother's Room",
+        image: "assets/content/locations/brother_room.jpg"
+    },
+    "fhKitchen": {
+        name: "Kitchen",
+        image: "assets/content/locations/kitchen.jpg"
+    },
+    "fhLivingRoom": {
+        name: "Living Room",
+        image: "assets/content/locations/williams_house.jpg"
+    },
+    "fhUpperBath": {
+        name: "Bathroom",
+        image: "assets/content/locations/bath.jpg"
+    },
+    "fhUpperHall": {
+        name: "Upper Hall",
+        image: "assets/content/locations/hallway.jpg"
+    },
+    "fhDownstairs": {
+        name: "Downstairs",
+        image: "assets/content/locations/stairs.jpg"
+    },
+
+    // === CITY ===
+    "cityDowntown": {
+        name: "Downtown",
+        image: "assets/content/locations/downtown.jpg"
+    },
+    "cityPark": {
+        name: "Central Park",
+        image: "assets/content/locations/park.jpg"
+    },
+    "cityCafe": {
+        name: "City Cafe",
+        image: "assets/content/locations/cafe.jpg"
+    },
+    "cityMall": {
+        name: "Shopping Mall",
+        image: "assets/content/locations/mall.jpg"
+    },
+
+    // === SCHOOL ===
+    "schoolMain": {
+        name: "School Entrance",
+        image: "assets/content/locations/school.jpg"
+    }
+};
+<</script>>

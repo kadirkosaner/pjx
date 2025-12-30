@@ -1,0 +1,70 @@
+/* ==========================================
+   BROTHER - Jake Williams
+   Complete Character Definition
+========================================== */
+
+/* CHARACTER DATA */
+<<set $characters.brother = {
+    name: "Jake Williams",
+    birthYear: 2004,
+    occupation: "College Student",
+    location: "Home, His Bedroom",
+    avatar: "assets/content/people/family/brother.jpg",
+    type: "npc",
+    color: "#10b981",
+    stats: {
+        love: 15,
+        friendship: 45,
+        lust: 0,
+        trust: 55
+    },
+    status: "Brother",
+    firstMet: "Childhood",
+    info: "<p>Your older brother who studies computer science at the university. He's usually gaming or studying in his room.</p>",
+    known: true,
+    currentLocation: null,
+    currentStatus: null
+}>>
+
+/* SCHEDULE - Where is he at different times */
+<<set $characterSchedules.brother = {
+    weekday: [
+        { hour: 0, location: "hisBedroom", status: "sleeping" },
+        { hour: 8, location: "university", status: "busy" },
+        { hour: 15, location: "hisBedroom", status: "available" },
+        { hour: 18, location: "livingRoom", status: "available" },
+        { hour: 20, location: "hisBedroom", status: "available" },
+        { hour: 23, location: "hisBedroom", status: "sleeping" }
+    ],
+    weekend: [
+        { hour: 0, location: "hisBedroom", status: "sleeping" },
+        { hour: 10, location: "hisBedroom", status: "available" },
+        { hour: 14, location: "livingRoom", status: "available" },
+        { hour: 17, location: "hisBedroom", status: "available" },
+        { hour: 23, location: "hisBedroom", status: "sleeping" }
+    ]
+}>>
+
+/* ACTIONS - What can you do with him at each location */
+<<set $characterActions.brother = {
+    hisBedroom: [
+        {
+            id: "talk", label: "Talk", passage: "Talk_Brother_Bedroom",
+            tags: [], requirements: {}
+        },
+        {
+            id: "playGames", label: "Play Video Games", passage: "PlayGames_Brother",
+            tags: [], requirements: { friendship: 20 }
+        }
+    ],
+    livingRoom: [
+        {
+            id: "talk", label: "Talk", passage: "Talk_Brother_LivingRoom",
+            tags: [], requirements: {}
+        },
+        {
+            id: "watchTV", label: "Watch TV Together", passage: "WatchTV_Brother",
+            tags: [], requirements: { friendship: 25 }
+        }
+    ]
+}>>

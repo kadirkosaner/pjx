@@ -1,0 +1,49 @@
+:: motherKissPBedroom [incest romantic]
+/* Mother - Bedroom Kiss */
+
+<<set $location = "Parents Room">>
+<<advanceTime 10>>
+
+<<narrative>>
+The bedroom is quiet, peaceful. Your mother is in her nightgown, getting ready for bed. She turns as you enter, a soft smile on her lips.
+<</narrative>>
+
+<<dialog "mother">>
+"Coming to say goodnight?"
+<</dialog>>
+
+<<dialog "player">>
+"Something like that..."
+<</dialog>>
+
+<<narrative>>
+You step closer to her. The air between you feels charged, electric. She doesn't move away.
+<</narrative>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.love < 80>>
+//Her breath catches slightly as you lean in.//
+
+"Sweetie... what are you..."
+
+//But she doesn't pull away as you press a gentle kiss to her cheek, lingering just a moment too long.//
+<<else>>
+//Her eyes flutter closed as you cup her face gently.//
+
+"We shouldn't..."
+
+//But even as she says it, she tilts her head up, and your lips meet in a soft, tender kiss.//
+<</if>>
+<</dialog>>
+
+<<set $characters.mother.stats.love += 8>>
+<<set $characters.mother.stats.lust += 5>>
+<<if $characters.mother.stats.love > 100>><<set $characters.mother.stats.love = 100>><</if>>
+<<if $characters.mother.stats.lust > 100>><<set $characters.mother.stats.lust = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-heart icon-14"></span> Love +8
+    <span class="icon icon-arousal icon-14"></span> Lust +5
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

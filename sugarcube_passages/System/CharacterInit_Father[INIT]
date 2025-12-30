@@ -1,0 +1,81 @@
+/* ==========================================
+   FATHER - Robert Williams
+   Complete Character Definition
+========================================== */
+
+/* CHARACTER DATA */
+<<set $characters.father = {
+    name: "Robert Williams",
+    birthYear: 1979,
+    occupation: "Engineer",
+    location: "Home, Study Room",
+    avatar: "assets/content/people/family/father.jpg",
+    type: "npc",
+    color: "#3b82f6",
+    stats: {
+        love: 30,
+        friendship: 50,
+        lust: 0,
+        trust: 65
+    },
+    status: "Father",
+    firstMet: "Birth",
+    info: "<p>Your father is a mechanical engineer who works long hours. He enjoys working on cars in the garage and watching sports.</p>",
+    known: true,
+    currentLocation: null,
+    currentStatus: null
+}>>
+
+/* SCHEDULE - Where is he at different times */
+<<set $characterSchedules.father = {
+    weekday: [
+        { hour: 0, location: "bedroom", status: "sleeping" },
+        { hour: 6, location: "kitchen", status: "available" },
+        { hour: 7, location: "work", status: "busy" },
+        { hour: 18, location: "livingRoom", status: "available" },
+        { hour: 20, location: "garage", status: "available" },
+        { hour: 22, location: "bedroom", status: "sleeping" }
+    ],
+    weekend: [
+        { hour: 0, location: "bedroom", status: "sleeping" },
+        { hour: 9, location: "kitchen", status: "available" },
+        { hour: 11, location: "garage", status: "available" },
+        { hour: 14, location: "livingRoom", status: "available" },
+        { hour: 18, location: "livingRoom", status: "available" },
+        { hour: 22, location: "bedroom", status: "sleeping" }
+    ]
+}>>
+
+/* ACTIONS - What can you do with him at each location */
+<<set $characterActions.father = {
+    kitchen: [
+        {
+            id: "talk", label: "Talk", passage: "Talk_Father_Kitchen",
+            tags: [], requirements: {}
+        },
+        {
+            id: "askAdvice", label: "Ask for Advice", passage: "AskAdvice_Father",
+            tags: [], requirements: { trust: 30 }
+        }
+    ],
+    livingRoom: [
+        {
+            id: "talk", label: "Talk", passage: "Talk_Father_LivingRoom",
+            tags: [], requirements: {}
+        },
+        {
+            id: "watchTV", label: "Watch TV Together", passage: "WatchTV_Father",
+            tags: [], requirements: { friendship: 25 }
+        }
+    ],
+    garage: [
+        {
+            id: "talk", label: "Talk", passage: "Talk_Father_Garage",
+            tags: [], requirements: {}
+        },
+        {
+            id: "helpWork", label: "Help with Project", passage: "HelpWork_Father",
+            tags: [], requirements: { friendship: 30 }
+        }
+    ]
+}>>

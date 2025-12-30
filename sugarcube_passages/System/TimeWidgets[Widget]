@@ -1,0 +1,145 @@
+<<nobr>>
+<<widget "getPeriod">>
+    <<set _hour = $timeSys.hour>>
+    <<if _hour >= 6 and _hour < 12>>
+        <<set _period = "morning">>
+    <<elseif _hour >= 12 and _hour < 18>>
+        <<set _period = "afternoon">>
+    <<elseif _hour >= 18 and _hour < 22>>
+        <<set _period = "evening">>
+    <<else>>
+        <<set _period = "night">>
+    <</if>>
+    <<set _return = _period>>
+<</widget>>
+
+<<widget "formatTime">>
+    <<set _h = $timeSys.hour.toString().padStart(2, '0')>>
+    <<set _m = $timeSys.minute.toString().padStart(2, '0')>>
+    <<set _return = _h + ":" + _m>>
+<</widget>>
+
+<<widget "formatDate">>
+    <<set _monthName = $timeConfig.monthNames[$timeSys.month - 1]>>
+    <<set _return = $timeSys.day + " " + _monthName + " " + $timeSys.year>>
+<</widget>>
+
+<<widget "getWeekdayName">>
+    <<set _return = $timeConfig.weekdayNames[$timeSys.weekday]>>
+<</widget>>
+
+<<widget "advanceTime">>
+    <<set _minutes = $args[0] || 30>>
+    <<set $timeSys.minute += _minutes>>
+    
+    <<if $timeSys.minute >= 60>>
+        <<set _hours = Math.floor($timeSys.minute / 60)>>
+        <<set $timeSys.minute = $timeSys.minute % 60>>
+        <<set $timeSys.hour += _hours>>
+    <</if>>
+    
+    <<if $timeSys.hour >= 24>>
+        <<set _days = Math.floor($timeSys.hour / 24)>>
+        <<set $timeSys.hour = $timeSys.hour % 24>>
+        <<advanceDay _days>>
+    <</if>>
+    
+    /* Update character locations based on new time */
+    <<updateCharacterLocations>>
+<</widget>>
+
+<<widget "advanceDay">>
+    <<set _days = $args[0] || 1>>
+    <<set $timeSys.day += _days>>
+    <<set $timeSys.weekday = ($timeSys.weekday + _days) % 7>>
+    
+    <<set _maxDays = $timeConfig.monthDays[$timeSys.month - 1]>>
+    
+    <<if $timeSys.month == 2>>
+        <<if ($timeSys.year % 4 == 0 and $timeSys.year % 100 != 0) or ($timeSys.year % 400 == 0)>>
+            <<set _maxDays = 29>>
+        <</if>>
+    <</if>>
+    
+    <<if $timeSys.day > _maxDays>>
+        <<set $timeSys.day = $timeSys.day - _maxDays>>
+        <<set $timeSys.month += 1>>
+        
+        <<if $timeSys.month > 12>>
+            <<set $timeSys.month = 1>>
+            <<set $timeSys.year += 1>>
+            <<set $timeSysYear = $timeSys.year>>
+        <</if>>
+    <</if>>
+<</widget>>
+
+<<widget "setTime">>
+    <<set _hour = $args[0]>>
+    <<set _minute = $args[1] || 0>>
+    
+    <<if _hour < $timeSys.hour or (_hour == $timeSys.hour and _minute < $timeSys.minute)>>
+        <<advanceDay 1>>
+    <</if>>
+    
+    <<set $timeSys.hour = _hour>>
+    <<set $timeSys.minute = _minute>>
+<</widget>>
+
+<<widget "nextPeriod">>
+    <<getPeriod>>
+    <<switch _period>>
+        <<case "morning">>
+            <<setTime 12 0>>
+        <<case "afternoon">>
+            <<setTime 18 0>>
+        <<case "evening">>
+            <<setTime 22 0>>
+        <<case "night">>
+            <<setTime 6 0>>
+    <</switch>>
+<</widget>>
+
+<<widget "showTime">>
+    <<getPeriod>>
+    <<formatTime>>
+    <<formatDate>>
+    <<getWeekdayName>>
+    <<print _return3>> - <<print _return2>>, <<print _return>>
+<</widget>>
+
+/* ==========================================
+   UPDATE CHARACTER LOCATIONS
+   Updates all character locations based on 
+   current time and their schedules
+========================================== */
+<<widget "updateCharacterLocations">>
+    <<set _isWeekend = ($timeSys.weekday === 0 || $timeSys.weekday === 6)>>
+    <<set _scheduleType = _isWeekend ? "weekend" : "weekday">>
+    <<set _currentHour = $timeSys.hour>>
+    
+    <<for _charId, _charData range $characterSchedules>>
+        <<set _schedule = _charData[_scheduleType]>>
+        <<if _schedule>>
+            /* Find the most recent time slot (look backwards) */
+            <<set _currentSlot = null>>
+            <<for _slot range _schedule>>
+                <<if _slot.hour <= _currentHour>>
+                    <<set _currentSlot = _slot>>
+                <</if>>
+            <</for>>
+            
+            /* If no slot found (before first entry), use last slot from previous day */
+            <<if _currentSlot === null>>
+                <<set _currentSlot = _schedule[_schedule.length - 1]>>
+            <</if>>
+            
+            /* Update character location and status */
+            <<if $characters[_charId]>>
+                <<set $characters[_charId].currentLocation = _currentSlot.location>>
+                <<set $characters[_charId].currentStatus = _currentSlot.status>>
+            <</if>>
+        <</if>>
+    <</for>>
+<</widget>>
+
+<</nobr>>

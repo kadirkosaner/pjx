@@ -1,0 +1,41 @@
+:: motherJogPark
+/* Mother - Jog Together */
+
+<<set $location = "Park">>
+<<advanceTime 45>>
+
+<<dialog "player">>
+"Mind if I jog with you?"
+<</dialog>>
+
+<<dialog "mother">>
+"Really? I'd love the company!"
+<</dialog>>
+
+<<narrative>>
+You match her pace around the park. At first it's easy, but after twenty minutes you're starting to feel the burn. Your mother, however, seems to be in her element.
+<</narrative>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.friendship < 60>>
+"Not bad! You should exercise more though."
+
+//She teases with a grin.//
+<<else>>
+"You're getting faster! I might actually have to try soon."
+
+//She laughs, genuinely impressed.//
+<</if>>
+<</dialog>>
+
+<<set $characters.mother.stats.friendship += 4>>
+<<set $characters.mother.stats.trust += 1>>
+<<if $characters.mother.stats.friendship > 100>><<set $characters.mother.stats.friendship = 100>><</if>>
+<<if $characters.mother.stats.trust > 100>><<set $characters.mother.stats.trust = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-handshake icon-14"></span> Friendship +4
+    <span class="icon icon-shield icon-14"></span> Trust +1
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

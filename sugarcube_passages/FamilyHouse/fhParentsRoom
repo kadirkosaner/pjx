@@ -1,0 +1,19 @@
+/* ==================================================
+   FAMILY HOUSE - PARENTS ROOM
+   Location passage only
+================================================== */
+
+<<set $location = "Parents Room">>
+<<set $previousPassage = "fhParentsRoom">>
+<<updateCharacterLocations>>
+
+<<narrative "Parents Room">>
+The master bedroom is elegant and well-kept. A large bed dominates the room, and soft curtains filter the light.
+<</narrative>>
+
+<<showLocationChars "bedroom">>
+
+<div class="location-actions">
+<<btn "Parents Bathroom" "fhParentsBath">>
+<<btn "Upstairs" "fhUpperstairs">>
+</div>

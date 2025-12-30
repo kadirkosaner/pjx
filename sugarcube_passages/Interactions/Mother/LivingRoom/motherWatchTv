@@ -1,0 +1,39 @@
+:: motherWatchTv
+/* Mother - Watch TV Together */
+
+<<set $location = "Living Room">>
+<<advanceTime 45>>
+
+<<dialog "player">>
+"What are you watching?"
+<</dialog>>
+
+<<dialog "mother">>
+"Oh, just some cooking show. Want to join me?"
+<</dialog>>
+
+<<narrative>>
+You settle onto the couch beside her. For the next hour, you watch together, occasionally commenting on the recipes and laughing at the host's jokes. It's comfortable, peaceful.
+<</narrative>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.friendship < 60>>
+"This was nice. We should do this more often."
+<<else>>
+//She leans against you slightly as the show ends.//
+
+"I love spending time with you like this."
+<</if>>
+<</dialog>>
+
+<<set $characters.mother.stats.friendship += 4>>
+<<set $characters.mother.stats.trust += 2>>
+<<if $characters.mother.stats.friendship > 100>><<set $characters.mother.stats.friendship = 100>><</if>>
+<<if $characters.mother.stats.trust > 100>><<set $characters.mother.stats.trust = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-handshake icon-14"></span> Friendship +4
+    <span class="icon icon-shield icon-14"></span> Trust +2
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

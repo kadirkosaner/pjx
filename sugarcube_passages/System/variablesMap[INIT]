@@ -1,0 +1,62 @@
+/* ==========================================
+   MAP REGIONS
+========================================== */
+
+<<set $mapRegions = [
+  {
+    id: "downtown",
+    name: "Downtown",
+    image: "assets/content/locations/downtown.jpg",
+    desc: "City center - Shops and entertainment",
+    passage: "DowntownStreet",
+    x: 50,
+    y: 30
+  },
+  {
+    id: "residential",
+    name: "Residential District",
+    image: "assets/content/locations/residential.jpg",
+    desc: "Quiet neighborhood - Homes and parks",
+    passage: "ResidentialArea",
+    x: 20,
+    y: 60
+  }
+] >>
+
+/* ==========================================
+   MAP LOCATIONS
+========================================== */
+
+<<set $mapLocations = {
+  williams_house: {
+    name: "Williams Residence",
+    image: "assets/content/locations/williams_house.jpg",
+    type: "residence",
+    region: "residential",
+    x: 25,
+    y: 35,
+    residents: ["mother", "father", "brother"],
+    taxiCost: 0,
+    passage: "Home"
+  },
+  downtown_cafe: {
+    name: "Downtown Café",
+    image: "assets/content/locations/cafe.jpg",
+    type: "store",
+    region: "downtown",
+    x: 55,
+    y: 25,
+    stores: [
+      { name: "Coffee Bar", desc: "Artisan coffee", open: true }
+    ],
+    taxiCost: 8,
+    passage: "Cafe"
+  }
+} >>
+
+/* ==========================================
+   LOCATION DISCOVERY FLAGS
+========================================== */
+
+<<set $discoveredWilliamsHouse = 1 >>
+<<set $discoveredDowntownCafe = 1 >>

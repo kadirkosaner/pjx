@@ -1,0 +1,33 @@
+:: motherHelpCook
+/* Mother - Help Cook */
+
+<<set $location = "Kitchen">>
+<<advanceTime 30>>
+
+<<dialog "player">>
+"Need any help with that, Mom?"
+<</dialog>>
+
+<<dialog "mother">>
+"Oh, that would be wonderful! Here, you can chop these vegetables while I handle the sauce."
+<</dialog>>
+
+<<narrative>>
+You spend the next half hour cooking together. Your mother hums softly as she works, occasionally guiding your hands to show you the proper technique. It's peaceful, comfortable.
+<</narrative>>
+
+<<dialog "mother">>
+"You're getting better at this. I'm proud of you."
+<</dialog>>
+
+<<set $characters.mother.stats.friendship += 5>>
+<<set $characters.mother.stats.trust += 2>>
+<<if $characters.mother.stats.friendship > 100>><<set $characters.mother.stats.friendship = 100>><</if>>
+<<if $characters.mother.stats.trust > 100>><<set $characters.mother.stats.trust = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-handshake icon-14"></span> Friendship +5
+    <span class="icon icon-shield icon-14"></span> Trust +2
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

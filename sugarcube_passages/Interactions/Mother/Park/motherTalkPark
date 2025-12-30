@@ -1,0 +1,26 @@
+:: motherTalkPark
+/* Mother - Park Talk */
+
+<<set $location = "Park">>
+<<advanceTime 15>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.friendship < 50>>
+"Oh! Fancy seeing you here."
+
+//She waves, slightly out of breath from her jog.//
+<<else>>
+"Hey! Want to walk with me for a bit?"
+
+//She slows her pace, happy to see you.//
+<</if>>
+<</dialog>>
+
+<<set $characters.mother.stats.friendship += 2>>
+<<if $characters.mother.stats.friendship > 100>><<set $characters.mother.stats.friendship = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-handshake icon-14"></span> Friendship +2
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

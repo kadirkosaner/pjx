@@ -1,0 +1,30 @@
+:: motherTalkKitchen
+/* Mother - Kitchen Talk */
+
+<<set $location = "Kitchen">>
+<<advanceTime 15>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.friendship < 40>>
+"Good morning, sweetie. Did you sleep well?"
+
+//She gives you a warm smile as she tends to the stove.//
+<<elseif $characters.mother.stats.friendship < 70>>
+"Hey there! Want to help me with breakfast? I'm making your favorite today."
+
+//Her eyes light up when she sees you.//
+<<else>>
+"There you are! I was just thinking about you. Come, keep me company while I cook."
+
+//She reaches out to briefly touch your arm, her smile genuine and warm.//
+<</if>>
+<</dialog>>
+
+<<set $characters.mother.stats.friendship += 2>>
+<<if $characters.mother.stats.friendship > 100>><<set $characters.mother.stats.friendship = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-handshake icon-14"></span> Friendship +2
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

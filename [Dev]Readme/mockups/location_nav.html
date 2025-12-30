@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Center</title>
+    <style>
+        :root {
+            --primary: #ec4899;
+            --bg-dark: #0f172a;
+            --text-main: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-dark);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .accordion-container {
+            display: flex;
+            min-width: 500px; 
+            height: 450px;
+            background: #000;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .location-card {
+            position: relative;
+            width: 100px;
+            background-color: #1e293b;
+            overflow: hidden;
+            cursor: pointer;
+            transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            border-right: 1px solid rgba(0,0,0,0.4);
+            flex-shrink: 0;
+            
+            /* FLEX CENTER to ensure text container is visually centered */
+            display: flex;
+            align-items: flex-end; /* Push content to bottom */
+            justify-content: center; /* Center horizontally */
+            padding-bottom: 40px; /* Space from bottom */
+        }
+
+        .location-card:last-child {
+            border-right: none;
+        }
+
+        .location-card:hover {
+            width: 400px;
+            /* Re-align for active state */
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding-left: 30px;
+            padding-bottom: 30px;
+        }
+
+        .card-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+            transition: all 0.5s ease;
+            filter: grayscale(100%) brightness(0.6);
+            /* Important: Absolute bg needs to be behind flex content */
+            z-index: 0;
+        }
+
+        .location-card:hover .card-bg {
+            opacity: 1;
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.05);
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            opacity: 0; 
+            transition: opacity 0.5s;
+            z-index: 1;
+        }
+        
+        .location-card:hover .gradient-overlay {
+            opacity: 1;
+        }
+
+        /* TEXT ELEMENT */
+        .location-name {
+            z-index: 2; /* On top of bg */
+            
+            position: relative; /* Relative to flex parent */
+            /* No absolute positioning needed here for centering! */
+            
+            /* Rotate to vertical */
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            
+            font-size: 1rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            white-space: nowrap;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            
+            transition: all 0.4s ease;
+        }
+
+        .location-card:hover .location-name {
+             writing-mode: horizontal-tb; /* Switch back to horizontal */
+             transform: rotate(0deg);
+             
+             font-size: 1.8rem;
+             color: #fff;
+             letter-spacing: 1px;
+             
+             /* Since we changed parent flex-align to flex-start, this just works */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="accordion-container">
+        <!-- Kitchen -->
+        <div class="location-card" onclick="goTo('Kitchen')">
+            <img src="../assets/content/locations/kitchen.jpg" class="card-bg">
+            <div class="gradient-overlay"></div>
+            <div class="location-name">Kitchen</div>
+        </div>
+
+        <!-- Living Room -->
+        <div class="location-card" onclick="goTo('LivingRoom')">
+            <img src="../assets/content/locations/williams_house.jpg" class="card-bg">
+            <div class="gradient-overlay"></div>
+            <div class="location-name">Living Room</div>
+        </div>
+
+        <!-- Bedroom -->
+        <div class="location-card" onclick="goTo('Bedroom')">
+            <div class="card-bg" style="background: linear-gradient(135deg, #2c3e50, #000);"></div>
+            <div class="gradient-overlay"></div>
+            <div class="location-name">Bedroom</div>
+        </div>
+
+        <!-- Cafe -->
+        <div class="location-card" onclick="goTo('Cafe')">
+            <img src="../assets/content/locations/cafe.jpg" class="card-bg">
+            <div class="gradient-overlay"></div>
+            <div class="location-name">City Cafe</div>
+        </div>
+
+        <!-- Downtown -->
+        <div class="location-card" onclick="goTo('Downtown')">
+            <img src="../assets/content/locations/downtown.jpg" class="card-bg">
+            <div class="gradient-overlay"></div>
+            <div class="location-name">Downtown</div>
+        </div>
+    </div>
+
+    <script>
+        function goTo(loc) {
+            console.log("Navigating to:", loc);
+        }
+    </script>
+</body>
+</html>

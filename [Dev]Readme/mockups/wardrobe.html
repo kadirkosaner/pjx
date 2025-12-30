@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wardrobe Mockup</title>
+    <style>
+        :root {
+            --color-bg-primary: #0a0a0a;
+            --color-bg-secondary: #0f0f0f;
+            --color-bg-tertiary: #1a1a1a;
+            --color-border-primary: #1a1a1a;
+            --color-border-secondary: #333;
+            --color-text-primary: #e0e0e0;
+            --color-text-secondary: #999;
+            --color-text-tertiary: #666;
+            --color-accent: #ec4899;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --transition-fast: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+        }
+
+        .wardrobe-container {
+            max-width: 1200px;
+            margin: var(--spacing-xl) auto;
+            padding: 0 var(--spacing-xl);
+        }
+
+        /* Header */
+        .wardrobe-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-border-primary);
+        }
+
+        .back-link {
+            color: var(--color-text-tertiary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .back-link:hover { color: var(--color-text-primary); }
+
+        .wardrobe-title {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+        }
+
+        /* Main Layout */
+        .wardrobe-main {
+            display: grid;
+            grid-template-columns: 160px 1fr 260px;
+            gap: var(--spacing-lg);
+        }
+
+        /* Categories */
+        .categories { display: flex; flex-direction: column; gap: 2px; }
+
+        .category-group-title {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--color-text-tertiary);
+            padding: var(--spacing-sm) 0;
+            margin-top: var(--spacing-sm);
+        }
+
+        .category-group-title:first-child { margin-top: 0; }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+        }
+
+        .category-item:hover { background: var(--color-bg-tertiary); }
+        .category-item.active { background: var(--color-bg-secondary); border-color: var(--color-border-secondary); }
+        .category-name { font-size: 0.95rem; color: var(--color-text-secondary); }
+        .category-item.active .category-name { color: var(--color-text-primary); }
+        .category-count { font-size: 0.85rem; color: var(--color-text-tertiary); }
+        .category-divider { height: 1px; background: var(--color-border-primary); margin: var(--spacing-sm) 0; }
+
+        /* Middle Column */
+        .middle-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+
+        /* Clothing Panel */
+        .clothing-panel {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header { margin-bottom: var(--spacing-md); }
+        .panel-title { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--color-text-tertiary); }
+
+        .clothing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: var(--spacing-md);
+            flex: 1;
+            align-content: start;
+        }
+
+        .clothing-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: var(--color-bg-tertiary);
+            border: 2px solid var(--color-border-primary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .clothing-item:hover { border-color: var(--color-border-secondary); }
+        .clothing-item.equipped { border-color: #22c55e; }
+        .clothing-item.equipped::before {
+            content: '';
+            position: absolute;
+            top: 6px; right: 6px;
+            width: 10px; height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .clothing-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .clothing-looks {
+            position: absolute;
+            bottom: 6px; left: 6px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: var(--color-accent);
+        }
+
+        .clothing-quality { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+        .clothing-quality.common { background: #666; }
+        .clothing-quality.rare { background: #3b82f6; }
+        .clothing-quality.premium { background: #a855f7; }
+
+        /* Selected Item Info */
+        .selected-info {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-sm);
+            display: none;
+        }
+
+        .selected-info.visible { display: block; }
+
+        .selected-header { display: flex; gap: var(--spacing-md); }
+
+        .selected-thumb {
+            width: 70px; height: 70px;
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .selected-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        .selected-details { flex: 1; }
+        .selected-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+        .selected-name { font-size: 1rem; color: var(--color-text-primary); }
+        .selected-brand { font-size: 0.85rem; color: var(--color-accent); margin-bottom: 5px; }
+        .selected-desc { font-size: 0.9rem; color: var(--color-text-tertiary); line-height: 1.4; }
+
+        .selected-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-sm);
+            padding-top: var(--spacing-sm);
+            border-top: 1px solid var(--color-border-primary);
+            font-size: 0.85rem;
+        }
+
+        .meta-value { color: var(--color-accent); }
+
+        .style-tag {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .style-tag.normal { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .style-tag.revealing { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .style-tag.provocative { background: rgba(236, 72, 153, 0.2); color: #ec4899; }
+
+        /* Quick Outfits */
+        .outfits-section {
+            padding: var(--spacing-md);
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+        }
+
+        .outfits-title { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: var(--spacing-md); }
+
+        .outfits-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--spacing-sm); }
+
+        .outfit-slot {
+            padding: var(--spacing-sm);
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            position: relative;
+        }
+
+        .outfit-slot:hover { border-color: var(--color-border-secondary); }
+        .outfit-slot.empty { border-style: dashed; display: flex; align-items: center; justify-content: center; min-height: 60px; cursor: pointer; }
+        .outfit-add { font-size: 1.3rem; color: var(--color-text-tertiary); }
+
+        .outfit-delete {
+            position: absolute;
+            top: 3px; right: 3px;
+            width: 16px; height: 16px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 3px;
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+            font-size: 0.55rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .outfit-delete:hover { color: #ef4444; border-color: #ef4444; }
+
+        .outfit-name-input {
+            width: 100%;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 3px;
+            color: var(--color-text-primary);
+            padding: 3px 4px;
+            font-size: 0.8rem;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .outfit-name-input:focus { outline: none; border-color: var(--color-accent); }
+
+        .outfit-actions { display: flex; justify-content: center; gap: 3px; }
+
+        .outfit-btn {
+            padding: 3px 6px;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: transparent;
+            border: 1px solid var(--color-border-secondary);
+            border-radius: 3px;
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+        }
+
+        .outfit-btn:hover { border-color: var(--color-text-secondary); color: var(--color-text-secondary); }
+        .outfit-btn.primary { border-color: var(--color-accent); color: var(--color-accent); }
+        .outfit-btn.primary:hover { background: var(--color-accent); color: white; }
+
+        /* Currently Wearing */
+        .wearing-panel {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wearing-header { margin-bottom: var(--spacing-sm); }
+        .wearing-title { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--color-text-tertiary); }
+
+        .wearing-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .slots-section-title {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--color-text-tertiary);
+            padding: 5px 0 3px;
+            border-bottom: 1px solid var(--color-border-primary);
+            margin-top: 6px;
+        }
+
+        .slots-section-title:first-child { margin-top: 0; }
+
+        .wearing-slot {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border-primary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+
+        .wearing-slot:hover { border-color: var(--color-border-secondary); }
+        .wearing-slot.empty { opacity: 0.4; cursor: default; }
+
+        .wearing-slot-img {
+            width: 32px; height: 32px;
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .wearing-slot-img img { width: 100%; height: 100%; object-fit: cover; }
+
+        .wearing-slot-info { flex: 1; min-width: 0; }
+        .wearing-slot-category { font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text-tertiary); }
+        .wearing-slot-name { font-size: 0.85rem; color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .wearing-slot-remove {
+            width: 20px; height: 20px;
+            background: transparent;
+            border: 1px solid var(--color-border-secondary);
+            border-radius: var(--radius-sm);
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .wearing-slot-remove:hover { color: #ef4444; border-color: #ef4444; }
+
+        /* Stats */
+        .stats-summary {
+            margin-top: auto;
+            padding-top: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border-primary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-label { font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 2px; }
+        .stat-value { font-size: 1rem; font-weight: 500; }
+        .stat-value.looks { color: var(--color-accent); }
+        .stat-value.normal { color: #22c55e; }
+        .stat-value.revealing { color: #f59e0b; }
+        .stat-value.provocative { color: #ef4444; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border-secondary);
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="wardrobe-container">
+        <div class="wardrobe-header">
+            <a href="#" class="back-link">← Bedroom</a>
+            <div class="wardrobe-title">Wardrobe</div>
+            <div style="width: 80px;"></div>
+        </div>
+
+        <div class="wardrobe-main">
+            <!-- Left: Categories -->
+            <div class="categories" id="categories"></div>
+
+            <!-- Middle: Clothing + Quick Outfits -->
+            <div class="middle-column">
+                <div class="clothing-panel">
+                    <div class="panel-header">
+                        <span class="panel-title" id="panel-title">Tops</span>
+                    </div>
+                    <div class="clothing-grid" id="clothing-grid"></div>
+                    <div class="selected-info" id="selected-info">
+                        <div class="selected-header">
+                            <div class="selected-thumb"><img id="selected-img" src="" alt=""></div>
+                            <div class="selected-details">
+                                <div class="selected-name-row">
+                                    <span class="selected-name" id="selected-name"></span>
+                                    <span class="style-tag" id="selected-style"></span>
+                                </div>
+                                <div class="selected-brand" id="selected-brand"></div>
+                                <div class="selected-desc" id="selected-desc"></div>
+                            </div>
+                        </div>
+                        <div class="selected-meta">
+                            <span>Quality: <span class="meta-value" id="selected-quality"></span></span>
+                            <span>Looks: <span class="meta-value" id="selected-looks"></span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="outfits-section">
+                    <div class="outfits-title">Quick Outfits</div>
+                    <div class="outfits-grid" id="outfits-grid"></div>
+                </div>
+            </div>
+
+            <!-- Right: Currently Wearing -->
+            <div class="wearing-panel">
+                <div class="wearing-header"><div class="wearing-title">Currently Wearing</div></div>
+                <div class="wearing-slots" id="wearing-slots"></div>
+                <div class="stats-summary">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Looks</div>
+                        <div class="stat-value looks" id="total-looks">+0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Style</div>
+                        <div class="stat-value" id="style-text">Normal</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const clothingData = {
+            tops: [
+                { id: 'crop_black', name: 'Black Crop Top', brand: 'Urban Style', desc: 'A classic black crop top perfect for casual outings.', image: '../assets/content/clothing/tops/crop_black.jpg', looks: 5, quality: 'Common', tags: ['casual'] },
+                { id: 'crop_shoulder', name: 'Shoulder Crop', brand: 'Chic Avenue', desc: 'Off-shoulder design that adds elegance to your look.', image: '../assets/content/clothing/tops/crop_sholder.jpg', looks: 8, quality: 'Rare', tags: ['casual', 'revealing'] }
+            ],
+            bottoms: [
+                { id: 'pant_black', name: 'Black Pants', brand: 'Classic Wear', desc: 'Sleek black pants for formal and casual occasions.', image: '../assets/content/clothing/bottoms/pants/pant_black.jpg', looks: 4, quality: 'Common', tags: ['formal'] },
+                { id: 'pant_blue', name: 'Blue Jeans', brand: 'Denim Co.', desc: 'Comfortable jeans that go with everything.', image: '../assets/content/clothing/bottoms/pants/pant_blue.jpg', looks: 5, quality: 'Common', tags: ['casual'] }
+            ],
+            dresses: [
+                { id: 'dress1', name: 'Elegant Dress', brand: 'Glamour', desc: 'Stunning dress for special occasions.', image: '../assets/content/clothing/dress/dress1.jpg', looks: 12, quality: 'Rare', tags: ['formal', 'revealing'] },
+                { id: 'dress2', name: 'Casual Dress', brand: 'Daily Chic', desc: 'Light dress for everyday adventures.', image: '../assets/content/clothing/dress/dress2.jpg', looks: 8, quality: 'Common', tags: ['casual'] }
+            ],
+            shoes: [
+                { id: 'shoes1', name: 'Casual Shoes', brand: 'Step Easy', desc: 'Comfortable sneakers for all-day wear.', image: '../assets/content/clothing/shoes/shoes1.jpg', looks: 3, quality: 'Common', tags: ['casual'] },
+                { id: 'shoes2', name: 'Heels', brand: 'Elegance', desc: 'Stylish heels that elevate any outfit.', image: '../assets/content/clothing/shoes/shoes2.jpg', looks: 7, quality: 'Rare', tags: ['formal', 'revealing'] }
+            ],
+            socks: [
+                { id: 'socks1', name: 'White Socks', brand: 'Basic', desc: 'Simple white cotton socks.', image: '../assets/content/clothing/socks/socks1.jpg', looks: 1, quality: 'Common', tags: ['casual'] },
+                { id: 'socks2', name: 'Black Socks', brand: 'Basic', desc: 'Classic black socks.', image: '../assets/content/clothing/socks/socks2.jpg', looks: 1, quality: 'Common', tags: ['formal'] }
+            ],
+            earrings: [
+                { id: 'earrings1', name: 'Simple Earrings', brand: 'Silver Touch', desc: 'Minimalist silver earrings.', image: '../assets/content/clothing/earrings/earrings1.jpg', looks: 3, quality: 'Common', tags: ['casual'] },
+                { id: 'earrings2', name: 'Gold Earrings', brand: 'Luxe', desc: 'Beautiful gold statement earrings.', image: '../assets/content/clothing/earrings/earrings2.jpg', looks: 6, quality: 'Rare', tags: ['formal'] }
+            ],
+            necklaces: [
+                { id: 'necklace1', name: 'Simple Necklace', brand: 'Silver Touch', desc: 'A delicate chain necklace.', image: '../assets/content/clothing/necklace/necklace1.jpg', looks: 4, quality: 'Common', tags: ['casual'] },
+                { id: 'necklace2', name: 'Pearl Necklace', brand: 'Royal Pearl', desc: 'Elegant pearl necklace.', image: '../assets/content/clothing/necklace/necklace2.jpg', looks: 8, quality: 'Premium', tags: ['formal'] }
+            ],
+            bracelets: [
+                { id: 'bracelet1', name: 'Simple Bracelet', brand: 'Silver Touch', desc: 'A thin silver bracelet.', image: '../assets/content/clothing/bracalet/bracalet1.jpg', looks: 2, quality: 'Common', tags: ['casual'] },
+                { id: 'bracelet2', name: 'Gold Bracelet', brand: 'Luxe', desc: 'Shimmering gold bracelet.', image: '../assets/content/clothing/bracalet/bracalet2.jpg', looks: 5, quality: 'Rare', tags: ['formal'] }
+            ],
+            bras: [
+                { id: 'bra1', name: 'Basic Bra', brand: 'Comfort', desc: 'Comfortable everyday bra.', image: '../assets/content/clothing/bra/bra1.jpg', looks: 2, quality: 'Common', tags: [] },
+                { id: 'bra2', name: 'Lace Bra', brand: 'Sensual', desc: 'Delicate lace bra.', image: '../assets/content/clothing/bra/bra2.jpg', looks: 5, quality: 'Rare', tags: ['revealing'] }
+            ],
+            panties: [
+                { id: 'panty1', name: 'Basic Panties', brand: 'Comfort', desc: 'Simple cotton panties.', image: '../assets/content/clothing/panty/panty1.jpg', looks: 1, quality: 'Common', tags: [] },
+                { id: 'panty2', name: 'Lace Panties', brand: 'Sensual', desc: 'Elegant lace panties.', image: '../assets/content/clothing/panty/panty2.jpg', looks: 4, quality: 'Rare', tags: ['revealing'] }
+            ]
+        };
+
+        const categories = [
+            { group: 'Outerwear', items: [{ id: 'tops', name: 'Tops' }, { id: 'bottoms', name: 'Bottoms' }, { id: 'dresses', name: 'Dresses' }, { id: 'shoes', name: 'Shoes' }, { id: 'socks', name: 'Socks' }]},
+            { group: 'Accessories', items: [{ id: 'earrings', name: 'Earrings' }, { id: 'necklaces', name: 'Necklaces' }, { id: 'bracelets', name: 'Bracelets' }]},
+            { group: 'Underwear', items: [{ id: 'bras', name: 'Bras' }, { id: 'panties', name: 'Panties' }]}
+        ];
+
+        const slotLabels = { top: 'Top', bottom: 'Bottom', dress: 'Dress', shoes: 'Shoes', socks: 'Socks', earrings: 'Earrings', necklace: 'Necklace', bracelet: 'Bracelet', bra: 'Bra', panty: 'Panties' };
+        const categoryToSlot = { tops: 'top', bottoms: 'bottom', dresses: 'dress', shoes: 'shoes', socks: 'socks', earrings: 'earrings', necklaces: 'necklace', bracelets: 'bracelet', bras: 'bra', panties: 'panty' };
+
+        let currentCategory = 'tops';
+        let selectedItem = null;
+        let equipped = {};
+        let outfits = [{ name: 'School', slots: {} }, { name: 'Home', slots: {} }, { name: 'Date', slots: {} }, null, null];
+
+        function renderCategories() {
+            const c = document.getElementById('categories');
+            c.innerHTML = '';
+            categories.forEach((g, gi) => {
+                c.innerHTML += `<div class="category-group-title">${g.group}</div>`;
+                g.items.forEach(cat => {
+                    c.innerHTML += `<div class="category-item ${cat.id === currentCategory ? 'active' : ''}" onclick="selectCategory('${cat.id}')">
+                        <span class="category-name">${cat.name}</span>
+                        <span class="category-count">${clothingData[cat.id]?.length || 0}</span>
+                    </div>`;
+                });
+                if (gi < categories.length - 1) c.innerHTML += `<div class="category-divider"></div>`;
+            });
+        }
+
+        function renderClothingGrid() {
+            const grid = document.getElementById('clothing-grid');
+            const items = clothingData[currentCategory] || [];
+            const slot = categoryToSlot[currentCategory];
+            document.getElementById('panel-title').textContent = categories.flatMap(g => g.items).find(c => c.id === currentCategory)?.name || '';
+            grid.innerHTML = items.map(item => `
+                <div class="clothing-item ${equipped[slot]?.id === item.id ? 'equipped' : ''}" onclick="selectAndEquip('${item.id}')">
+                    <img class="clothing-img" src="${item.image}" alt="${item.name}">
+                    <span class="clothing-looks">+${item.looks}</span>
+                    <div class="clothing-quality ${item.quality.toLowerCase()}"></div>
+                </div>
+            `).join('');
+        }
+
+        function renderSelectedInfo() {
+            const info = document.getElementById('selected-info');
+            if (!selectedItem) { info.classList.remove('visible'); return; }
+            info.classList.add('visible');
+            document.getElementById('selected-img').src = selectedItem.image;
+            document.getElementById('selected-name').textContent = selectedItem.name;
+            document.getElementById('selected-brand').textContent = selectedItem.brand;
+            document.getElementById('selected-desc').textContent = selectedItem.desc;
+            document.getElementById('selected-quality').textContent = selectedItem.quality;
+            document.getElementById('selected-looks').textContent = '+' + selectedItem.looks;
+            
+            // Style tag
+            const styleTag = document.getElementById('selected-style');
+            if (selectedItem.tags?.includes('revealing')) {
+                styleTag.textContent = 'Revealing';
+                styleTag.className = 'style-tag revealing';
+            } else {
+                styleTag.textContent = 'Normal';
+                styleTag.className = 'style-tag normal';
+            }
+        }
+
+        function renderSlot(slot) {
+            const item = equipped[slot];
+            return `<div class="wearing-slot ${!item ? 'empty' : ''}" onclick="focusSlot('${slot}')">
+                <div class="wearing-slot-img">${item ? `<img src="${item.image}">` : ''}</div>
+                <div class="wearing-slot-info">
+                    <div class="wearing-slot-category">${slotLabels[slot]}</div>
+                    <div class="wearing-slot-name">${item ? item.name : 'Empty'}</div>
+                </div>
+                ${item ? `<button class="wearing-slot-remove" onclick="event.stopPropagation(); unequip('${slot}')">✕</button>` : ''}
+            </div>`;
+        }
+
+        function renderWearingSlots() {
+            const container = document.getElementById('wearing-slots');
+            let html = '<div class="slots-section-title">Outerwear</div>';
+            html += ['top', 'bottom', 'dress', 'shoes', 'socks'].map(renderSlot).join('');
+            html += '<div class="slots-section-title">Accessories</div>';
+            html += ['earrings', 'necklace', 'bracelet'].map(renderSlot).join('');
+            html += '<div class="slots-section-title">Underwear</div>';
+            html += ['bra', 'panty'].map(renderSlot).join('');
+            container.innerHTML = html;
+        }
+
+        function renderOutfits() {
+            const grid = document.getElementById('outfits-grid');
+            grid.innerHTML = outfits.map((o, i) => {
+                if (!o) return `<div class="outfit-slot empty" onclick="createOutfit(${i})"><span class="outfit-add">+</span></div>`;
+                return `<div class="outfit-slot">
+                    <button class="outfit-delete" onclick="deleteOutfit(${i})">✕</button>
+                    <input type="text" class="outfit-name-input" value="${o.name}" onchange="outfits[${i}].name=this.value" onclick="event.stopPropagation()">
+                    <div class="outfit-actions">
+                        <button class="outfit-btn" onclick="saveOutfit(${i})">Save</button>
+                        <button class="outfit-btn primary" onclick="wearOutfit(${i})">Wear</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function updateStats() {
+            let looks = 0, revealing = 0;
+            Object.values(equipped).forEach(item => {
+                if (item) { looks += item.looks; if (item.tags?.includes('revealing')) revealing++; }
+            });
+            document.getElementById('total-looks').textContent = '+' + looks;
+            const st = document.getElementById('style-text');
+            if (revealing >= 3) { st.textContent = 'Provocative'; st.className = 'stat-value provocative'; }
+            else if (revealing >= 1) { st.textContent = 'Revealing'; st.className = 'stat-value revealing'; }
+            else { st.textContent = 'Normal'; st.className = 'stat-value normal'; }
+        }
+
+        function selectCategory(id) { currentCategory = id; selectedItem = null; renderCategories(); renderClothingGrid(); renderSelectedInfo(); }
+
+        function selectAndEquip(id) {
+            const items = clothingData[currentCategory] || [];
+            const item = items.find(i => i.id === id);
+            const slot = categoryToSlot[currentCategory];
+            
+            if (equipped[slot]?.id === id) {
+                unequip(slot);
+                selectedItem = null;
+            } else {
+                if (slot === 'dress') { delete equipped.top; delete equipped.bottom; }
+                if (slot === 'top' || slot === 'bottom') { delete equipped.dress; }
+                equipped[slot] = item;
+                selectedItem = item;
+                showToast(`Equipped: ${item.name}`);
+            }
+            
+            renderClothingGrid(); renderWearingSlots(); renderSelectedInfo(); updateStats();
+        }
+
+        function unequip(slot) {
+            const name = equipped[slot]?.name || slotLabels[slot];
+            delete equipped[slot];
+            showToast(`Removed: ${name}`);
+            renderClothingGrid(); renderWearingSlots(); updateStats();
+        }
+
+        function focusSlot(slot) {
+            const catId = Object.keys(categoryToSlot).find(k => categoryToSlot[k] === slot);
+            if (catId) selectCategory(catId);
+        }
+
+        function createOutfit(i) {
+            const name = prompt('Enter outfit name:');
+            if (name) { outfits[i] = { name, slots: { ...equipped } }; showToast(`Created: ${name}`); renderOutfits(); }
+        }
+
+        function saveOutfit(i) { outfits[i].slots = { ...equipped }; showToast(`Saved: ${outfits[i].name}`); }
+
+        function deleteOutfit(i) {
+            if (confirm(`Delete "${outfits[i].name}"?`)) {
+                outfits[i] = null;
+                showToast('Outfit deleted');
+                renderOutfits();
+            }
+        }
+
+        function wearOutfit(i) {
+            const o = outfits[i];
+            if (o?.slots) { equipped = { ...o.slots }; showToast(`Wearing: ${o.name}`); renderClothingGrid(); renderWearingSlots(); updateStats(); }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        function init() {
+            equipped = { top: clothingData.tops[0], bottom: clothingData.bottoms[1], shoes: clothingData.shoes[0], socks: clothingData.socks[0], bra: clothingData.bras[0], panty: clothingData.panties[0] };
+            renderCategories(); renderClothingGrid(); renderWearingSlots(); renderOutfits(); updateStats();
+        }
+
+        init();
+    </script>
+</body>
+</html>

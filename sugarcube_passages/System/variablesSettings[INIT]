@@ -1,0 +1,20 @@
+// Initialize video settings in State.variables
+State.variables.videoSettings = State.variables.videoSettings || {
+    autoplaySet: true,
+    loopSet: true,
+    masterVolume: 100,
+    videoVolume: 100
+};
+
+/* ==========================================
+   CONTENT PREFERENCES
+   Controls which content types are visible
+========================================== */
+<<set $contentPreferences = {
+    incest: true,      /* Family romantic content */
+    romantic: true,    /* Romantic/flirting content */
+    sexual: true,      /* Sexual content */
+    gore: true,        /* Blood, violence, graphic content */
+    violence: true,    /* Physical combat, fights */
+    scat: false        /* Bathroom related content */
+}>>

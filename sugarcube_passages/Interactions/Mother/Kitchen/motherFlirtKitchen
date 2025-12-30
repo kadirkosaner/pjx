@@ -1,0 +1,41 @@
+:: motherFlirtKitchen [incest romantic]
+/* Mother - Kitchen Flirt */
+
+<<set $location = "Kitchen">>
+<<advanceTime 15>>
+
+<<thought>>
+She looks beautiful today... Maybe I should tell her.
+<</thought>>
+
+<<dialog "player">>
+"You look really nice today, Mom. That apron suits you."
+<</dialog>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.love < 50>>
+//Her cheeks flush a soft pink as she tucks a strand of hair behind her ear.//
+
+"Oh, you... you're just saying that."
+
+//She seems flustered but pleased.//
+<<else>>
+//She pauses her cooking, turning to face you with a warm yet somehow intense gaze.//
+
+"Is that so? You always know how to make me feel special..."
+
+//Her voice is soft, almost playful.//
+<</if>>
+<</dialog>>
+
+<<set $characters.mother.stats.love += 3>>
+<<set $characters.mother.stats.lust += 1>>
+<<if $characters.mother.stats.love > 100>><<set $characters.mother.stats.love = 100>><</if>>
+<<if $characters.mother.stats.lust > 100>><<set $characters.mother.stats.lust = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-heart icon-14"></span> Love +3
+    <span class="icon icon-arousal icon-14"></span> Lust +1
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

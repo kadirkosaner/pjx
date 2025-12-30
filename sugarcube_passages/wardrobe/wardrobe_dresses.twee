@@ -1,0 +1,43 @@
+:: [Wardrobe] Dresses [init]
+<<nobr>>
+/* Dresses - Full dresses, gowns, etc.
+ * Note: Wearing a dress removes top and bottom
+ * 
+ * Template:
+ * { id, name, brand, desc, image, looks, quality, tags, price, shopAvailable, startOwned }
+ * 
+ * Tags: casual, formal, revealing, sexy, elegant, party
+ * Quality: Common, Rare, Premium
+ * FUTURE: size, durability, effects, unlockCondition
+ */
+
+<<set setup.clothingData = setup.clothingData || {}>>
+<<set setup.clothingData.dresses = [
+    {
+        id: "dress_elegant",
+        name: "Elegant Dress",
+        brand: "Glamour",
+        desc: "A stunning dress for special occasions and night outs.",
+        image: "assets/content/clothing/dress/dress1.jpg",
+        looks: 12,
+        quality: "Rare",
+        tags: ["formal", "revealing", "party"],
+        price: 150,
+        shopAvailable: true,
+        startOwned: false
+    },
+    {
+        id: "dress_casual",
+        name: "Casual Dress",
+        brand: "Daily Chic",
+        desc: "Light and comfortable dress for everyday adventures.",
+        image: "assets/content/clothing/dress/dress2.jpg",
+        looks: 8,
+        quality: "Common",
+        tags: ["casual"],
+        price: 75,
+        shopAvailable: true,
+        startOwned: false
+    }
+]>>
+<</nobr>>

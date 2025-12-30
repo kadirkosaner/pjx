@@ -1,0 +1,42 @@
+:: [Wardrobe] Bottoms [init]
+<<nobr>>
+/* Bottoms - Pants, jeans, shorts, skirts, etc.
+ * 
+ * Template:
+ * { id, name, brand, desc, image, looks, quality, tags, price, shopAvailable, startOwned }
+ * 
+ * Tags: casual, formal, revealing, sexy, sporty, elegant
+ * Quality: Common, Rare, Premium
+ * FUTURE: size, durability, effects, unlockCondition
+ */
+
+<<set setup.clothingData = setup.clothingData || {}>>
+<<set setup.clothingData.bottoms = [
+    {
+        id: "pant_black",
+        name: "Black Pants",
+        brand: "Classic Wear",
+        desc: "Sleek black pants suitable for both formal and casual occasions.",
+        image: "assets/content/clothing/bottoms/pants/pant_black.jpg",
+        looks: 4,
+        quality: "Common",
+        tags: ["formal"],
+        price: 55,
+        shopAvailable: true,
+        startOwned: false
+    },
+    {
+        id: "pant_blue",
+        name: "Blue Jeans",
+        brand: "Denim Co.",
+        desc: "Comfortable blue jeans that go with everything in your wardrobe.",
+        image: "assets/content/clothing/bottoms/pants/pant_blue.jpg",
+        looks: 5,
+        quality: "Common",
+        tags: ["casual"],
+        price: 60,
+        shopAvailable: true,
+        startOwned: true
+    }
+]>>
+<</nobr>>

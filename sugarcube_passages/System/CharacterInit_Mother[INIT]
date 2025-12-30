@@ -1,0 +1,103 @@
+/* ==========================================
+   MOTHER - Sarah Williams
+   Complete Character Definition
+========================================== */
+
+/* CHARACTER DATA */
+<<set $characters.mother = {
+    name: "Sarah Williams",
+    birthYear: 1982,
+    occupation: "Teacher",
+    location: "Home, Living Room",
+    avatar: "assets/content/people/family/mother.jpg",
+    type: "npc",
+    color: "#ec4899",
+    stats: {
+        love: 35,
+        friendship: 60,
+        lust: 10,
+        trust: 70
+    },
+    status: "Mother",
+    firstMet: "Birth",
+    info: "<p>Your loving mother who always cares about your well-being. She works as a high school teacher and enjoys cooking, jogging, and reading romance novels.</p>",
+    known: true,
+    currentLocation: null,
+    currentStatus: null
+}>>
+
+/* SCHEDULE - Where is she at different times */
+<<set $characterSchedules.mother = {
+    weekday: [
+        { hour: 0, location: "bedroom", status: "sleeping" },
+        { hour: 6, location: "bedroom", status: "waking" },
+        { hour: 7, location: "kitchen", status: "available" },
+        { hour: 8, location: "work", status: "busy" },
+        { hour: 16, location: "kitchen", status: "available" },
+        { hour: 18, location: "livingRoom", status: "available" },
+        { hour: 21, location: "bedroom", status: "available" },
+        { hour: 23, location: "bedroom", status: "sleeping" }
+    ],
+    weekend: [
+        { hour: 0, location: "bedroom", status: "sleeping" },
+        { hour: 8, location: "bedroom", status: "waking" },
+        { hour: 9, location: "kitchen", status: "available" },
+        { hour: 11, location: "park", status: "available" },
+        { hour: 14, location: "livingRoom", status: "available" },
+        { hour: 17, location: "kitchen", status: "available" },
+        { hour: 19, location: "livingRoom", status: "available" },
+        { hour: 22, location: "bedroom", status: "sleeping" }
+    ]
+}>>
+
+/* ACTIONS - What can you do with her at each location */
+<<set $characterActions.mother = {
+    kitchen: [
+        {
+            id: "talk", label: "Talk", passage: "motherTalkKitchen",
+            tags: [], requirements: {}
+        },
+        {
+            id: "helpCook", label: "Help Cook", passage: "motherHelpCook",
+            tags: [], requirements: { friendship: 20 }
+        },
+        {
+            id: "flirt", label: "Compliment Her", passage: "motherFlirtKitchen",
+            tags: ["incest", "romantic"], requirements: { love: 30 }
+        }
+    ],
+    livingRoom: [
+        {
+            id: "talk", label: "Talk", passage: "motherTalkLivingRoom",
+            tags: [], requirements: {}
+        },
+        {
+            id: "watchTV", label: "Watch TV Together", passage: "motherWatchTv",
+            tags: [], requirements: { friendship: 30 }
+        },
+        {
+            id: "cuddle", label: "Cuddle", passage: "motherCuddleLivingroom",
+            tags: ["incest", "romantic"], requirements: { love: 50 }
+        }
+    ],
+    bedroom: [
+        {
+            id: "talk", label: "Talk", passage: "motherTalkPBedroom",
+            tags: [], requirements: {}
+        },
+        {
+            id: "kiss", label: "Kiss Goodnight", passage: "motherKissPBedroom",
+            tags: ["incest", "romantic"], requirements: { love: 70 }
+        }
+    ],
+    park: [
+        {
+            id: "talk", label: "Talk", passage: "motherTalkPark",
+            tags: [], requirements: {}
+        },
+        {
+            id: "jog", label: "Jog Together", passage: "motherJogPark",
+            tags: [], requirements: { friendship: 25 }
+        }
+    ]
+}>>

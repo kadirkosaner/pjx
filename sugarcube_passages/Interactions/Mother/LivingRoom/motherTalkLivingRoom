@@ -1,0 +1,30 @@
+:: motherTalkLivingRoom
+/* Mother - Living Room Talk */
+
+<<set $location = "Living Room">>
+<<advanceTime 15>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.friendship < 40>>
+"Oh, hello sweetie. Just relaxing a bit before dinner."
+
+//She gives you a warm smile.//
+<<elseif $characters.mother.stats.friendship < 70>>
+"There you are! Want to sit with me for a while?"
+
+//She pats the couch next to her invitingly.//
+<<else>>
+"I was hoping you'd come by. I miss our little chats."
+
+//Her eyes light up with genuine happiness.//
+<</if>>
+<</dialog>>
+
+<<set $characters.mother.stats.friendship += 2>>
+<<if $characters.mother.stats.friendship > 100>><<set $characters.mother.stats.friendship = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-handshake icon-14"></span> Friendship +2
+</div>
+
+<<btn "Continue" "CharacterInteraction">>

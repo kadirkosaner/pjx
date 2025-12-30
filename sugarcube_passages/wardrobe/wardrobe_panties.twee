@@ -1,0 +1,42 @@
+:: [Wardrobe] Panties [init]
+<<nobr>>
+/* Panties - Regular panties, thongs, lingerie, etc.
+ * 
+ * Template:
+ * { id, name, brand, desc, image, looks, quality, tags, price, shopAvailable, startOwned }
+ * 
+ * Tags: casual, revealing, sexy, comfortable
+ * Quality: Common, Rare, Premium
+ * FUTURE: size, durability, effects, unlockCondition
+ */
+
+<<set setup.clothingData = setup.clothingData || {}>>
+<<set setup.clothingData.panties = [
+    {
+        id: "panty_basic",
+        name: "Basic Panties",
+        brand: "Comfort",
+        desc: "Simple cotton panties for everyday comfort.",
+        image: "assets/content/clothing/panty/panty1.jpg",
+        looks: 1,
+        quality: "Common",
+        tags: ["casual", "comfortable"],
+        price: 15,
+        shopAvailable: true,
+        startOwned: true
+    },
+    {
+        id: "panty_lace",
+        name: "Lace Panties",
+        brand: "Sensual",
+        desc: "Elegant lace panties with delicate details.",
+        image: "assets/content/clothing/panty/panty2.jpg",
+        looks: 4,
+        quality: "Rare",
+        tags: ["revealing", "sexy"],
+        price: 45,
+        shopAvailable: true,
+        startOwned: false
+    }
+]>>
+<</nobr>>

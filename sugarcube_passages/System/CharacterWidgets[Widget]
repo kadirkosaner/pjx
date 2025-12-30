@@ -1,0 +1,62 @@
+:: CharacterWidgets [widget]
+/* ==================================================
+   CHARACTER DISPLAY WIDGETS
+   Widgets for rendering character cards in locations
+================================================== */
+
+/* Show Location Characters Widget
+   Usage: <<showLocationChars "kitchen">>
+   Automatically displays characters at the specified location
+   based on Time System schedule
+*/
+<<widget "showLocationChars">>
+<<nobr>>
+<<set _targetLocation = _args[0]>>
+<<set _hasCharacter = false>>
+
+<div class="location-characters">
+<<for _charId, _char range $characters>>
+    <<if _charId !== "player" && _char.currentLocation === _targetLocation>>
+        <<set _hasCharacter = true>>
+        <<capture _charId>>
+        <<set _avatar = $characters[_charId].avatar>>
+        <<set _name = $characters[_charId].name>>
+        <<set _status = $characters[_charId].currentStatus>>
+        
+        <<if _status === "busy">>
+            <div class="character-card-inner busy">
+                <div class="character-avatar">
+                    <img @src="_avatar" @alt="_name">
+                </div>
+                <div class="character-name"><<print _name>></div>
+                <div class="character-status busy">Busy</div>
+            </div>
+        <<else>>
+            <a class="character-card-link" @data-char-id="_charId">
+                <div class="character-card-inner">
+                    <div class="character-avatar">
+                        <img @src="_avatar" @alt="_name">
+                    </div>
+                    <div class="character-name"><<print _name>></div>
+                </div>
+            </a>
+        <</if>>
+        <</capture>>
+    <</if>>
+<</for>>
+<<if !_hasCharacter>>
+    <p class="no-characters">No one is here right now.</p>
+<</if>>
+</div>
+
+<<run 
+    /* Click handler for character cards */
+    $(document).off('click.charcard').on('click.charcard', '.character-card-link', function(e) {
+        e.preventDefault();
+        const charId = $(this).attr('data-char-id');
+        State.variables.interactingChar = charId;
+        Engine.play('CharacterInteraction');
+    });
+>>
+<</nobr>>
+<</widget>>

@@ -1,0 +1,55 @@
+:: CharacterInteraction
+<<nobr>>
+/* Safety check - ensure we have a valid character */
+<<if !$interactingChar || !$characters[$interactingChar]>>
+    <<goto $previousPassage>>
+<</if>>
+<<set _char = $characters[$interactingChar]>>
+
+/* Make sure character locations are updated */
+<<if !_char.currentLocation>>
+    <<updateCharacterLocations>>
+    <<set _char = $characters[$interactingChar]>>
+<</if>>
+
+<<set _charLoc = _char.currentLocation || "unknown">>
+<<set _status = _char.currentStatus || "available">>
+<</nobr>>
+
+<<if _status === "sleeping">>
+<<narrative _charLoc>>
+You quietly approach <<print _char.name>>'s room. The door is slightly ajar, and you can hear soft breathing. They're fast asleep.
+<</narrative>>
+
+<<btn "Leave quietly" $previousPassage "secondary">>
+
+<<elseif _status === "busy">>
+<<narrative _charLoc>>
+<<print _char.name>> seems to be occupied with something important right now. Maybe you should come back later.
+<</narrative>>
+
+<<btn "Leave" $previousPassage "secondary">>
+
+<<elseif _status === "waking">>
+<<narrative _charLoc>>
+<<print _char.name>> is just waking up, stretching and yawning. They notice you and give a sleepy smile.
+<</narrative>>
+
+<<showActions $interactingChar _charLoc>>
+
+<div class="interaction-footer">
+<<btn "Leave" $previousPassage "secondary">>
+</div>
+
+<<else>>
+<<narrative _charLoc>>
+You approach <<print _char.name>>.
+<</narrative>>
+
+<<showActions $interactingChar _charLoc>>
+
+<div class="interaction-footer">
+<<btn "Leave" $previousPassage "secondary">>
+</div>
+
+<</if>>

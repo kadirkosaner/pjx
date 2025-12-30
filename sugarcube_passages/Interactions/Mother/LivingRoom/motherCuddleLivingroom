@@ -1,0 +1,52 @@
+:: motherCuddleLivingroom [incest romantic]
+/* Mother - Living Room Cuddle */
+
+<<set $location = "Living Room">>
+<<advanceTime 20>>
+
+<<narrative>>
+Your mother is sitting on the couch, watching TV. The room is dim, lit only by the soft glow of the screen.
+<</narrative>>
+
+<<dialog "player">>
+"Mind if I join you?"
+<</dialog>>
+
+<<dialog "mother">>
+<<if $characters.mother.stats.love < 60>>
+"Of course, sweetie. Come sit with me."
+
+//She pats the spot next to her invitingly.//
+<<else>>
+"I was hoping you would..."
+
+//She lifts her arm, inviting you in closer.//
+<</if>>
+<</dialog>>
+
+<<narrative>>
+<<if $characters.mother.stats.love < 60>>
+You sit close to her, and she wraps an arm around you. It feels safe, comfortable. Like when you were a child.
+<<else>>
+You settle in beside her, and she pulls you close. Her warmth envelops you as she rests her head against yours. Neither of you is really watching the TV anymore.
+<</if>>
+<</narrative>>
+
+<<set $characters.mother.stats.love += 5>>
+<<set $characters.mother.stats.trust += 3>>
+<<if $contentPreferences.romantic>>
+<<set $characters.mother.stats.lust += 2>>
+<</if>>
+<<if $characters.mother.stats.love > 100>><<set $characters.mother.stats.love = 100>><</if>>
+<<if $characters.mother.stats.trust > 100>><<set $characters.mother.stats.trust = 100>><</if>>
+<<if $characters.mother.stats.lust > 100>><<set $characters.mother.stats.lust = 100>><</if>>
+
+<div class="stat-change">
+    <span class="icon icon-heart icon-14"></span> Love +5
+    <span class="icon icon-shield icon-14"></span> Trust +3
+    <<if $contentPreferences.romantic>>
+    <span class="icon icon-arousal icon-14"></span> Lust +2
+    <</if>>
+</div>
+
+<<btn "Continue" "CharacterInteraction">>
