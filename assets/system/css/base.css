@@ -992,13 +992,6 @@ body.startscreen-active #passages {
     padding-top: 0;
 }
 
-.phone-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
 .message-item {
     display: flex;
     align-items: center;
@@ -1043,9 +1036,11 @@ body.startscreen-active #passages {
     flex-shrink: 0;
 }
 
+/* Phone Empty State - Single Definition */
 .phone-empty {
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: var(--spacing-lg);
@@ -2114,33 +2109,37 @@ body.startscreen-active #passages {
 .saveload-modal {
     width: 90%;
     max-width: 1200px;
-    max-height: 85vh;
+    max-height: 92vh;
 }
 
 .saveload-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
     padding: var(--spacing-md);
 }
 
 .save-slot {
+    position: relative;
     background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border-primary);
+    border: 1px solid var(--color-border-secondary);
     border-radius: var(--radius-lg);
+    padding: 1rem;
     overflow: hidden;
-    transition: all var(--transition-medium);
+    transition: all var(--transition-fast);
     display: flex;
     flex-direction: column;
 }
 
-.save-slot:hover {
-    border-color: var(--color-border-secondary);
+.save-slot:not(.save-slot-empty):hover {
+    border-color: var(--color-accent);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .save-slot-empty {
     border-style: dashed;
+    opacity: 0.6;
 }
 
 .save-slot-empty:hover {
@@ -2221,50 +2220,56 @@ body.startscreen-active #passages {
     padding-top: 0;
     display: flex;
     gap: var(--spacing-sm);
+    flex-wrap: wrap;
 }
 
 .save-btn {
     flex: 1;
-    padding: 0.6rem 1rem;
-    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-secondary);
     border-radius: var(--radius-md);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-primary);
     font-size: 0.75rem;
+    font-weight: 500;
     letter-spacing: 1px;
     text-transform: uppercase;
     cursor: pointer;
     transition: all var(--transition-fast);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    min-width: 0;
 }
 
 .save-btn:hover {
-    border-color: var(--color-text-primary);
-    color: var(--color-text-primary);
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-secondary);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
 }
 
 .save-btn-load {
+    background: var(--color-accent);
     border-color: var(--color-accent);
-    color: var(--color-accent);
+    color: white;
 }
 
 .save-btn-load:hover {
-    background: var(--color-accent);
-    color: var(--color-text-primary);
+    background: #db2777;
+    border-color: #db2777;
 }
 
 .save-btn-save {
+    width: 100%;
+    background: var(--color-accent);
     border-color: var(--color-accent);
-    color: var(--color-accent);
+    color: white;
 }
 
 .save-btn-save:hover {
-    background: var(--color-accent);
-    color: var(--color-text-primary);
+    background: #db2777;
+    border-color: #db2777;
 }
 
 .save-btn-delete {
@@ -2356,6 +2361,7 @@ body.startscreen-active #passages {
 .btn-primary:hover {
     background: var(--color-accent);
     color: #fff;
+    transform: translateY(-1px);
 }
 
 .btn-danger {
@@ -2366,6 +2372,7 @@ body.startscreen-active #passages {
 .btn-danger:hover {
     background: #ef4444;
     color: #fff;
+    transform: translateY(-1px);
 }
 
 /* Prompt Input */
@@ -3341,39 +3348,6 @@ body.startscreen-active #passages {
     border-top: 1px solid var(--color-border-primary);
 }
 
-/* ================== SAVE/LOAD MODAL =================== */
-.saveload-modal {
-    max-width: 95vw;
-    width: 1200px;
-    max-height: 92vh;
-}
-
-.saveload-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.save-slot {
-    position: relative;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border-secondary);
-    border-radius: var(--radius-lg);
-    padding: 1rem;
-    transition: all var(--transition-fast);
-}
-
-.save-slot:not(.save-slot-empty):hover {
-    border-color: var(--color-accent);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.save-slot-empty {
-    opacity: 0.6;
-}
-
 /* Delete badge (EXACTLY like AUTO SAVE) */
 .save-delete-btn {
     position: absolute;
@@ -3456,157 +3430,16 @@ body.startscreen-active #passages {
     background: rgba(0, 0, 0, 0.8) !important;
 }
 
-.modal-overlay {
-    z-index: 10000 !important;
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.btn-primary {
-    background: transparent;
-    color: var(--color-accent);
-    border: 1px solid var(--color-accent) !important;
-}
-
-.btn-primary:hover {
-    background: var(--color-accent);
-    color: white;
-    transform: translateY(-1px);
-}
-
-.btn-danger {
-    background: transparent;
-    color: #ef4444; /* Brighter red */
-    border: 1px solid #ef4444 !important;
-}
-
-.btn-danger:hover {
-    background: #ef4444;
-    color: white;
-    transform: translateY(-1px);
-}
-
 .btn-secondary {
     background: transparent;
     color: var(--color-text-secondary);
-    border: 1px solid var(--color-border-secondary) !important;
+    border: 1px solid var(--color-border-secondary);
 }
 
 .btn-secondary:hover {
     background: var(--color-bg-tertiary);
     border-color: var(--color-text-secondary);
     transform: translateY(-1px);
-}
-
-.save-preview,
-.save-preview-empty {
-    text-align: center;
-    margin-bottom: 0.75rem;
-}
-
-/* Auto save badge styling handled in common components section */
-
-.save-slot-number {
-    font-size: 0.75rem;
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.save-metadata {
-    margin-bottom: 0.75rem;
-    text-align: center;
-}
-
-.save-title {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    margin-bottom: 0.25rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.save-date {
-    font-size: 0.7rem;
-    color: var(--color-text-tertiary);
-}
-
-.save-actions {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.save-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.75rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border-secondary);
-    border-radius: var(--radius-md);
-    color: var(--color-text-primary);
-    font-size: 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    min-width: 0;
-}
-
-.save-btn:hover {
-    background: var(--color-bg-secondary);
-    border-color: var(--color-accent);
-    transform: translateY(-1px);
-}
-
-.save-btn-load {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: white;
-}
-
-.save-btn-load:hover {
-    background: #db2777;
-    border-color: #db2777;
-}
-
-.save-btn-save {
-    width: 100%;
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: white;
-}
-
-.save-btn-save:hover {
-    background: #db2777;
-    border-color: #db2777;
-}
-
-.save-preview-empty {
-    padding: 1.5rem 1rem;
-}
-
-.save-preview-empty .icon-save {
-    display: inline-block;
-    background-color: var(--color-text-tertiary);
-    opacity: 0.4;
-}
-
-.empty-label {
-    font-size: 0.75rem;
-    color: var(--color-text-tertiary);
-    margin-top: 0.5rem;
 }
 
 /* ================== SAVE/LOAD DISK BUTTONS =================== */
