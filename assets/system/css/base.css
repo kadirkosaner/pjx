@@ -1466,8 +1466,10 @@ body.startscreen-active #passages {
     border-radius: 6px;
     padding: var(--spacing-sm) 0.75rem;
     color: var(--color-text-primary);
-    font-size: 0.75rem;
-    white-space: nowrap;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: 300px;
+    white-space: normal;
     z-index: 10000;
     pointer-events: none;
     transform: translateX(-50%) translateY(5px);
@@ -4547,4 +4549,196 @@ body.wardrobe-active .passage {
 .measurement-row strong {
     color: var(--color-text-primary);
     font-weight: 600;
+}
+
+/* ==========================================
+   SETTINGS UI GLOBAL STYLES
+========================================== */
+
+.settings-list {
+    display: grid;
+    gap: 20px;
+    padding: 10px;
+}
+
+.settings-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+}
+
+.settings-control:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.setting-toggle-btn {
+    padding: 8px 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.setting-toggle-btn.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+.setting-toggle-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.setting-toggle-btn.active:hover {
+    background: #f472b6;
+}
+
+/* ==========================================
+   SETTINGS & TABS COMMON STYLES
+========================================== */
+
+.tab-content-inner {
+    padding: var(--spacing-lg);
+}
+
+.tab-content-inner h3 {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* ==========================================
+   GAME SETUP & ACCORDION STYLES
+========================================== */
+
+.game-setup-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.setup-accordion-item {
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-border-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-bg-tertiary);
+}
+
+.setup-accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.setup-accordion-header:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.setup-accordion-header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.setup-accordion-toggle {
+    font-size: 1.5rem;
+    transition: transform 0.3s;
+    color: var(--color-accent);
+}
+
+.setup-accordion-item.active .setup-accordion-toggle {
+    transform: rotate(180deg);
+}
+
+.setup-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.setup-accordion-item.active .setup-accordion-content {
+    max-height: 2000px;
+}
+
+.setup-accordion-body {
+    padding: 1.5rem;
+    border-top: 1px solid var(--color-border-primary);
+}
+
+.form-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-input-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+}
+
+.form-input-group input[type=\u0022text\u0022] {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 6px;
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+}
+
+.form-input-group input[type=\u0022text\u0022]:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.settings-info-note {
+    background: rgba(236, 72, 153, 0.1);
+    border-left: 3px solid var(--color-accent);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.settings-select {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 6px;
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.settings-select:focus {
+    outline: none;
+    border-color: var(--color-accent);
 }

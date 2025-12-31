@@ -13,6 +13,16 @@
     relationshipDecay: false
 }>>
 
+/* CHARACTER APPEARANCE DEFAULTS */
+<<set $player = {
+    firstName: "Alex",
+    lastName: "Taylor",
+    hairColor: "Brown",
+    eyeColor: "Brown",
+    skinTone: "Fair",
+    bodyType: "Average"
+}>>
+
 /* CORE STATS */
 <<set $energy = 100>>
 <<set $energyMax = 100>>

@@ -20,6 +20,7 @@ window.SystemModules = {
         'saveload',
         'location',
         'map',
-        'wardrobe'
+        'wardrobe',
+        'accordion'
     ]
 };
