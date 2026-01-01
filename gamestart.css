@@ -1,0 +1,362 @@
+/* ==========================================
+   GAMESTART SCREENS CSS
+   Isolated styles for: welcomePage, settingsPage, confirmationPage
+   Uses unique class prefixes to avoid conflicts with main UI
+========================================== */
+
+/* ==========================================
+   WELCOME PAGE
+========================================== */
+
+.gs-welcome-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+.gs-welcome-container {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+.gs-welcome-glow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.gs-welcome-header {
+  margin-bottom: 2rem;
+}
+
+.gs-welcome-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.gs-welcome-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.15em;
+  margin: 0;
+}
+
+.gs-welcome-version {
+  background: var(--color-accent);
+  color: #000;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.gs-welcome-tagline {
+  font-size: 0.9rem;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.05em;
+}
+
+.gs-welcome-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--color-accent);
+  margin: 1rem auto 0;
+}
+
+.gs-welcome-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.gs-warning-section {
+  margin-bottom: 1.5rem;
+}
+
+.gs-warning-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.gs-warning-header .warning-icon {
+  font-size: 1.5rem;
+}
+
+.gs-warning-header h2 {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 1.25rem;
+}
+
+.gs-warning-text {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.gs-warning-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid var(--color-accent);
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.gs-section-divider {
+  height: 1px;
+  background: var(--color-border-primary);
+  margin: 1.5rem 0;
+}
+
+.gs-features-section h3 {
+  font-size: 1rem;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.gs-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.gs-feature-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--color-bg-tertiary);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.gs-feature-icon-box {
+  font-size: 1.25rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(236, 72, 153, 0.1);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.gs-feature-info {
+  min-width: 0;
+}
+
+.gs-feature-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.15rem;
+}
+
+.gs-feature-desc {
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+}
+
+.gs-verification-section {
+  margin-bottom: 2rem;
+}
+
+.gs-verification-prompt {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.gs-verification-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.gs-welcome-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+}
+
+.gs-footer-dot {
+  opacity: 0.5;
+}
+
+/* ==========================================
+   GAME SETUP CONTAINER (Shared)
+========================================== */
+
+/* When fullscreen-centered, page-wrapper becomes fullscreen like welcome-page */
+body.fullscreen-centered .page-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+/* Flex spacers for safe centering */
+body.fullscreen-centered .page-wrapper::before {
+  content: '';
+  display: block;
+  flex: 1;
+  min-height: 5rem; /* Space for hamburger menu */
+}
+
+body.fullscreen-centered .page-wrapper::after {
+  content: '';
+  display: block;
+  flex: 1;
+  min-height: 2rem;
+}
+
+/* Content container */
+body.fullscreen-centered .page-wrapper > div {
+  margin: 0 auto;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+/* Setup container - scoped to avoid override */
+body.fullscreen-centered .game-setup-container,
+.gs-setup-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Setup page title - scoped */
+.gs-page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.gs-page-subtitle {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.gs-setup-header-line {
+  width: 60px;
+  height: 2px;
+  background: var(--color-accent);
+  margin: 0 auto 1rem auto;
+}
+
+/* ==========================================
+   CONFIRMATION PAGE
+========================================== */
+
+.gs-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.gs-info-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.gs-info-card-header {
+  background: var(--color-bg-tertiary);
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gs-info-card-body {
+  padding: 1.5rem;
+}
+
+.gs-info-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+
+.gs-info-line:last-child {
+  border-bottom: none;
+}
+
+.gs-info-line .label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.gs-info-line .value {
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.gs-separator-line {
+  height: 1px;
+  background: var(--color-border-primary);
+  margin: 1rem 0;
+}
+
+.gs-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
