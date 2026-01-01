@@ -159,6 +159,7 @@ $(document).one(':storyready', async function () {
         await loadCSS("assets/system/css/dialog.css");
         await loadCSS("assets/system/css/debug.css");
         await loadCSS("assets/system/css/icons.css");
+     
 
         // Load config first
         await loadJS("assets/system/js/config.js");
@@ -186,8 +187,7 @@ $(document).one(':storyready', async function () {
                 window[initFn](API);
             }
         });
-
-        // Trigger initial render
+        
         // Trigger initial render
         $(document).trigger(':passagerender');
 
@@ -198,32 +198,51 @@ $(document).one(':storyready', async function () {
     }
 });
 
+/* ================== Fullscreen Layout Detection =================== */
+// When topbar and rightbar are hidden, center the page content
+$(document).on(':passagerender', function () {
+    const vars = State.variables;
+    
+    // Check if both topbar content and rightbar are hidden
+    const topbarHidden = vars.hideTopbar === true || 
+        (vars.hideTopbarNav === true && vars.hideTopbarTimebox === true && vars.hideTopbarNotifications === true);
+    const rightbarHidden = vars.hideRightbar === true;
+    
+    if (topbarHidden && rightbarHidden) {
+        $('body').addClass('fullscreen-layout');
+    } else {
+        $('body').removeClass('fullscreen-layout');
+    }
+});
+
 /* ================== Custom Link Macro =================== */
 Macro.add('btn', {
     handler: function () {
-        if (this.args.length < 2) {
-            return this.error('btn macro requires at least 2 arguments: text and passage');
+        if (this.args.length < 1) {
+            return this.error('btn macro requires at least 1 argument: text');
         }
 
         const text = this.args[0];
-        const passage = this.args[1];
+        const passage = this.args[1]; // Optional
         const style = this.args[2] ? this.args[2].toLowerCase() : 'default';
 
         const link = $('<a>')
             .addClass('link-internal')
             .addClass('btn-style')
             .addClass('btn-' + style)
-            .attr('data-passage', passage)
             .attr('tabindex', '0')
             .text(text)
             .appendTo(this.output);
 
-        link.ariaClick({
-            namespace: '.macros',
-            one: true
-        }, function () {
-            Engine.play(passage);
-        });
+        if (passage) {
+            link.attr('data-passage', passage);
+            link.ariaClick({
+                namespace: '.macros',
+                one: true
+            }, function () {
+                Engine.play(passage);
+            });
+        }
     }
 });
 
@@ -745,432 +764,444 @@ Macro.add('locationMenu', {
 
 &lt;&lt;set $taxiBaseFare = 10&gt;&gt;
 
-/* ==========================================
-   SUGARCUBE WIDGETS - Stats Calculations
-========================================== */
 
-&lt;&lt;widget &quot;calculateBodyAppeal&quot;&gt;&gt;
-    &lt;&lt;set _bmi = $body.weight / Math.pow($body.height / 100, 2)&gt;&gt;
-    &lt;&lt;set _whr = $body.waist / $body.hips&gt;&gt;
-    
-    &lt;&lt;set _idealBMI = 21.5&gt;&gt;
-    &lt;&lt;set _bmiDiff = Math.abs(_bmi - _idealBMI)&gt;&gt;
-    &lt;&lt;set _bmiScore = Math.max(0, 100 - (_bmiDiff * 10))&gt;&gt;
-    
-    &lt;&lt;set _idealWHR = 0.7&gt;&gt;
-    &lt;&lt;set _whrDiff = Math.abs(_whr - _idealWHR)&gt;&gt;
-    &lt;&lt;set _whrScore = Math.max(0, 100 - (_whrDiff * 200))&gt;&gt;
-    
-    &lt;&lt;set _bustHipAvg = ($body.bust + $body.hips) / 2&gt;&gt;
-    &lt;&lt;set _symmetryRatio = _bustHipAvg / $body.waist&gt;&gt;
-    &lt;&lt;set _idealSymmetry = 1.35&gt;&gt;
-    &lt;&lt;set _symDiff = Math.abs(_symmetryRatio - _idealSymmetry)&gt;&gt;
-    &lt;&lt;set _symmetryScore = Math.max(0, 100 - (_symDiff * 50))&gt;&gt;
-    
-    &lt;&lt;set _idealMuscle = 40&gt;&gt;
-    &lt;&lt;set _idealFat = 20&gt;&gt;
-    &lt;&lt;set _muscleDiff = Math.abs($body.muscleMass - _idealMuscle)&gt;&gt;
-    &lt;&lt;set _fatDiff = Math.abs($body.bodyFat - _idealFat)&gt;&gt;
-    &lt;&lt;set _compScore = (Math.max(0, 100 - (_muscleDiff * 2)) * 0.5) + (Math.max(0, 100 - (_fatDiff * 2)) * 0.5)&gt;&gt;
-    
-    &lt;&lt;set $body.appeal = Math.round((_bmiScore * 0.3) + (_whrScore * 0.3) + (_symmetryScore * 0.2) + (_compScore * 0.2))&gt;&gt;
-&lt;&lt;/widget&gt;&gt;
-
-&lt;&lt;widget &quot;calculateFitness&quot;&gt;&gt;
-    &lt;&lt;set $fitness = Math.round(($upperBody + $core + $lowerBody + $cardio) / 4)&gt;&gt;
-&lt;&lt;/widget&gt;&gt;
-
-&lt;&lt;widget &quot;calculateLooks&quot;&gt;&gt;
-    &lt;&lt;calculateFitness&gt;&gt;
-    &lt;&lt;calculateBodyAppeal&gt;&gt;
-    &lt;&lt;set $looks = Math.round(($beauty + $clothingScore + $fitness + $body.appeal) / 4)&gt;&gt;
-&lt;&lt;/widget&gt;&gt;
-
-&lt;&lt;widget &quot;calculateEnergyMax&quot;&gt;&gt;
-    &lt;&lt;calculateFitness&gt;&gt;
-    &lt;&lt;set $energyMax = 100 + Math.floor($fitness / 4)&gt;&gt;
-&lt;&lt;/widget&gt;&gt;
 </tw-passagedata><tw-passagedata pid="3" name="settingsPage" tags="" position="1050,400" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $hideTopbarNav = true&gt;&gt;
 &lt;&lt;set $hideTopbarTimebox = true&gt;&gt;
 &lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
 &lt;&lt;set $hideRightbar = true&gt;&gt;
-&lt;&lt;run $(&#39;body&#39;).addClass(&#39;layout-centered&#39;)&gt;&gt;
+&lt;&lt;set $hideTopbar = true&gt;&gt;
+&lt;&lt;run $(&#39;body&#39;).addClass(&#39;fullscreen-centered&#39;)&gt;&gt;
+
 &lt;div class=&quot;page-wrapper&quot;&gt;
 &lt;div class=&quot;game-setup-container&quot;&gt;
     &lt;h1 class=&quot;page-title&quot;&gt;Game Setup&lt;/h1&gt;
+    &lt;div class=&quot;setup-header-line&quot;&gt;&lt;/div&gt;
     &lt;p class=&quot;page-subtitle&quot;&gt;
-        Configure your character and game preferences. These settings can only be configured once at game start.
+        Configure your character and world. These choices define your starting experience.
     &lt;/p&gt;
 
     &lt;!-- 1. CHARACTER CREATION --&gt;
-    &lt;div class=&quot;setup-accordion-item active&quot; data-accordion=&quot;character&quot;&gt;
-        &lt;div class=&quot;setup-accordion-header&quot;&gt;
-            &lt;h3&gt;&lt;span class=&quot;icon icon-user&quot;&gt;&lt;/span&gt; Character Creation&lt;/h3&gt;
+    &lt;div class=&quot;settings-section setup-accordion-item&quot;&gt;
+        &lt;div class=&quot;settings-section-header setup-accordion-header&quot;&gt;
+            &lt;div style=&quot;display: flex; align-items: center; gap: 0.5rem;&quot;&gt;&lt;span class=&quot;icon icon-user&quot;&gt;&lt;/span&gt; Character Identity&lt;/div&gt;
             &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;
-        &lt;div class=&quot;setup-accordion-content&quot;&gt;
-            &lt;div class=&quot;setup-accordion-body&quot;&gt;
-                &lt;div class=&quot;form-grid-2&quot;&gt;
-                    &lt;div class=&quot;form-input-group&quot;&gt;
-                        &lt;label&gt;First Name&lt;/label&gt;
-                        &lt;input type=&quot;text&quot; id=&quot;characterFirstName&quot; placeholder=&quot;Alex&quot; value=&quot;Alex&quot;&gt;
-                    &lt;/div&gt;
-                    
-                    &lt;div class=&quot;form-input-group&quot;&gt;
-                        &lt;label&gt;Last Name&lt;/label&gt;
-                        &lt;input type=&quot;text&quot; id=&quot;characterLastName&quot; placeholder=&quot;Taylor&quot; value=&quot;Taylor&quot;&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;form-input-group&quot;&gt;
-                        &lt;label&gt;Hair Color&lt;/label&gt;
-                        &lt;select id=&quot;charHair&quot; class=&quot;settings-select&quot;&gt;
-                            &lt;option value=&quot;Black&quot;&gt;Black&lt;/option&gt;
-                            &lt;option value=&quot;Brown&quot; selected&gt;Brown&lt;/option&gt;
-                            &lt;option value=&quot;Blonde&quot;&gt;Blonde&lt;/option&gt;
-                            &lt;option value=&quot;Red&quot;&gt;Red&lt;/option&gt;
-                            &lt;option value=&quot;White&quot;&gt;White&lt;/option&gt;
-                        &lt;/select&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;form-input-group&quot;&gt;
-                        &lt;label&gt;Eye Color&lt;/label&gt;
-                        &lt;select id=&quot;charEyes&quot; class=&quot;settings-select&quot;&gt;
-                            &lt;option value=&quot;Brown&quot; selected&gt;Brown&lt;/option&gt;
-                            &lt;option value=&quot;Blue&quot;&gt;Blue&lt;/option&gt;
-                            &lt;option value=&quot;Green&quot;&gt;Green&lt;/option&gt;
-                            &lt;option value=&quot;Hazel&quot;&gt;Hazel&lt;/option&gt;
-                            &lt;option value=&quot;Grey&quot;&gt;Grey&lt;/option&gt;
-                            &lt;option value=&quot;Amber&quot;&gt;Amber&lt;/option&gt;
-                        &lt;/select&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;form-input-group&quot;&gt;
-                        &lt;label&gt;Skin Tone&lt;/label&gt;
-                        &lt;select id=&quot;charSkin&quot; class=&quot;settings-select&quot;&gt;
-                            &lt;option value=&quot;Pale&quot;&gt;Pale&lt;/option&gt;
-                            &lt;option value=&quot;Fair&quot; selected&gt;Fair&lt;/option&gt;
-                            &lt;option value=&quot;Light&quot;&gt;Light&lt;/option&gt;
-                            &lt;option value=&quot;Olive&quot;&gt;Olive&lt;/option&gt;
-                            &lt;option value=&quot;Tan&quot;&gt;Tan&lt;/option&gt;
-                            &lt;option value=&quot;Brown&quot;&gt;Brown&lt;/option&gt;
-                            &lt;option value=&quot;Dark&quot;&gt;Dark&lt;/option&gt;
-                            &lt;option value=&quot;Black&quot;&gt;Black&lt;/option&gt;
-                        &lt;/select&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;form-input-group&quot;&gt;
-                        &lt;label&gt;Body Type&lt;/label&gt;
-                        &lt;select id=&quot;charBody&quot; class=&quot;settings-select&quot;&gt;
-                            &lt;option value=&quot;Slim&quot;&gt;Slim&lt;/option&gt;
-                            &lt;option value=&quot;Athletic&quot;&gt;Athletic&lt;/option&gt;
-                            &lt;option value=&quot;Average&quot; selected&gt;Average&lt;/option&gt;
-                            &lt;option value=&quot;Curvy&quot;&gt;Curvy&lt;/option&gt;
-                            &lt;option value=&quot;Chubby&quot;&gt;Chubby&lt;/option&gt;
-                            &lt;option value=&quot;Muscular&quot;&gt;Muscular&lt;/option&gt;
-                        &lt;/select&gt;
-                    &lt;/div&gt;
+        &lt;div class=&quot;settings-section-body setup-accordion-content&quot;&gt;
+            &lt;div class=&quot;form-grid-2&quot;&gt;
+                &lt;div class=&quot;form-input-group&quot;&gt;
+                    &lt;label&gt;First Name&lt;/label&gt;
+                    &lt;input type=&quot;text&quot; id=&quot;characterFirstName&quot; @value=&quot;$player.firstName&quot;&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;form-input-group&quot;&gt;
+                    &lt;label&gt;Last Name&lt;/label&gt;
+                    &lt;input type=&quot;text&quot; id=&quot;characterLastName&quot; @value=&quot;$player.lastName&quot;&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
-    &lt;!-- 2. SIMULATION SETTINGS --&gt;
-    &lt;div class=&quot;setup-accordion-item&quot; data-accordion=&quot;simulation&quot;&gt;
-        &lt;div class=&quot;setup-accordion-header&quot;&gt;
-            &lt;h3&gt;&lt;span class=&quot;icon icon-simulation&quot;&gt;&lt;/span&gt; Simulation Settings&lt;/h3&gt;
+    &lt;!-- 2. BODY CUSTOMIZATION --&gt;
+    &lt;div class=&quot;settings-section setup-accordion-item&quot;&gt;
+        &lt;div class=&quot;settings-section-header setup-accordion-header&quot;&gt;
+            &lt;div style=&quot;display: flex; align-items: center; gap: 0.5rem;&quot;&gt;&lt;span class=&quot;icon icon-body&quot;&gt;&lt;/span&gt; Body Customization&lt;/div&gt;
             &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;
-        &lt;div class=&quot;setup-accordion-content&quot;&gt;
-            &lt;div class=&quot;setup-accordion-body&quot;&gt;
-                &lt;div class=&quot;settings-info-note&quot;&gt;
-                    &lt;strong&gt;Note:&lt;/strong&gt; These simulation options affect realism but can be changed later in the settings menu.
+        &lt;div class=&quot;settings-section-body setup-accordion-content&quot;&gt;
+            
+            &lt;!-- Hidden Inputs for JS to update --&gt;
+            &lt;input type=&quot;hidden&quot; id=&quot;valEyeColor&quot; value=&quot;Brown&quot;&gt;
+            &lt;input type=&quot;hidden&quot; id=&quot;valHairColor&quot; value=&quot;Brown&quot;&gt;
+            &lt;input type=&quot;hidden&quot; id=&quot;valHairLength&quot; value=&quot;Long&quot;&gt;
+            &lt;input type=&quot;hidden&quot; id=&quot;valBustSize&quot; value=&quot;C&quot;&gt;
+            &lt;input type=&quot;hidden&quot; id=&quot;valHipSize&quot; value=&quot;Medium&quot;&gt;
+
+            &lt;!-- Eye Color --&gt;
+            &lt;div class=&quot;visual-label&quot;&gt;Eye Color&lt;/div&gt;
+            &lt;div class=&quot;color-grid&quot; id=&quot;gridEyeColor&quot;&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Black&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #1a1a1a;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Black&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option selected&quot; data-value=&quot;Brown&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #5D4037;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Brown&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Hazel&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #8B6914;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Hazel&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Green&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #4A7C59;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Green&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Blue&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #5B8FA8;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Blue&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Gray&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #7A8B8B;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Gray&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Hair Color --&gt;
+            &lt;div class=&quot;visual-label&quot;&gt;Hair Color&lt;/div&gt;
+            &lt;div class=&quot;color-grid&quot; id=&quot;gridHairColor&quot;&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Black&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #1a1a1a;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Black&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Dark Brown&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #2C1810;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;D.Brown&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option selected&quot; data-value=&quot;Brown&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #6B4423;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Brown&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Auburn&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #A0522D;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Auburn&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Light Brown&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #CD853F;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;L.Brown&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Blonde&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #DAA520;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Blonde&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Red&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #8B0000;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Red&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;color-option&quot; data-value=&quot;Gray&quot;&gt;&lt;div class=&quot;color-swatch&quot; style=&quot;background: #C0C0C0;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;color-name&quot;&gt;Gray&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Hair Length --&gt;
+            &lt;div class=&quot;visual-label&quot;&gt;Hair Length&lt;/div&gt;
+            &lt;div class=&quot;visual-grid&quot; id=&quot;gridHairLength&quot;&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;Short&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Short Hair&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Short&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;Medium&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Medium Hair&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Medium&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option selected&quot; data-value=&quot;Long&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Long Hair&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Long&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;Very Long&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Very Long Hair&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Very Long&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Bust Size --&gt;
+            &lt;div class=&quot;visual-label&quot;&gt;Bust Size&lt;/div&gt;
+            &lt;div class=&quot;visual-grid&quot; id=&quot;gridBustSize&quot;&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;A&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;A Cup&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;A-Cup&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;B&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;B Cup&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;B-Cup&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option selected&quot; data-value=&quot;C&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;C Cup&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;C-Cup&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;D&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;D Cup&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;D-Cup&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;DD&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;DD+ Cup&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;DD+&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Hip Size --&gt;
+            &lt;div class=&quot;visual-label&quot;&gt;Hip Size&lt;/div&gt;
+            &lt;div class=&quot;visual-grid&quot; id=&quot;gridHipSize&quot;&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;Slim&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Slim Hips&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Slim&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option selected&quot; data-value=&quot;Medium&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Medium Hips&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Medium&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;Wide&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Wide Hips&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Wide&lt;/div&gt;&lt;/div&gt;
+                &lt;div class=&quot;visual-option&quot; data-value=&quot;Curvy&quot;&gt;&lt;div class=&quot;visual-img&quot;&gt;&lt;img src=&quot;assets/content/400.jpg&quot; alt=&quot;Curvy Hips&quot;&gt;&lt;/div&gt;&lt;div class=&quot;visual-name&quot;&gt;Curvy&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 3. SIMULATION SETTINGS --&gt;
+    &lt;div class=&quot;settings-section setup-accordion-item&quot;&gt;
+        &lt;div class=&quot;settings-section-header setup-accordion-header&quot;&gt;
+            &lt;div style=&quot;display: flex; align-items: center; gap: 0.5rem;&quot;&gt;&lt;span class=&quot;icon icon-settings&quot;&gt;&lt;/span&gt; Simulation Settings&lt;/div&gt;
+            &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;settings-section-body setup-accordion-content&quot;&gt;
+            &lt;div class=&quot;note-box warning&quot;&gt;
+                ⚠️ These settings cannot be changed after starting the game.
+            &lt;/div&gt;
+
+            &lt;div class=&quot;sim-grid&quot;&gt;
+                &lt;div class=&quot;sim-group-title&quot;&gt;Basic Needs&lt;/div&gt;
+                
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Hunger&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Need to eat regularly&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackHunger&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Thirst&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Need to drink water&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackThirst&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Bladder&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Need to use bathroom&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackBladder&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Calories&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Track intake vs burn&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackCalories&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Hygiene Impact&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Bad smell repels people&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;hygieneRequirement&quot;&gt;ON&lt;/button&gt;
                 &lt;/div&gt;
 
-                &lt;h4 class=&quot;section-title mb-2&quot;&gt;Basic Needs&lt;/h4&gt;
-                &lt;div class=&quot;settings-list&quot;&gt;
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Track Hunger
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Your character needs to eat regularly. If you get too hungry, you&#39;ll feel tired and grumpy. Extreme hunger prevents working or studying.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Manage hunger and eating habits&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackHunger&quot;&gt;ON&lt;/button&gt;
+                &lt;div class=&quot;sim-group-title&quot;&gt;Appearance &amp; Decay&lt;/div&gt;
+                
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Hair Growth&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Hair gets longer daily&lt;/div&gt;
                     &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Track Thirst
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Your character must stay hydrated. Being too thirsty drains your energy and damages your health. You can&#39;t exercise when severely dehydrated.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Manage thirst and drinking&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackThirst&quot;&gt;ON&lt;/button&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Track Bladder
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Bathroom breaks become necessary. Wait too long and you risk embarrassing accidents that hurt your hygiene and mood.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Manage bathroom needs&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;trackBladder&quot;&gt;OFF&lt;/button&gt;
-                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;hairGrowth&quot;&gt;ON&lt;/button&gt;
                 &lt;/div&gt;
-
-                &lt;h4 class=&quot;section-title mt-4 mb-2&quot;&gt;Advanced Options&lt;/h4&gt;
-                &lt;div class=&quot;settings-list&quot;&gt;
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Calorie Tracking
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;See detailed nutrition information when eating. Daily target is 2000 calories. Helps you manage your character&#39;s body weight and composition more precisely.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Show calorie counts when eating&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;trackCalories&quot;&gt;OFF&lt;/button&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Hair Messiness&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Wake up with messy hair&lt;/div&gt;
                     &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Skill Decay
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Skills rust if you don&#39;t practice them regularly. Makes the game more challenging as you need to maintain your abilities over time.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Skills decrease over time if unused&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;skillDecay&quot;&gt;OFF&lt;/button&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;hairMessiness&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                 &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Body Hair&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Body hair grows over time&lt;/div&gt;
                     &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Relationship Decay
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Friendships and romances fade if you neglect them. You&#39;ll need to spend quality time with people to keep relationships strong.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Relationships weaken if not maintained&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;relationshipDecay&quot;&gt;OFF&lt;/button&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;bodyHairGrowth&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Makeup Fade&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Makeup wears off daily&lt;/div&gt;
                     &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;makeupWearOff&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                 &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Body Changes&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Muscle/Fat gain/loss&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;bodyDegradation&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Skill Decay&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Unused skills degrade&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;skillDecay&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Relation Decay&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Unseen friends drift apart&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;relationshipDecay&quot;&gt;ON&lt;/button&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
-    &lt;!-- 3. CONTENT PREFERENCES --&gt;
-    &lt;div class=&quot;setup-accordion-item&quot; data-accordion=&quot;content&quot;&gt;
-        &lt;div class=&quot;setup-accordion-header&quot;&gt;
-            &lt;h3&gt;&lt;span class=&quot;icon icon-eye&quot;&gt;&lt;/span&gt; Content Preferences&lt;/h3&gt;
-            &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
+    &lt;!-- 4. CONTENT PREFERENCES --&gt;
+    &lt;div class=&quot;settings-section setup-accordion-item&quot;&gt;
+        &lt;div class=&quot;settings-section-header setup-accordion-header&quot;&gt;
+             &lt;div style=&quot;display: flex; align-items: center; gap: 0.5rem;&quot;&gt;&lt;span class=&quot;icon icon-eye&quot;&gt;&lt;/span&gt; Content Preferences&lt;/div&gt;
+             &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;
-        &lt;div class=&quot;setup-accordion-content&quot;&gt;
-            &lt;div class=&quot;setup-accordion-body&quot;&gt;
-                &lt;div class=&quot;settings-info-note&quot;&gt;
-                    &lt;strong&gt;Note:&lt;/strong&gt; These content filters can be changed anytime in the settings menu.
-                &lt;/div&gt;
-
-               &lt;div class=&quot;settings-list&quot;&gt;
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Incest Content
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Family romantic or sexual interactions. You can change this anytime in settings.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Family romantic/sexual interactions&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;incest&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Romantic Content
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Flirting and romance scenes. Change anytime in settings.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Flirting, romance scenes&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;romantic&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Sexual Content
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Explicit sexual scenes. Change anytime in settings.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Explicit sexual scenes&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;sexual&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Gore &amp; Violence
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Blood, graphic violence, and combat scenes. Change anytime in settings.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Blood, graphic violence, combat&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;gore&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
-                    &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Scat Content
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Bathroom-related content. Change anytime in settings.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Bathroom related content&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;scat&quot; data-category=&quot;content&quot;&gt;OFF&lt;/button&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
+        &lt;div class=&quot;settings-section-body setup-accordion-content&quot;&gt;
+            &lt;div class=&quot;note-box warning&quot;&gt;
+                Select content you are comfortable with. Can be changed anytime.
             &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
 
-    &lt;!-- 4. GAMEPLAY SETTINGS --&gt;
-    &lt;div class=&quot;setup-accordion-item&quot; data-accordion=&quot;gameplay&quot;&gt;
-        &lt;div class=&quot;setup-accordion-header&quot;&gt;
-            &lt;h3&gt;&lt;span class=&quot;icon icon-settings&quot;&gt;&lt;/span&gt; Gameplay Settings&lt;/h3&gt;
-            &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;setup-accordion-content&quot;&gt;
-            &lt;div class=&quot;setup-accordion-body&quot;&gt;
-                &lt;div class=&quot;settings-info-note&quot;&gt;
-                    &lt;strong&gt;Note:&lt;/strong&gt; Video and audio settings can be adjusted anytime in the settings menu.
+            &lt;div class=&quot;sim-grid&quot;&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Male Sexual&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Scenes with men&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;maleSexual&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
                 &lt;/div&gt;
-
-                &lt;h4 class=&quot;section-title mb-2&quot;&gt;Video Options&lt;/h4&gt;
-                &lt;div class=&quot;settings-list&quot;&gt;
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Video Autoplay
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Videos play automatically when you enter a passage. Change anytime in settings.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Automatically play videos in passages&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;autoplaySet&quot; data-category=&quot;video&quot;&gt;ON&lt;/button&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Female Sexual&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Scenes with women&lt;/div&gt;
                     &lt;/div&gt;
-
-                    &lt;div class=&quot;settings-control&quot;&gt;
-                        &lt;div&gt;
-                            &lt;div class=&quot;setting-label&quot;&gt;
-                                Video Loop
-                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Videos repeat automatically when they end. Change anytime in settings.&quot;&gt;&lt;/span&gt;
-                            &lt;/div&gt;
-                            &lt;div class=&quot;setting-description&quot;&gt;Automatically repeat videos when they end&lt;/div&gt;
-                        &lt;/div&gt;
-                        &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;loopSet&quot; data-category=&quot;video&quot;&gt;ON&lt;/button&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;femaleSexual&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Trans/Futa&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Penis-having women&lt;/div&gt;
                     &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;futaTrans&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Pregnancy&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Risk of getting pregnant&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;pregnancy&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Incest&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Family relations&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;incest&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;NTR / Cheating&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Betrayal content&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;ntr&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;BDSM&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Bondage and dominance&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;bdsm&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Non-Consensual&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Forced interactions&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;nonConsensual&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Public / Exhibition&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Being seen in public&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;publicExhibition&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Lactation&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Breast milk production&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;lactation&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Foot Fetish&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Focus on feet&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;feet&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Watersports&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Urine related content&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;watersports&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Scat&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Feces related content&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;scat&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;sim-item&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;sim-label&quot;&gt;Gore / Violence&lt;/div&gt;
+                        &lt;div class=&quot;sim-desc&quot;&gt;Blood and injury&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;goreViolence&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
     &lt;!-- START GAME BUTTON --&gt;
-    &lt;div class=&quot;flex-center mt-4&quot;&gt;
-        &lt;a class=&quot;link-internal btn-style btn-accent&quot; id=&quot;start-game-btn&quot;&gt;Start Game&lt;/a&gt;
+    &lt;div class=&quot;flex-center mt-4 mb-4&quot; id=&quot;start-game-container&quot;&gt;
+        &lt;&lt;btn &quot;Continue&quot; &quot;&quot; &quot;accent&quot;&gt;&gt;
     &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;&lt;/nobr&gt;&gt;
 
 &lt;&lt;script&gt;&gt;
-// Save settings and navigate to confirmation page
 $(document).on(&#39;:passagedisplay&#39;, function(ev) {
-    // Only bind for settingsPage
     if (ev.passage.title !== &#39;settingsPage&#39;) return;
     
     const State = SugarCube.State;
-    const $ = jQuery;
     const vars = State.variables;
-    
-    // Populate form with saved values
-    if (vars.player) {
-        $(&#39;#characterFirstName&#39;).val(vars.player.firstName || &#39;Alex&#39;);
-        $(&#39;#characterLastName&#39;).val(vars.player.lastName || &#39;Taylor&#39;);
-        $(&#39;#charHair&#39;).val(vars.player.hairColor || &#39;Brown&#39;);
-        $(&#39;#charEyes&#39;).val(vars.player.eyeColor || &#39;Brown&#39;);
-        $(&#39;#charSkin&#39;).val(vars.player.skinTone || &#39;Fair&#39;);
-        $(&#39;#charBody&#39;).val(vars.player.bodyType || &#39;Average&#39;);
-    }
-    
-    // Populate toggle buttons with saved values
-    function setToggle(setting, value) {
+    const $ = jQuery;
+
+    // --- INITIALIZATION ---
+
+    // 1. Restore Toggles (Using .active instead of .on/.off to match accordion.js)
+    function restoreToggle(setting, obj) {
+        if (!obj || obj[setting] === undefined) return;
+        const val = obj[setting];
         const $btn = $(`.setting-toggle-btn[data-setting=&quot;${setting}&quot;]`);
-        if (value) {
+        if (val) {
             $btn.addClass(&#39;active&#39;).text(&#39;ON&#39;);
         } else {
             $btn.removeClass(&#39;active&#39;).text(&#39;OFF&#39;);
         }
     }
-    
-    // Game Settings
+
+    // Restore Game Settings
     if (vars.gameSettings) {
-        setToggle(&#39;trackHunger&#39;, vars.gameSettings.trackHunger);
-        setToggle(&#39;trackThirst&#39;, vars.gameSettings.trackThirst);
-        setToggle(&#39;trackBladder&#39;, vars.gameSettings.trackBladder);
-        setToggle(&#39;trackCalories&#39;, vars.gameSettings.trackCalories);
-        setToggle(&#39;skillDecay&#39;, vars.gameSettings.skillDecay);
-        setToggle(&#39;relationshipDecay&#39;, vars.gameSettings.relationshipDecay);
+        Object.keys(vars.gameSettings).forEach(key =&gt; restoreToggle(key, vars.gameSettings));
     }
-    
-    // Content Preferences
+    // Restore Content Preferences
     if (vars.contentPreferences) {
-        setToggle(&#39;incest&#39;, vars.contentPreferences.incest);
-        setToggle(&#39;romantic&#39;, vars.contentPreferences.romantic);
-        setToggle(&#39;sexual&#39;, vars.contentPreferences.sexual);
-        setToggle(&#39;gore&#39;, vars.contentPreferences.gore);
-        setToggle(&#39;scat&#39;, vars.contentPreferences.scat);
+        Object.keys(vars.contentPreferences).forEach(key =&gt; restoreToggle(key, vars.contentPreferences));
     }
-    
-    // Video Settings
-    if (vars.videoSettings) {
-        setToggle(&#39;autoplaySet&#39;, vars.videoSettings.autoplaySet);
-        setToggle(&#39;loopSet&#39;, vars.videoSettings.loopSet);
+
+    // 2. Restore Visual Selections
+    function restoreSelection(group, value) {
+        if (!value) return;
+        const $container = $(`#grid${group}`);
+        $container.find(&#39;.selected&#39;).removeClass(&#39;selected&#39;);
+        $container.find(`[data-value=&quot;${value}&quot;]`).addClass(&#39;selected&#39;);
+        $(`#val${group}`).val(value);
     }
-    
-    // Start Game button handler
-    $(&#39;#start-game-btn&#39;).off(&#39;click.settingsPage&#39;).on(&#39;click.settingsPage&#39;, function(e) {
+
+    if (vars.player) {
+        restoreSelection(&#39;EyeColor&#39;, vars.player.eyeColor);
+        restoreSelection(&#39;HairColor&#39;, vars.player.hairColor);
+        restoreSelection(&#39;HairLength&#39;, vars.player.hairLength);
+        restoreSelection(&#39;BustSize&#39;, vars.player.bustSize);
+        restoreSelection(&#39;HipSize&#39;, vars.player.hipSize);
+        if (vars.player.firstName) $(&#39;#characterFirstName&#39;).val(vars.player.firstName);
+        if (vars.player.lastName) $(&#39;#characterLastName&#39;).val(vars.player.lastName);
+    }
+
+    // --- EVENT LISTENERS ---
+
+    // 1. Color &amp; Visual Options Click
+    $(&#39;.color-option, .visual-option&#39;).on(&#39;click&#39;, function() {
+        const $this = $(this);
+        const $container = $this.parent();
+        const value = $this.data(&#39;value&#39;);
+        
+        $container.find(&#39;.selected&#39;).removeClass(&#39;selected&#39;);
+        $this.addClass(&#39;selected&#39;);
+
+        const gridId = $container.attr(&#39;id&#39;);
+        const inputId = gridId.replace(&#39;grid&#39;, &#39;val&#39;);
+        $(`#${inputId}`).val(value);
+    });
+
+    // 2. Toggle Buttons Click -&gt; HANDLED BY accordion.js
+
+    // 3. Start Game Click (Updated to target widget output)
+    $(&#39;#start-game-container .btn-style&#39;).on(&#39;click&#39;, function(e) {
         e.preventDefault();
+
+        // Ensure player object exists
+        if (!vars.player) {
+            vars.player = {};
+        }
+
+        // Save Character Info
+        vars.player.firstName = $(&#39;#characterFirstName&#39;).val() || &quot;Alex&quot;;
+        vars.player.lastName = $(&#39;#characterLastName&#39;).val() || &quot;Taylor&quot;;
         
-        // Character
-        vars.player.firstName = $(&#39;#characterFirstName&#39;).val() || &#39;Alex&#39;;
-        vars.player.lastName = $(&#39;#characterLastName&#39;).val() || &#39;Taylor&#39;;
-        vars.player.hairColor = $(&#39;#charHair&#39;).val();
-        vars.player.eyeColor = $(&#39;#charEyes&#39;).val();
-        vars.player.skinTone = $(&#39;#charSkin&#39;).val();
-        vars.player.bodyType = $(&#39;#charBody&#39;).val();
-        
-        // Simulation Settings
-        vars.gameSettings.trackHunger = $(&#39;.setting-toggle-btn[data-setting=&quot;trackHunger&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.gameSettings.trackThirst = $(&#39;.setting-toggle-btn[data-setting=&quot;trackThirst&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.gameSettings.trackBladder = $(&#39;.setting-toggle-btn[data-setting=&quot;trackBladder&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.gameSettings.trackCalories = $(&#39;.setting-toggle-btn[data-setting=&quot;trackCalories&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.gameSettings.skillDecay = $(&#39;.setting-toggle-btn[data-setting=&quot;skillDecay&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.gameSettings.relationshipDecay = $(&#39;.setting-toggle-btn[data-setting=&quot;relationshipDecay&quot;]&#39;).hasClass(&#39;active&#39;);
-        
-        // Content Preferences
-        vars.contentPreferences.incest = $(&#39;.setting-toggle-btn[data-setting=&quot;incest&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.contentPreferences.romantic = $(&#39;.setting-toggle-btn[data-setting=&quot;romantic&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.contentPreferences.sexual = $(&#39;.setting-toggle-btn[data-setting=&quot;sexual&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.contentPreferences.gore = $(&#39;.setting-toggle-btn[data-setting=&quot;gore&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.contentPreferences.scat = $(&#39;.setting-toggle-btn[data-setting=&quot;scat&quot;]&#39;).hasClass(&#39;active&#39;);
-        
-        // Video Settings
-        vars.videoSettings.autoplaySet = $(&#39;.setting-toggle-btn[data-setting=&quot;autoplaySet&quot;]&#39;).hasClass(&#39;active&#39;);
-        vars.videoSettings.loopSet = $(&#39;.setting-toggle-btn[data-setting=&quot;loopSet&quot;]&#39;).hasClass(&#39;active&#39;);
-        
-        // Navigate to confirmation page
+        // Save Body Customization
+        vars.player.eyeColor = $(&#39;#valEyeColor&#39;).val();
+        vars.player.hairColor = $(&#39;#valHairColor&#39;).val();
+        vars.player.hairLength = $(&#39;#valHairLength&#39;).val();
+        vars.player.bustSize = $(&#39;#valBustSize&#39;).val();
+        vars.player.hipSize = $(&#39;#valHipSize&#39;).val();
+
+        // Save Simulation Settings
+        $(&#39;.setting-toggle-btn[data-category!=&quot;content&quot;]&#39;).each(function() {
+            const key = $(this).data(&#39;setting&#39;);
+            vars.gameSettings[key] = $(this).hasClass(&#39;active&#39;);
+        });
+
+        // Save Content Preferences
+        $(&#39;.setting-toggle-btn[data-category=&quot;content&quot;]&#39;).each(function() {
+            const key = $(this).data(&#39;setting&#39;);
+            vars.contentPreferences[key] = $(this).hasClass(&#39;active&#39;);
+        });
+
+        // Navigate
         SugarCube.Engine.play(&#39;confirmationPage&#39;);
     });
+
 });
 &lt;&lt;/script&gt;&gt;
 </tw-passagedata><tw-passagedata pid="4" name="variablesImage" tags="init" position="225,200" size="100,100">&lt;&lt;set $imageProfile = &quot;assets/content/ProfilePlaceholder.png&quot;&gt;&gt;
@@ -1387,136 +1418,206 @@ $(document).on(&#39;:passagedisplay&#39;, function(ev) {
 &lt;&lt;set $hideTopbarTimebox = true&gt;&gt;
 &lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
 &lt;&lt;set $hideRightbar = true&gt;&gt;
-&lt;&lt;run $(&#39;body&#39;).addClass(&#39;layout-centered&#39;)&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
-Oyuna hoş geldin beş gittin bu böyle şu böyle.
+&lt;&lt;set $hideTopbar = true&gt;&gt;
+&lt;&lt;run $(&#39;body&#39;).addClass(&#39;fullscreen-centered&#39;)&gt;&gt;
 
-[[settingsPage]] </tw-passagedata><tw-passagedata pid="9" name="confirmationPage" tags="" position="1175,400" size="100,100">:: confirmationPage
+&lt;div class=&quot;page-wrapper welcome-page&quot;&gt;
+&lt;div class=&quot;welcome-container&quot;&gt;
+
+    &lt;!-- Animated Background Accent --&gt;
+    &lt;div class=&quot;welcome-glow&quot;&gt;&lt;/div&gt;
+
+    &lt;!-- Game Logo/Title --&gt;
+    &lt;div class=&quot;welcome-header&quot;&gt;
+        &lt;div class=&quot;welcome-logo&quot;&gt;
+            &lt;h1 class=&quot;welcome-title&quot;&gt;$gameName&lt;/h1&gt;
+            &lt;div class=&quot;welcome-version&quot;&gt;v $gameVersion&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;welcome-tagline&quot;&gt;An Adult Life Simulation Experience&lt;/div&gt;
+        &lt;div class=&quot;welcome-divider&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Main Content Card --&gt;
+    &lt;div class=&quot;welcome-card&quot;&gt;
+        
+        &lt;!-- Warning Section --&gt;
+        &lt;div class=&quot;warning-section&quot;&gt;
+            &lt;div class=&quot;warning-header&quot;&gt;
+                &lt;span class=&quot;warning-icon&quot;&gt;🔞&lt;/span&gt;
+                &lt;h2&gt;Adult Content Warning&lt;/h2&gt;
+            &lt;/div&gt;
+            &lt;p class=&quot;warning-text&quot;&gt;
+                This game contains &lt;strong&gt;explicit adult content&lt;/strong&gt; including sexual themes, 
+                strong language, and mature situations. All characters depicted are 18 years or older.
+            &lt;/p&gt;
+            &lt;div class=&quot;warning-notice&quot;&gt;
+                &lt;span class=&quot;notice-icon&quot;&gt;⚠️&lt;/span&gt;
+                &lt;span&gt;You must be &lt;strong&gt;18 years or older&lt;/strong&gt; to continue.&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Divider --&gt;
+        &lt;div class=&quot;section-divider&quot;&gt;&lt;/div&gt;
+
+        &lt;!-- Game Features --&gt;
+        &lt;div class=&quot;features-section&quot;&gt;
+            &lt;h3&gt;What Awaits You&lt;/h3&gt;
+            &lt;div class=&quot;feature-grid&quot;&gt;
+                &lt;div class=&quot;feature-card&quot;&gt;
+                    &lt;div class=&quot;feature-icon-box&quot;&gt;🎭&lt;/div&gt;
+                    &lt;div class=&quot;feature-info&quot;&gt;
+                        &lt;div class=&quot;feature-title&quot;&gt;Deep Storytelling&lt;/div&gt;
+                        &lt;div class=&quot;feature-desc&quot;&gt;Shape your narrative through meaningful choices&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;feature-card&quot;&gt;
+                    &lt;div class=&quot;feature-icon-box&quot;&gt;💕&lt;/div&gt;
+                    &lt;div class=&quot;feature-info&quot;&gt;
+                        &lt;div class=&quot;feature-title&quot;&gt;Relationships&lt;/div&gt;
+                        &lt;div class=&quot;feature-desc&quot;&gt;Build connections with unique characters&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;feature-card&quot;&gt;
+                    &lt;div class=&quot;feature-icon-box&quot;&gt;🏠&lt;/div&gt;
+                    &lt;div class=&quot;feature-info&quot;&gt;
+                        &lt;div class=&quot;feature-title&quot;&gt;Open World&lt;/div&gt;
+                        &lt;div class=&quot;feature-desc&quot;&gt;Explore a living, reactive environment&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;feature-card&quot;&gt;
+                    &lt;div class=&quot;feature-icon-box&quot;&gt;⚙️&lt;/div&gt;
+                    &lt;div class=&quot;feature-info&quot;&gt;
+                        &lt;div class=&quot;feature-title&quot;&gt;Content Control&lt;/div&gt;
+                        &lt;div class=&quot;feature-desc&quot;&gt;Customize your experience with filters&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+
+    &lt;!-- Age Verification --&gt;
+    &lt;div class=&quot;verification-section&quot;&gt;
+        &lt;p class=&quot;verification-prompt&quot;&gt;By continuing, you confirm that you are &lt;strong&gt;18 years of age or older&lt;/strong&gt; and legally permitted to view adult content in your jurisdiction.&lt;/p&gt;
+        &lt;div class=&quot;verification-buttons&quot;&gt;
+            &lt;&lt;btn &quot;I Confirm - Enter Game&quot; &quot;settingsPage&quot; &quot;accent&quot;&gt;&gt;
+            &lt;a href=&quot;https://www.google.com&quot; class=&quot;btn-style btn-default&quot;&gt;Exit&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Footer --&gt;
+    &lt;div class=&quot;welcome-footer&quot;&gt;
+        &lt;span&gt;© 2024 $gameName&lt;/span&gt;
+        &lt;span class=&quot;footer-dot&quot;&gt;•&lt;/span&gt;
+        &lt;span&gt;All Rights Reserved&lt;/span&gt;
+        &lt;span class=&quot;footer-dot&quot;&gt;•&lt;/span&gt;
+        &lt;span&gt;Version $gameVersion&lt;/span&gt;
+    &lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;&lt;/nobr&gt;&gt;
+</tw-passagedata><tw-passagedata pid="9" name="confirmationPage" tags="" position="1175,400" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $hideTopbarNav = true&gt;&gt;
 &lt;&lt;set $hideTopbarTimebox = true&gt;&gt;
 &lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
 &lt;&lt;set $hideRightbar = true&gt;&gt;
-&lt;&lt;run $(&#39;body&#39;).addClass(&#39;layout-centered&#39;)&gt;&gt;
-&lt;&lt;nobr&gt;&gt;
+&lt;&lt;set $hideTopbar = true&gt;&gt;
+&lt;&lt;run $(&#39;body&#39;).addClass(&#39;fullscreen-centered&#39;)&gt;&gt;
+
 &lt;div class=&quot;page-wrapper&quot;&gt;
 &lt;div class=&quot;game-setup-container&quot;&gt;
-    &lt;h1 class=&quot;page-title&quot;&gt;Confirm Your Settings&lt;/h1&gt;
-    &lt;p class=&quot;page-subtitle&quot;&gt;Review your choices before starting the game.&lt;/p&gt;
+    &lt;h1 class=&quot;page-title&quot;&gt;Confirm Your Choices&lt;/h1&gt;
+    &lt;div class=&quot;setup-header-line&quot;&gt;&lt;/div&gt;
+    &lt;p class=&quot;page-subtitle&quot;&gt;
+        Review your character settings before beginning your new life.
+    &lt;/p&gt;
 
     &lt;div class=&quot;info-grid&quot;&gt;
-    &lt;!-- CHARACTER --&gt;
-    &lt;div class=&quot;info-card&quot;&gt;
-        &lt;div class=&quot;info-card-header&quot;&gt;
-            &lt;span class=&quot;icon icon-user&quot;&gt;&lt;/span&gt; Character
-        &lt;/div&gt;
-        &lt;div class=&quot;info-card-body&quot;&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Name&lt;/span&gt;
-                &lt;span class=&quot;info-val&quot;&gt;$player.firstName $player.lastName&lt;/span&gt;
+        &lt;!-- 1. IDENTITY (Full Width) --&gt;
+        &lt;div class=&quot;info-card&quot; style=&quot;grid-column: 1 / -1;&quot;&gt;
+            &lt;div class=&quot;info-card-header&quot;&gt;
+                &lt;span class=&quot;icon icon-user&quot;&gt;&lt;/span&gt; CHARACTER IDENTITY
             &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Hair&lt;/span&gt;
-                &lt;span class=&quot;info-val&quot;&gt;$player.hairColor&lt;/span&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Eyes&lt;/span&gt;
-                &lt;span class=&quot;info-val&quot;&gt;$player.eyeColor&lt;/span&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Skin&lt;/span&gt;
-                &lt;span class=&quot;info-val&quot;&gt;$player.skinTone&lt;/span&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Body&lt;/span&gt;
-                &lt;span class=&quot;info-val&quot;&gt;$player.bodyType&lt;/span&gt;
+            &lt;div class=&quot;info-card-body&quot;&gt;
+                &lt;div style=&quot;text-align: center;&quot;&gt;
+                    &lt;div style=&quot;font-size: 0.75rem; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;&quot;&gt;Full Name&lt;/div&gt;
+                    &lt;div style=&quot;font-size: 1.25rem; color: var(--color-accent); font-weight: 600;&quot;&gt;$player.firstName $player.lastName&lt;/div&gt;
+                &lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
+
+        &lt;!-- 2. BODY (Full Width) --&gt;
+        &lt;div class=&quot;info-card&quot; style=&quot;grid-column: 1 / -1;&quot;&gt;
+            &lt;div class=&quot;info-card-header&quot;&gt;
+                &lt;span class=&quot;icon icon-body&quot;&gt;&lt;/span&gt; BODY DETAILS
+            &lt;/div&gt;
+            &lt;div class=&quot;info-card-body&quot;&gt;
+                &lt;div style=&quot;display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;&quot;&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Eye Color&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;$player.eyeColor&lt;/span&gt;&lt;/div&gt;
+                        &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Hair Color&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;$player.hairColor&lt;/span&gt;&lt;/div&gt;
+                        &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Hair Length&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;$player.hairLength&lt;/span&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                        &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Bust Size&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;$player.bustSize&lt;/span&gt;&lt;/div&gt;
+                        &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Hip Size&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;$player.hipSize&lt;/span&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 3. SIMULATION (Left Col) --&gt;
+        &lt;div class=&quot;info-card&quot;&gt;
+            &lt;div class=&quot;info-card-header&quot;&gt;
+                &lt;span class=&quot;icon icon-settings&quot;&gt;&lt;/span&gt; SIMULATION SETTINGS
+            &lt;/div&gt;
+            &lt;div class=&quot;info-card-body&quot;&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Hunger Tracking&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.trackHunger&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Thirst Tracking&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.trackThirst&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Bladder Tracking&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.trackBladder&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Calorie Tracking&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.trackCalories&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Hygiene Requirement&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.hygieneRequirement&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;separator-line&quot;&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Hair Growth&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.hairGrowth&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Hair Messiness&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.hairMessiness&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Body Hair Growth&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.bodyHairGrowth&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Makeup Fade&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.makeupWearOff&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Body Weight Changes&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.bodyDegradation&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Skill Decay&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.skillDecay&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Relationship Decay&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $gameSettings.relationshipDecay&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- 4. CONTENT (Right Col) --&gt;
+        &lt;div class=&quot;info-card&quot;&gt;
+            &lt;div class=&quot;info-card-header&quot;&gt;
+                &lt;span class=&quot;icon icon-eye&quot;&gt;&lt;/span&gt; CONTENT PREFERENCES
+            &lt;/div&gt;
+            &lt;div class=&quot;info-card-body&quot;&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Male Sexual Content&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.maleSexual&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Female Sexual Content&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.femaleSexual&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Trans / Futa Content&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.futaTrans&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Pregnancy Content&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.pregnancy&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Incest Content&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.incest&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;NTR / Cheating&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.ntr&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;BDSM Content&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.bdsm&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Non-Consensual&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.nonConsensual&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Public Exhibition&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.publicExhibition&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Lactation&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.lactation&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Foot Fetish&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.feet&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Watersports&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.watersports&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Scat Content&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.scat&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+                &lt;div class=&quot;info-line&quot;&gt;&lt;span class=&quot;label&quot;&gt;Gore / Violence&lt;/span&gt; &lt;span class=&quot;value&quot;&gt;&lt;&lt;if $contentPreferences.goreViolence&gt;&gt;ON&lt;&lt;else&gt;&gt;OFF&lt;&lt;/if&gt;&gt;&lt;/span&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
     &lt;/div&gt;
 
-    &lt;!-- SIMULATION --&gt;
-    &lt;div class=&quot;info-card&quot;&gt;
-        &lt;div class=&quot;info-card-header&quot;&gt;
-            &lt;span class=&quot;icon icon-simulation&quot;&gt;&lt;/span&gt; Simulation
-        &lt;/div&gt;
-        &lt;div class=&quot;info-card-body&quot;&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Hunger&lt;/span&gt;
-                &lt;&lt;if $gameSettings.trackHunger&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Thirst&lt;/span&gt;
-                &lt;&lt;if $gameSettings.trackThirst&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Bladder&lt;/span&gt;
-                &lt;&lt;if $gameSettings.trackBladder&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Calories&lt;/span&gt;
-                &lt;&lt;if $gameSettings.trackCalories&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Skill Decay&lt;/span&gt;
-                &lt;&lt;if $gameSettings.skillDecay&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Relationship Decay&lt;/span&gt;
-                &lt;&lt;if $gameSettings.relationshipDecay&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;!-- CONTENT --&gt;
-    &lt;div class=&quot;info-card&quot;&gt;
-        &lt;div class=&quot;info-card-header&quot;&gt;
-            &lt;span class=&quot;icon icon-eye&quot;&gt;&lt;/span&gt; Content
-        &lt;/div&gt;
-        &lt;div class=&quot;info-card-body&quot;&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Incest&lt;/span&gt;
-                &lt;&lt;if $contentPreferences.incest&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Romantic&lt;/span&gt;
-                &lt;&lt;if $contentPreferences.romantic&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Sexual&lt;/span&gt;
-                &lt;&lt;if $contentPreferences.sexual&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Gore&lt;/span&gt;
-                &lt;&lt;if $contentPreferences.gore&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Scat&lt;/span&gt;
-                &lt;&lt;if $contentPreferences.scat&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;!-- VIDEO --&gt;
-    &lt;div class=&quot;info-card&quot;&gt;
-        &lt;div class=&quot;info-card-header&quot;&gt;
-            &lt;span class=&quot;icon icon-settings&quot;&gt;&lt;/span&gt; Video
-        &lt;/div&gt;
-        &lt;div class=&quot;info-card-body&quot;&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Autoplay&lt;/span&gt;
-                &lt;&lt;if $videoSettings.autoplaySet&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;info-line&quot;&gt;
-                &lt;span class=&quot;info-key&quot;&gt;Loop&lt;/span&gt;
-                &lt;&lt;if $videoSettings.loopSet&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;!-- BUTTONS --&gt;
-    &lt;div class=&quot;flex-center gap-2 mt-4&quot;&gt;
+    &lt;!-- NAVIGATION BUTTONS --&gt;
+    &lt;div class=&quot;form-actions mt-4&quot;&gt;
         &lt;&lt;btn &quot;Go Back&quot; &quot;settingsPage&quot; &quot;default&quot;&gt;&gt;
-        &lt;&lt;btn &quot;Continue&quot; &quot;prologuePage&quot; &quot;accent&quot;&gt;&gt;
+        &lt;&lt;btn &quot;Start Life&quot; &quot;prologuePage&quot; &quot;accent&quot;&gt;&gt;
     &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1527,12 +1628,21 @@ Oyuna hoş geldin beş gittin bu böyle şu böyle.
    Simulation toggles for optional features
 ========================================== */
 &lt;&lt;set $gameSettings = {
-    trackHunger: false,
-    trackThirst: false,
-    trackBladder: false,
-    trackCalories: false,
-    skillDecay: false,
-    relationshipDecay: false
+    /* Basic Needs */
+    trackHunger: true,
+    trackThirst: true,
+    trackBladder: true,
+    trackCalories: true,
+    hygieneRequirement: true,
+    /* Appearance Changes */
+    hairGrowth: true,
+    hairMessiness: true,
+    bodyHairGrowth: true,
+    makeupWearOff: true,
+    bodyDegradation: true,
+    /* Decay Systems */
+    skillDecay: true,
+    relationshipDecay: true
 }&gt;&gt;
 
 /* ==========================================
@@ -1550,15 +1660,23 @@ State.variables.videoSettings = State.variables.videoSettings || {
 
 /* ==========================================
    CONTENT PREFERENCES
-   Controls which content types are visible
+   Controls which content types are visible (14 categories)
 ========================================== */
 &lt;&lt;set $contentPreferences = {
-    incest: true,      /* Family romantic content */
-    romantic: true,    /* Romantic/flirting content */
-    sexual: true,      /* Sexual content */
-    gore: true,        /* Blood, violence, graphic content */
-    violence: true,    /* Physical combat, fights */
-    scat: false        /* Bathroom related content */
+    maleSexual: true,
+    femaleSexual: true,
+    futaTrans: true,
+    ntr: true,
+    pregnancy: true,
+    incest: true,
+    bdsm: true,
+    nonConsensual: true,
+    publicExhibition: true,
+    lactation: true,
+    feet: true,
+    watersports: true,
+    scat: true,
+    goreViolence: true
 }&gt;&gt;</tw-passagedata><tw-passagedata pid="11" name="variablesMap" tags="init" position="600,200" size="100,100">/* ==========================================
    MAP REGIONS
 ========================================== */
@@ -1621,7 +1739,7 @@ State.variables.videoSettings = State.variables.videoSettings || {
 
 &lt;&lt;set $discoveredWilliamsHouse = 1 &gt;&gt;
 &lt;&lt;set $discoveredDowntownCafe = 1 &gt;&gt;
-</tw-passagedata><tw-passagedata pid="12" name="fastTravelTaxi" tags="" position="875,200" size="100,100">&lt;&lt;set _destination = $tempTaxiDestination&gt;&gt;
+</tw-passagedata><tw-passagedata pid="12" name="fastTravelTaxi" tags="" position="850,200" size="100,100">&lt;&lt;set _destination = $tempTaxiDestination&gt;&gt;
 &lt;&lt;set _cost = $tempTaxiCost&gt;&gt;
 
 &lt;&lt;if $money &gt;= _cost&gt;&gt;
@@ -1724,10 +1842,17 @@ Leader / Lone Wolf
 
 Risk-taker / Cautious
 
-[[newhomeEnter]] </tw-passagedata><tw-passagedata pid="19" name="newhomeEnter" tags="" position="2050,400" size="100,100">[[fhBedroom]] </tw-passagedata><tw-passagedata pid="20" name="fhBedroom" tags="" position="1250,725" size="100,100">&lt;&lt;locationMenu&gt;&gt;
+[[newhomeEnter]] </tw-passagedata><tw-passagedata pid="19" name="newhomeEnter" tags="" position="2050,400" size="100,100">&lt;&lt;set $hideTopbarNav = false&gt;&gt;
+&lt;&lt;set $hideTopbarTimebox = false&gt;&gt;
+&lt;&lt;set $hideTopbarNotifications = false&gt;&gt;
+&lt;&lt;set $hideRightbar = false&gt;&gt;
+&lt;&lt;set $hideTopbar = false&gt;&gt;
+[[fhBedroom]] </tw-passagedata><tw-passagedata pid="20" name="fhBedroom" tags="" position="1250,725" size="100,100">&lt;&lt;locationMenu&gt;&gt;
 	&lt;&lt;loc &quot;fhWardrobe&quot;&gt;&gt;
 	&lt;&lt;loc &quot;fhUpperstairs&quot;&gt;&gt;
-&lt;&lt;/locationMenu&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="fhUpperBath" tags="" position="1100,725" size="100,100">[[fhUpperstairs]] </tw-passagedata><tw-passagedata pid="22" name="fhBrotherRoom" tags="" position="1400,725" size="100,100">[[fhUpperstairs]] </tw-passagedata><tw-passagedata pid="23" name="fhDownstairs" tags="" position="1250,1000" size="100,100">[[fhKitchen]] 
+&lt;&lt;/locationMenu&gt;&gt;
+
+&lt;&lt;set $location = &quot;Kitchen&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="fhUpperBath" tags="" position="1100,725" size="100,100">[[fhUpperstairs]] </tw-passagedata><tw-passagedata pid="22" name="fhBrotherRoom" tags="" position="1400,725" size="100,100">[[fhUpperstairs]] </tw-passagedata><tw-passagedata pid="23" name="fhDownstairs" tags="" position="1250,1000" size="100,100">[[fhKitchen]] 
 [[fhLivingroom]] 
 [[fhDownBath]] 
 [[fhParentsRoom]] 
@@ -2049,20 +2174,68 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
 }&gt;&gt;
 </tw-passagedata><tw-passagedata pid="34" name="charPlayer" tags="init" position="550,0" size="100,100">/* ==========================================
    PLAYER - You
-   Player Character Definition
+   Player Character Definition &amp; Initialization
 ========================================== */
 
-/* CHARACTER APPEARANCE DEFAULTS */
+/* ==========================================
+   1. BASIC INFO &amp; APPEARANCE
+========================================== */
 &lt;&lt;set $player = {
     firstName: &quot;Alex&quot;,
     lastName: &quot;Taylor&quot;,
-    hairColor: &quot;Brown&quot;,
     eyeColor: &quot;Brown&quot;,
-    skinTone: &quot;Fair&quot;,
-    bodyType: &quot;Average&quot;
+    hairColor: &quot;Brown&quot;,
+    hairLength: &quot;long&quot;,
+    bustSize: &quot;C&quot;,
+    hipSize: &quot;medium&quot;
 }&gt;&gt;
 
-/* CORE STATS */
+/* DYNAMIC APPEARANCE */
+&lt;&lt;set $appearance = {
+    hairLengthCm: 45,
+    tanLevel: 0,
+    makeupLevel: 0,
+    hairMessiness: 0,
+    nailPolish: &quot;none&quot;,
+    hairStyle: &quot;loose&quot;,
+    bodyHair: {
+        legs: 0,
+        pubic: 0,
+        armpits: 0
+    }
+}&gt;&gt;
+
+/* PLASTIC SURGERY */
+&lt;&lt;set $plasticSurgery = {
+    lipsSize: 50,
+    eyeSize: 50,
+    eyelashes: 50
+}&gt;&gt;
+
+/* BODY CHANGES */
+&lt;&lt;set $bodyChanges = {
+    bustGrowth: 0,
+    hipGrowth: 0,
+    pregnancyWeek: 0,
+    lactationActive: false
+}&gt;&gt;
+
+/* BODY MEASUREMENTS */
+&lt;&lt;set $body = {
+    height: 170,
+    weight: 65,
+    bust: 90,
+    waist: 70,
+    hips: 95,
+    muscleMass: 40,
+    bodyFat: 22,
+    appeal: 50
+}&gt;&gt;
+
+
+/* ==========================================
+   2. CORE STATS
+========================================== */
 &lt;&lt;set $energy = 100&gt;&gt;
 &lt;&lt;set $energyMax = 100&gt;&gt;
 &lt;&lt;set $mood = 100&gt;&gt;
@@ -2076,6 +2249,10 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
 &lt;&lt;set $thirst = 0&gt;&gt;
 &lt;&lt;set $bladder = 0&gt;&gt;
 
+
+/* ==========================================
+   3. ATTRIBUTES &amp; SKILLS
+========================================== */
 /* MENTAL STATS */
 &lt;&lt;set $intelligence = 50&gt;&gt;
 &lt;&lt;set $focus = 50&gt;&gt;
@@ -2099,18 +2276,6 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
 &lt;&lt;set $cardio = 0&gt;&gt;
 &lt;&lt;set $fitness = 0&gt;&gt;
 
-/* BODY MEASUREMENTS */
-&lt;&lt;set $body = {
-    height: 170,
-    weight: 65,
-    bust: 90,
-    waist: 70,
-    hips: 95,
-    muscleMass: 40,
-    bodyFat: 22,
-    appeal: 50
-}&gt;&gt;
-
 /* SKILLS */
 &lt;&lt;set $skills = {
     social: 0,
@@ -2121,7 +2286,59 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
     leadership: 0
 }&gt;&gt;
 
-/* CHARACTER DATA */
+
+/* ==========================================
+   4. PROGRESSION &amp; TRACKING
+========================================== */
+
+/* SEXUAL EXPERIENCE */
+&lt;&lt;set $sexual = {
+    virginity: {
+        vaginal: true,
+        anal: true
+    },
+    counts: {
+        vaginal: 0,
+        anal: 0,
+        oral: 0,
+        gangbang: 0,
+        public: 0
+    },
+    stretch: {
+        vaginal: 0,
+        anal: 0
+    },
+    totalPartners: 0,
+    photosTaken: 0,
+    videosTaken: 0
+}&gt;&gt;
+
+/* JOURNAL FIRST TIMES */
+&lt;&lt;set $firsts = {
+    firstKiss: null,
+    firstVaginal: null,
+    firstAnal: null,
+    firstOralGiven: null,
+    firstOralReceived: null,
+    firstThreesome: null,
+    firstPublic: null,
+    firstPregnancy: null,
+    firstPhoto: null
+}&gt;&gt;
+
+/* REPUTATION ZONES */
+&lt;&lt;set $reputation = {
+    home: 100,
+    campus: 50,
+    downtown: 50,
+    workplace: 50,
+    socialMedia: 0
+}&gt;&gt;
+
+
+/* ==========================================
+   5. CHARACTER DATA OBJECT
+========================================== */
 &lt;&lt;set $characters.player = {
     name: &quot;Joe&quot;,
     lastname: &quot;Doe&quot;,
@@ -3121,6 +3338,85 @@ setup.locations = {
     }
 ]&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
+</tw-passagedata><tw-passagedata pid="59" name="systemWidgets" tags="widget" position="100,325" size="100,100">/* ==========================================
+   SUGARCUBE WIDGETS - Stats Calculations
+========================================== */
+
+&lt;&lt;widget &quot;calculateBodyAppeal&quot;&gt;&gt;
+    &lt;&lt;set _bmi = $body.weight / Math.pow($body.height / 100, 2)&gt;&gt;
+    &lt;&lt;set _whr = $body.waist / $body.hips&gt;&gt;
+    
+    &lt;&lt;set _idealBMI = 21.5&gt;&gt;
+    &lt;&lt;set _bmiDiff = Math.abs(_bmi - _idealBMI)&gt;&gt;
+    &lt;&lt;set _bmiScore = Math.max(0, 100 - (_bmiDiff * 10))&gt;&gt;
+    
+    &lt;&lt;set _idealWHR = 0.7&gt;&gt;
+    &lt;&lt;set _whrDiff = Math.abs(_whr - _idealWHR)&gt;&gt;
+    &lt;&lt;set _whrScore = Math.max(0, 100 - (_whrDiff * 200))&gt;&gt;
+    
+    &lt;&lt;set _bustHipAvg = ($body.bust + $body.hips) / 2&gt;&gt;
+    &lt;&lt;set _symmetryRatio = _bustHipAvg / $body.waist&gt;&gt;
+    &lt;&lt;set _idealSymmetry = 1.35&gt;&gt;
+    &lt;&lt;set _symDiff = Math.abs(_symmetryRatio - _idealSymmetry)&gt;&gt;
+    &lt;&lt;set _symmetryScore = Math.max(0, 100 - (_symDiff * 50))&gt;&gt;
+    
+    &lt;&lt;set _idealMuscle = 40&gt;&gt;
+    &lt;&lt;set _idealFat = 20&gt;&gt;
+    &lt;&lt;set _muscleDiff = Math.abs($body.muscleMass - _idealMuscle)&gt;&gt;
+    &lt;&lt;set _fatDiff = Math.abs($body.bodyFat - _idealFat)&gt;&gt;
+    &lt;&lt;set _compScore = (Math.max(0, 100 - (_muscleDiff * 2)) * 0.5) + (Math.max(0, 100 - (_fatDiff * 2)) * 0.5)&gt;&gt;
+    
+    &lt;&lt;set $body.appeal = Math.round((_bmiScore * 0.3) + (_whrScore * 0.3) + (_symmetryScore * 0.2) + (_compScore * 0.2))&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+&lt;&lt;widget &quot;calculateFitness&quot;&gt;&gt;
+    &lt;&lt;set $fitness = Math.round(($upperBody + $core + $lowerBody + $cardio) / 4)&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+&lt;&lt;widget &quot;calculateLooks&quot;&gt;&gt;
+    &lt;&lt;calculateFitness&gt;&gt;
+    &lt;&lt;calculateBodyAppeal&gt;&gt;
+    &lt;&lt;set $looks = Math.round(($beauty + $clothingScore + $fitness + $body.appeal) / 4)&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+
+&lt;&lt;widget &quot;dailyAppearanceUpdate&quot;&gt;&gt;
+    /* Hair Growth (approx 0.04cm/day = 1.2cm/month) */
+    &lt;&lt;if $gameSettings.hairGrowth&gt;&gt;
+        &lt;&lt;set $appearance.hairLengthCm += 0.04&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+    
+    /* Hair Messiness */
+    &lt;&lt;if $gameSettings.hairMessiness&gt;&gt;
+        &lt;&lt;set $appearance.hairMessiness = Math.min(100, $appearance.hairMessiness + 15)&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+
+    /* Body Hair Growth */
+    &lt;&lt;if $gameSettings.bodyHairGrowth&gt;&gt;
+        &lt;&lt;set $appearance.bodyHair.legs = Math.min(100, $appearance.bodyHair.legs + 5)&gt;&gt;
+        &lt;&lt;set $appearance.bodyHair.pubic = Math.min(100, $appearance.bodyHair.pubic + 5)&gt;&gt;
+        &lt;&lt;set $appearance.bodyHair.armpits = Math.min(100, $appearance.bodyHair.armpits + 5)&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+
+    /* Makeup Wear Off */
+    &lt;&lt;if $gameSettings.makeupWearOff&gt;&gt;
+        &lt;&lt;set $appearance.makeupLevel = Math.max(0, $appearance.makeupLevel - 20)&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+&lt;&lt;widget &quot;weeklyBodyUpdate&quot;&gt;&gt;
+    /* Body Degradation (Muscle atrophy if unused) */
+    &lt;&lt;if $gameSettings.bodyDegradation&gt;&gt;
+        &lt;&lt;set $body.muscleMass = Math.max(20, $body.muscleMass - 0.5)&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+&lt;&lt;widget &quot;calculateEnergyMax&quot;&gt;&gt;
+    &lt;&lt;calculateFitness&gt;&gt;
+    &lt;&lt;set $energyMax = 100 + Math.floor($fitness / 4)&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+
 </tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */

@@ -1,0 +1,79 @@
+/* ==========================================
+   SUGARCUBE WIDGETS - Stats Calculations
+========================================== */
+
+<<widget "calculateBodyAppeal">>
+    <<set _bmi = $body.weight / Math.pow($body.height / 100, 2)>>
+    <<set _whr = $body.waist / $body.hips>>
+    
+    <<set _idealBMI = 21.5>>
+    <<set _bmiDiff = Math.abs(_bmi - _idealBMI)>>
+    <<set _bmiScore = Math.max(0, 100 - (_bmiDiff * 10))>>
+    
+    <<set _idealWHR = 0.7>>
+    <<set _whrDiff = Math.abs(_whr - _idealWHR)>>
+    <<set _whrScore = Math.max(0, 100 - (_whrDiff * 200))>>
+    
+    <<set _bustHipAvg = ($body.bust + $body.hips) / 2>>
+    <<set _symmetryRatio = _bustHipAvg / $body.waist>>
+    <<set _idealSymmetry = 1.35>>
+    <<set _symDiff = Math.abs(_symmetryRatio - _idealSymmetry)>>
+    <<set _symmetryScore = Math.max(0, 100 - (_symDiff * 50))>>
+    
+    <<set _idealMuscle = 40>>
+    <<set _idealFat = 20>>
+    <<set _muscleDiff = Math.abs($body.muscleMass - _idealMuscle)>>
+    <<set _fatDiff = Math.abs($body.bodyFat - _idealFat)>>
+    <<set _compScore = (Math.max(0, 100 - (_muscleDiff * 2)) * 0.5) + (Math.max(0, 100 - (_fatDiff * 2)) * 0.5)>>
+    
+    <<set $body.appeal = Math.round((_bmiScore * 0.3) + (_whrScore * 0.3) + (_symmetryScore * 0.2) + (_compScore * 0.2))>>
+<</widget>>
+
+<<widget "calculateFitness">>
+    <<set $fitness = Math.round(($upperBody + $core + $lowerBody + $cardio) / 4)>>
+<</widget>>
+
+<<widget "calculateLooks">>
+    <<calculateFitness>>
+    <<calculateBodyAppeal>>
+    <<set $looks = Math.round(($beauty + $clothingScore + $fitness + $body.appeal) / 4)>>
+<</widget>>
+
+
+<<widget "dailyAppearanceUpdate">>
+    /* Hair Growth (approx 0.04cm/day = 1.2cm/month) */
+    <<if $gameSettings.hairGrowth>>
+        <<set $appearance.hairLengthCm += 0.04>>
+    <</if>>
+    
+    /* Hair Messiness */
+    <<if $gameSettings.hairMessiness>>
+        <<set $appearance.hairMessiness = Math.min(100, $appearance.hairMessiness + 15)>>
+    <</if>>
+
+    /* Body Hair Growth */
+    <<if $gameSettings.bodyHairGrowth>>
+        <<set $appearance.bodyHair.legs = Math.min(100, $appearance.bodyHair.legs + 5)>>
+        <<set $appearance.bodyHair.pubic = Math.min(100, $appearance.bodyHair.pubic + 5)>>
+        <<set $appearance.bodyHair.armpits = Math.min(100, $appearance.bodyHair.armpits + 5)>>
+    <</if>>
+
+    /* Makeup Wear Off */
+    <<if $gameSettings.makeupWearOff>>
+        <<set $appearance.makeupLevel = Math.max(0, $appearance.makeupLevel - 20)>>
+    <</if>>
+<</widget>>
+
+<<widget "weeklyBodyUpdate">>
+    /* Body Degradation (Muscle atrophy if unused) */
+    <<if $gameSettings.bodyDegradation>>
+        <<set $body.muscleMass = Math.max(20, $body.muscleMass - 0.5)>>
+    <</if>>
+<</widget>>
+
+<<widget "calculateEnergyMax">>
+    <<calculateFitness>>
+    <<set $energyMax = 100 + Math.floor($fitness / 4)>>
+<</widget>>
+
+

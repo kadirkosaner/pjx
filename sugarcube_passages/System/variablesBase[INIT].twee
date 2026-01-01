@@ -69,48 +69,4 @@
 
 <<set $taxiBaseFare = 10>>
 
-/* ==========================================
-   SUGARCUBE WIDGETS - Stats Calculations
-========================================== */
 
-<<widget "calculateBodyAppeal">>
-    <<set _bmi = $body.weight / Math.pow($body.height / 100, 2)>>
-    <<set _whr = $body.waist / $body.hips>>
-    
-    <<set _idealBMI = 21.5>>
-    <<set _bmiDiff = Math.abs(_bmi - _idealBMI)>>
-    <<set _bmiScore = Math.max(0, 100 - (_bmiDiff * 10))>>
-    
-    <<set _idealWHR = 0.7>>
-    <<set _whrDiff = Math.abs(_whr - _idealWHR)>>
-    <<set _whrScore = Math.max(0, 100 - (_whrDiff * 200))>>
-    
-    <<set _bustHipAvg = ($body.bust + $body.hips) / 2>>
-    <<set _symmetryRatio = _bustHipAvg / $body.waist>>
-    <<set _idealSymmetry = 1.35>>
-    <<set _symDiff = Math.abs(_symmetryRatio - _idealSymmetry)>>
-    <<set _symmetryScore = Math.max(0, 100 - (_symDiff * 50))>>
-    
-    <<set _idealMuscle = 40>>
-    <<set _idealFat = 20>>
-    <<set _muscleDiff = Math.abs($body.muscleMass - _idealMuscle)>>
-    <<set _fatDiff = Math.abs($body.bodyFat - _idealFat)>>
-    <<set _compScore = (Math.max(0, 100 - (_muscleDiff * 2)) * 0.5) + (Math.max(0, 100 - (_fatDiff * 2)) * 0.5)>>
-    
-    <<set $body.appeal = Math.round((_bmiScore * 0.3) + (_whrScore * 0.3) + (_symmetryScore * 0.2) + (_compScore * 0.2))>>
-<</widget>>
-
-<<widget "calculateFitness">>
-    <<set $fitness = Math.round(($upperBody + $core + $lowerBody + $cardio) / 4)>>
-<</widget>>
-
-<<widget "calculateLooks">>
-    <<calculateFitness>>
-    <<calculateBodyAppeal>>
-    <<set $looks = Math.round(($beauty + $clothingScore + $fitness + $body.appeal) / 4)>>
-<</widget>>
-
-<<widget "calculateEnergyMax">>
-    <<calculateFitness>>
-    <<set $energyMax = 100 + Math.floor($fitness / 4)>>
-<</widget>>

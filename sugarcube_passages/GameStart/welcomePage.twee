@@ -1,0 +1,104 @@
+:: welcomePage [nobr]
+<<set $hideTopbarNav = true>>
+<<set $hideTopbarTimebox = true>>
+<<set $hideTopbarNotifications = true>>
+<<set $hideRightbar = true>>
+<<set $hideTopbar = true>>
+<<run $('body').addClass('fullscreen-centered')>>
+
+<div class="page-wrapper welcome-page">
+<div class="welcome-container">
+
+    <!-- Animated Background Accent -->
+    <div class="welcome-glow"></div>
+
+    <!-- Game Logo/Title -->
+    <div class="welcome-header">
+        <div class="welcome-logo">
+            <h1 class="welcome-title">$gameName</h1>
+            <div class="welcome-version">v $gameVersion</div>
+        </div>
+        <div class="welcome-tagline">An Adult Life Simulation Experience</div>
+        <div class="welcome-divider"></div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="welcome-card">
+        
+        <!-- Warning Section -->
+        <div class="warning-section">
+            <div class="warning-header">
+                <span class="warning-icon">🔞</span>
+                <h2>Adult Content Warning</h2>
+            </div>
+            <p class="warning-text">
+                This game contains <strong>explicit adult content</strong> including sexual themes, 
+                strong language, and mature situations. All characters depicted are 18 years or older.
+            </p>
+            <div class="warning-notice">
+                <span class="notice-icon">⚠️</span>
+                <span>You must be <strong>18 years or older</strong> to continue.</span>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="section-divider"></div>
+
+        <!-- Game Features -->
+        <div class="features-section">
+            <h3>What Awaits You</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box">🎭</div>
+                    <div class="feature-info">
+                        <div class="feature-title">Deep Storytelling</div>
+                        <div class="feature-desc">Shape your narrative through meaningful choices</div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box">💕</div>
+                    <div class="feature-info">
+                        <div class="feature-title">Relationships</div>
+                        <div class="feature-desc">Build connections with unique characters</div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box">🏠</div>
+                    <div class="feature-info">
+                        <div class="feature-title">Open World</div>
+                        <div class="feature-desc">Explore a living, reactive environment</div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box">⚙️</div>
+                    <div class="feature-info">
+                        <div class="feature-title">Content Control</div>
+                        <div class="feature-desc">Customize your experience with filters</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Age Verification -->
+    <div class="verification-section">
+        <p class="verification-prompt">By continuing, you confirm that you are <strong>18 years of age or older</strong> and legally permitted to view adult content in your jurisdiction.</p>
+        <div class="verification-buttons">
+            <<btn "I Confirm - Enter Game" "settingsPage" "accent">>
+            <a href="https://www.google.com" class="btn-style btn-default">Exit</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="welcome-footer">
+        <span>© 2024 $gameName</span>
+        <span class="footer-dot">•</span>
+        <span>All Rights Reserved</span>
+        <span class="footer-dot">•</span>
+        <span>Version $gameVersion</span>
+    </div>
+
+</div>
+</div>
+

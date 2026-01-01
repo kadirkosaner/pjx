@@ -1,20 +1,68 @@
 :: CharacterInit_Player [init]
 /* ==========================================
    PLAYER - You
-   Player Character Definition
+   Player Character Definition & Initialization
 ========================================== */
 
-/* CHARACTER APPEARANCE DEFAULTS */
+/* ==========================================
+   1. BASIC INFO & APPEARANCE
+========================================== */
 <<set $player = {
     firstName: "Alex",
     lastName: "Taylor",
-    hairColor: "Brown",
     eyeColor: "Brown",
-    skinTone: "Fair",
-    bodyType: "Average"
+    hairColor: "Brown",
+    hairLength: "long",
+    bustSize: "C",
+    hipSize: "medium"
 }>>
 
-/* CORE STATS */
+/* DYNAMIC APPEARANCE */
+<<set $appearance = {
+    hairLengthCm: 45,
+    tanLevel: 0,
+    makeupLevel: 0,
+    hairMessiness: 0,
+    nailPolish: "none",
+    hairStyle: "loose",
+    bodyHair: {
+        legs: 0,
+        pubic: 0,
+        armpits: 0
+    }
+}>>
+
+/* PLASTIC SURGERY */
+<<set $plasticSurgery = {
+    lipsSize: 50,
+    eyeSize: 50,
+    eyelashes: 50
+}>>
+
+/* BODY CHANGES */
+<<set $bodyChanges = {
+    bustGrowth: 0,
+    hipGrowth: 0,
+    pregnancyWeek: 0,
+    lactationActive: false
+}>>
+
+/* BODY MEASUREMENTS */
+<<set $body = {
+    height: 170,
+    weight: 65,
+    bust: 90,
+    waist: 70,
+    hips: 95,
+    muscleMass: 40,
+    bodyFat: 22,
+    appeal: 50
+}>>
+
+
+/* ==========================================
+   2. CORE STATS
+========================================== */
 <<set $energy = 100>>
 <<set $energyMax = 100>>
 <<set $mood = 100>>
@@ -28,6 +76,10 @@
 <<set $thirst = 0>>
 <<set $bladder = 0>>
 
+
+/* ==========================================
+   3. ATTRIBUTES & SKILLS
+========================================== */
 /* MENTAL STATS */
 <<set $intelligence = 50>>
 <<set $focus = 50>>
@@ -51,18 +103,6 @@
 <<set $cardio = 0>>
 <<set $fitness = 0>>
 
-/* BODY MEASUREMENTS */
-<<set $body = {
-    height: 170,
-    weight: 65,
-    bust: 90,
-    waist: 70,
-    hips: 95,
-    muscleMass: 40,
-    bodyFat: 22,
-    appeal: 50
-}>>
-
 /* SKILLS */
 <<set $skills = {
     social: 0,
@@ -73,7 +113,59 @@
     leadership: 0
 }>>
 
-/* CHARACTER DATA */
+
+/* ==========================================
+   4. PROGRESSION & TRACKING
+========================================== */
+
+/* SEXUAL EXPERIENCE */
+<<set $sexual = {
+    virginity: {
+        vaginal: true,
+        anal: true
+    },
+    counts: {
+        vaginal: 0,
+        anal: 0,
+        oral: 0,
+        gangbang: 0,
+        public: 0
+    },
+    stretch: {
+        vaginal: 0,
+        anal: 0
+    },
+    totalPartners: 0,
+    photosTaken: 0,
+    videosTaken: 0
+}>>
+
+/* JOURNAL FIRST TIMES */
+<<set $firsts = {
+    firstKiss: null,
+    firstVaginal: null,
+    firstAnal: null,
+    firstOralGiven: null,
+    firstOralReceived: null,
+    firstThreesome: null,
+    firstPublic: null,
+    firstPregnancy: null,
+    firstPhoto: null
+}>>
+
+/* REPUTATION ZONES */
+<<set $reputation = {
+    home: 100,
+    campus: 50,
+    downtown: 50,
+    workplace: 50,
+    socialMedia: 0
+}>>
+
+
+/* ==========================================
+   5. CHARACTER DATA OBJECT
+========================================== */
 <<set $characters.player = {
     name: "Joe",
     lastname: "Doe",

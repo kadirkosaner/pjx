@@ -3,381 +3,439 @@
 <<set $hideTopbarTimebox = true>>
 <<set $hideTopbarNotifications = true>>
 <<set $hideRightbar = true>>
-<<run $('body').addClass('layout-centered')>>
+<<set $hideTopbar = true>>
+<<run $('body').addClass('fullscreen-centered')>>
+
 <div class="page-wrapper">
 <div class="game-setup-container">
     <h1 class="page-title">Game Setup</h1>
+    <div class="setup-header-line"></div>
     <p class="page-subtitle">
-        Configure your character and game preferences. These settings can only be configured once at game start.
+        Configure your character and world. These choices define your starting experience.
     </p>
 
     <!-- 1. CHARACTER CREATION -->
-    <div class="setup-accordion-item active" data-accordion="character">
-        <div class="setup-accordion-header">
-            <h3><span class="icon icon-user"></span> Character Creation</h3>
+    <div class="settings-section setup-accordion-item">
+        <div class="settings-section-header setup-accordion-header">
+            <div style="display: flex; align-items: center; gap: 0.5rem;"><span class="icon icon-user"></span> Character Identity</div>
             <span class="setup-accordion-toggle icon icon-chevron-down"></span>
         </div>
-        <div class="setup-accordion-content">
-            <div class="setup-accordion-body">
-                <div class="form-grid-2">
-                    <div class="form-input-group">
-                        <label>First Name</label>
-                        <input type="text" id="characterFirstName" placeholder="Alex" value="Alex">
-                    </div>
-                    
-                    <div class="form-input-group">
-                        <label>Last Name</label>
-                        <input type="text" id="characterLastName" placeholder="Taylor" value="Taylor">
-                    </div>
-
-                    <div class="form-input-group">
-                        <label>Hair Color</label>
-                        <select id="charHair" class="settings-select">
-                            <option value="Black">Black</option>
-                            <option value="Brown" selected>Brown</option>
-                            <option value="Blonde">Blonde</option>
-                            <option value="Red">Red</option>
-                            <option value="White">White</option>
-                        </select>
-                    </div>
-
-                    <div class="form-input-group">
-                        <label>Eye Color</label>
-                        <select id="charEyes" class="settings-select">
-                            <option value="Brown" selected>Brown</option>
-                            <option value="Blue">Blue</option>
-                            <option value="Green">Green</option>
-                            <option value="Hazel">Hazel</option>
-                            <option value="Grey">Grey</option>
-                            <option value="Amber">Amber</option>
-                        </select>
-                    </div>
-
-                    <div class="form-input-group">
-                        <label>Skin Tone</label>
-                        <select id="charSkin" class="settings-select">
-                            <option value="Pale">Pale</option>
-                            <option value="Fair" selected>Fair</option>
-                            <option value="Light">Light</option>
-                            <option value="Olive">Olive</option>
-                            <option value="Tan">Tan</option>
-                            <option value="Brown">Brown</option>
-                            <option value="Dark">Dark</option>
-                            <option value="Black">Black</option>
-                        </select>
-                    </div>
-
-                    <div class="form-input-group">
-                        <label>Body Type</label>
-                        <select id="charBody" class="settings-select">
-                            <option value="Slim">Slim</option>
-                            <option value="Athletic">Athletic</option>
-                            <option value="Average" selected>Average</option>
-                            <option value="Curvy">Curvy</option>
-                            <option value="Chubby">Chubby</option>
-                            <option value="Muscular">Muscular</option>
-                        </select>
-                    </div>
+        <div class="settings-section-body setup-accordion-content">
+            <div class="form-grid-2">
+                <div class="form-input-group">
+                    <label>First Name</label>
+                    <input type="text" id="characterFirstName" @value="$player.firstName">
+                </div>
+                <div class="form-input-group">
+                    <label>Last Name</label>
+                    <input type="text" id="characterLastName" @value="$player.lastName">
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 2. SIMULATION SETTINGS -->
-    <div class="setup-accordion-item" data-accordion="simulation">
-        <div class="setup-accordion-header">
-            <h3><span class="icon icon-simulation"></span> Simulation Settings</h3>
+    <!-- 2. BODY CUSTOMIZATION -->
+    <div class="settings-section setup-accordion-item">
+        <div class="settings-section-header setup-accordion-header">
+            <div style="display: flex; align-items: center; gap: 0.5rem;"><span class="icon icon-body"></span> Body Customization</div>
             <span class="setup-accordion-toggle icon icon-chevron-down"></span>
         </div>
-        <div class="setup-accordion-content">
-            <div class="setup-accordion-body">
-                <div class="settings-info-note">
-                    <strong>Note:</strong> These simulation options affect realism but can be changed later in the settings menu.
+        <div class="settings-section-body setup-accordion-content">
+            
+            <!-- Hidden Inputs for JS to update -->
+            <input type="hidden" id="valEyeColor" value="Brown">
+            <input type="hidden" id="valHairColor" value="Brown">
+            <input type="hidden" id="valHairLength" value="Long">
+            <input type="hidden" id="valBustSize" value="C">
+            <input type="hidden" id="valHipSize" value="Medium">
+
+            <!-- Eye Color -->
+            <div class="visual-label">Eye Color</div>
+            <div class="color-grid" id="gridEyeColor">
+                <div class="color-option" data-value="Black"><div class="color-swatch" style="background: #1a1a1a;"></div><div class="color-name">Black</div></div>
+                <div class="color-option selected" data-value="Brown"><div class="color-swatch" style="background: #5D4037;"></div><div class="color-name">Brown</div></div>
+                <div class="color-option" data-value="Hazel"><div class="color-swatch" style="background: #8B6914;"></div><div class="color-name">Hazel</div></div>
+                <div class="color-option" data-value="Green"><div class="color-swatch" style="background: #4A7C59;"></div><div class="color-name">Green</div></div>
+                <div class="color-option" data-value="Blue"><div class="color-swatch" style="background: #5B8FA8;"></div><div class="color-name">Blue</div></div>
+                <div class="color-option" data-value="Gray"><div class="color-swatch" style="background: #7A8B8B;"></div><div class="color-name">Gray</div></div>
+            </div>
+
+            <!-- Hair Color -->
+            <div class="visual-label">Hair Color</div>
+            <div class="color-grid" id="gridHairColor">
+                <div class="color-option" data-value="Black"><div class="color-swatch" style="background: #1a1a1a;"></div><div class="color-name">Black</div></div>
+                <div class="color-option" data-value="Dark Brown"><div class="color-swatch" style="background: #2C1810;"></div><div class="color-name">D.Brown</div></div>
+                <div class="color-option selected" data-value="Brown"><div class="color-swatch" style="background: #6B4423;"></div><div class="color-name">Brown</div></div>
+                <div class="color-option" data-value="Auburn"><div class="color-swatch" style="background: #A0522D;"></div><div class="color-name">Auburn</div></div>
+                <div class="color-option" data-value="Light Brown"><div class="color-swatch" style="background: #CD853F;"></div><div class="color-name">L.Brown</div></div>
+                <div class="color-option" data-value="Blonde"><div class="color-swatch" style="background: #DAA520;"></div><div class="color-name">Blonde</div></div>
+                <div class="color-option" data-value="Red"><div class="color-swatch" style="background: #8B0000;"></div><div class="color-name">Red</div></div>
+                <div class="color-option" data-value="Gray"><div class="color-swatch" style="background: #C0C0C0;"></div><div class="color-name">Gray</div></div>
+            </div>
+
+            <!-- Hair Length -->
+            <div class="visual-label">Hair Length</div>
+            <div class="visual-grid" id="gridHairLength">
+                <div class="visual-option" data-value="Short"><div class="visual-img"><img src="assets/content/400.jpg" alt="Short Hair"></div><div class="visual-name">Short</div></div>
+                <div class="visual-option" data-value="Medium"><div class="visual-img"><img src="assets/content/400.jpg" alt="Medium Hair"></div><div class="visual-name">Medium</div></div>
+                <div class="visual-option selected" data-value="Long"><div class="visual-img"><img src="assets/content/400.jpg" alt="Long Hair"></div><div class="visual-name">Long</div></div>
+                <div class="visual-option" data-value="Very Long"><div class="visual-img"><img src="assets/content/400.jpg" alt="Very Long Hair"></div><div class="visual-name">Very Long</div></div>
+            </div>
+
+            <!-- Bust Size -->
+            <div class="visual-label">Bust Size</div>
+            <div class="visual-grid" id="gridBustSize">
+                <div class="visual-option" data-value="A"><div class="visual-img"><img src="assets/content/400.jpg" alt="A Cup"></div><div class="visual-name">A-Cup</div></div>
+                <div class="visual-option" data-value="B"><div class="visual-img"><img src="assets/content/400.jpg" alt="B Cup"></div><div class="visual-name">B-Cup</div></div>
+                <div class="visual-option selected" data-value="C"><div class="visual-img"><img src="assets/content/400.jpg" alt="C Cup"></div><div class="visual-name">C-Cup</div></div>
+                <div class="visual-option" data-value="D"><div class="visual-img"><img src="assets/content/400.jpg" alt="D Cup"></div><div class="visual-name">D-Cup</div></div>
+                <div class="visual-option" data-value="DD"><div class="visual-img"><img src="assets/content/400.jpg" alt="DD+ Cup"></div><div class="visual-name">DD+</div></div>
+            </div>
+
+            <!-- Hip Size -->
+            <div class="visual-label">Hip Size</div>
+            <div class="visual-grid" id="gridHipSize">
+                <div class="visual-option" data-value="Slim"><div class="visual-img"><img src="assets/content/400.jpg" alt="Slim Hips"></div><div class="visual-name">Slim</div></div>
+                <div class="visual-option selected" data-value="Medium"><div class="visual-img"><img src="assets/content/400.jpg" alt="Medium Hips"></div><div class="visual-name">Medium</div></div>
+                <div class="visual-option" data-value="Wide"><div class="visual-img"><img src="assets/content/400.jpg" alt="Wide Hips"></div><div class="visual-name">Wide</div></div>
+                <div class="visual-option" data-value="Curvy"><div class="visual-img"><img src="assets/content/400.jpg" alt="Curvy Hips"></div><div class="visual-name">Curvy</div></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 3. SIMULATION SETTINGS -->
+    <div class="settings-section setup-accordion-item">
+        <div class="settings-section-header setup-accordion-header">
+            <div style="display: flex; align-items: center; gap: 0.5rem;"><span class="icon icon-settings"></span> Simulation Settings</div>
+            <span class="setup-accordion-toggle icon icon-chevron-down"></span>
+        </div>
+        <div class="settings-section-body setup-accordion-content">
+            <div class="note-box warning">
+                ⚠️ These settings cannot be changed after starting the game.
+            </div>
+
+            <div class="sim-grid">
+                <div class="sim-group-title">Basic Needs</div>
+                
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Hunger</div>
+                        <div class="sim-desc">Need to eat regularly</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="trackHunger">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Thirst</div>
+                        <div class="sim-desc">Need to drink water</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="trackThirst">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Bladder</div>
+                        <div class="sim-desc">Need to use bathroom</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="trackBladder">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Calories</div>
+                        <div class="sim-desc">Track intake vs burn</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="trackCalories">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Hygiene Impact</div>
+                        <div class="sim-desc">Bad smell repels people</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="hygieneRequirement">ON</button>
                 </div>
 
-                <h4 class="section-title mb-2">Basic Needs</h4>
-                <div class="settings-list">
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Track Hunger
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Your character needs to eat regularly. If you get too hungry, you'll feel tired and grumpy. Extreme hunger prevents working or studying."></span>
-                            </div>
-                            <div class="setting-description">Manage hunger and eating habits</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="trackHunger">ON</button>
+                <div class="sim-group-title">Appearance & Decay</div>
+                
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Hair Growth</div>
+                        <div class="sim-desc">Hair gets longer daily</div>
                     </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Track Thirst
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Your character must stay hydrated. Being too thirsty drains your energy and damages your health. You can't exercise when severely dehydrated."></span>
-                            </div>
-                            <div class="setting-description">Manage thirst and drinking</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="trackThirst">ON</button>
-                    </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Track Bladder
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Bathroom breaks become necessary. Wait too long and you risk embarrassing accidents that hurt your hygiene and mood."></span>
-                            </div>
-                            <div class="setting-description">Manage bathroom needs</div>
-                        </div>
-                        <button class="setting-toggle-btn" data-setting="trackBladder">OFF</button>
-                    </div>
+                    <button class="setting-toggle-btn active" data-setting="hairGrowth">ON</button>
                 </div>
-
-                <h4 class="section-title mt-4 mb-2">Advanced Options</h4>
-                <div class="settings-list">
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Calorie Tracking
-                                <span class="icon icon-info setting-info-icon" data-tooltip="See detailed nutrition information when eating. Daily target is 2000 calories. Helps you manage your character's body weight and composition more precisely."></span>
-                            </div>
-                            <div class="setting-description">Show calorie counts when eating</div>
-                        </div>
-                        <button class="setting-toggle-btn" data-setting="trackCalories">OFF</button>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Hair Messiness</div>
+                        <div class="sim-desc">Wake up with messy hair</div>
                     </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Skill Decay
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Skills rust if you don't practice them regularly. Makes the game more challenging as you need to maintain your abilities over time."></span>
-                            </div>
-                            <div class="setting-description">Skills decrease over time if unused</div>
-                        </div>
-                        <button class="setting-toggle-btn" data-setting="skillDecay">OFF</button>
+                    <button class="setting-toggle-btn active" data-setting="hairMessiness">ON</button>
+                </div>
+                 <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Body Hair</div>
+                        <div class="sim-desc">Body hair grows over time</div>
                     </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Relationship Decay
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Friendships and romances fade if you neglect them. You'll need to spend quality time with people to keep relationships strong."></span>
-                            </div>
-                            <div class="setting-description">Relationships weaken if not maintained</div>
-                        </div>
-                        <button class="setting-toggle-btn" data-setting="relationshipDecay">OFF</button>
+                    <button class="setting-toggle-btn active" data-setting="bodyHairGrowth">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Makeup Fade</div>
+                        <div class="sim-desc">Makeup wears off daily</div>
                     </div>
+                    <button class="setting-toggle-btn active" data-setting="makeupWearOff">ON</button>
+                </div>
+                 <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Body Changes</div>
+                        <div class="sim-desc">Muscle/Fat gain/loss</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="bodyDegradation">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Skill Decay</div>
+                        <div class="sim-desc">Unused skills degrade</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="skillDecay">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Relation Decay</div>
+                        <div class="sim-desc">Unseen friends drift apart</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="relationshipDecay">ON</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 3. CONTENT PREFERENCES -->
-    <div class="setup-accordion-item" data-accordion="content">
-        <div class="setup-accordion-header">
-            <h3><span class="icon icon-eye"></span> Content Preferences</h3>
-            <span class="setup-accordion-toggle icon icon-chevron-down"></span>
+    <!-- 4. CONTENT PREFERENCES -->
+    <div class="settings-section setup-accordion-item">
+        <div class="settings-section-header setup-accordion-header">
+             <div style="display: flex; align-items: center; gap: 0.5rem;"><span class="icon icon-eye"></span> Content Preferences</div>
+             <span class="setup-accordion-toggle icon icon-chevron-down"></span>
         </div>
-        <div class="setup-accordion-content">
-            <div class="setup-accordion-body">
-                <div class="settings-info-note">
-                    <strong>Note:</strong> These content filters can be changed anytime in the settings menu.
-                </div>
-
-               <div class="settings-list">
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Incest Content
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Family romantic or sexual interactions. You can change this anytime in settings."></span>
-                            </div>
-                            <div class="setting-description">Family romantic/sexual interactions</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="incest" data-category="content">ON</button>
-                    </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Romantic Content
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Flirting and romance scenes. Change anytime in settings."></span>
-                            </div>
-                            <div class="setting-description">Flirting, romance scenes</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="romantic" data-category="content">ON</button>
-                    </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Sexual Content
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Explicit sexual scenes. Change anytime in settings."></span>
-                            </div>
-                            <div class="setting-description">Explicit sexual scenes</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="sexual" data-category="content">ON</button>
-                    </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Gore & Violence
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Blood, graphic violence, and combat scenes. Change anytime in settings."></span>
-                            </div>
-                            <div class="setting-description">Blood, graphic violence, combat</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="gore" data-category="content">ON</button>
-                    </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Scat Content
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Bathroom-related content. Change anytime in settings."></span>
-                            </div>
-                            <div class="setting-description">Bathroom related content</div>
-                        </div>
-                        <button class="setting-toggle-btn" data-setting="scat" data-category="content">OFF</button>
-                    </div>
-                </div>
+        <div class="settings-section-body setup-accordion-content">
+            <div class="note-box warning">
+                Select content you are comfortable with. Can be changed anytime.
             </div>
-        </div>
-    </div>
 
-    <!-- 4. GAMEPLAY SETTINGS -->
-    <div class="setup-accordion-item" data-accordion="gameplay">
-        <div class="setup-accordion-header">
-            <h3><span class="icon icon-settings"></span> Gameplay Settings</h3>
-            <span class="setup-accordion-toggle icon icon-chevron-down"></span>
-        </div>
-        <div class="setup-accordion-content">
-            <div class="setup-accordion-body">
-                <div class="settings-info-note">
-                    <strong>Note:</strong> Video and audio settings can be adjusted anytime in the settings menu.
+            <div class="sim-grid">
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Male Sexual</div>
+                        <div class="sim-desc">Scenes with men</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="maleSexual" data-category="content">ON</button>
                 </div>
-
-                <h4 class="section-title mb-2">Video Options</h4>
-                <div class="settings-list">
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Video Autoplay
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Videos play automatically when you enter a passage. Change anytime in settings."></span>
-                            </div>
-                            <div class="setting-description">Automatically play videos in passages</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="autoplaySet" data-category="video">ON</button>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Female Sexual</div>
+                        <div class="sim-desc">Scenes with women</div>
                     </div>
-
-                    <div class="settings-control">
-                        <div>
-                            <div class="setting-label">
-                                Video Loop
-                                <span class="icon icon-info setting-info-icon" data-tooltip="Videos repeat automatically when they end. Change anytime in settings."></span>
-                            </div>
-                            <div class="setting-description">Automatically repeat videos when they end</div>
-                        </div>
-                        <button class="setting-toggle-btn active" data-setting="loopSet" data-category="video">ON</button>
+                    <button class="setting-toggle-btn active" data-setting="femaleSexual" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Trans/Futa</div>
+                        <div class="sim-desc">Penis-having women</div>
                     </div>
+                    <button class="setting-toggle-btn active" data-setting="futaTrans" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Pregnancy</div>
+                        <div class="sim-desc">Risk of getting pregnant</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="pregnancy" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Incest</div>
+                        <div class="sim-desc">Family relations</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="incest" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">NTR / Cheating</div>
+                        <div class="sim-desc">Betrayal content</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="ntr" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">BDSM</div>
+                        <div class="sim-desc">Bondage and dominance</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="bdsm" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Non-Consensual</div>
+                        <div class="sim-desc">Forced interactions</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="nonConsensual" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Public / Exhibition</div>
+                        <div class="sim-desc">Being seen in public</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="publicExhibition" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Lactation</div>
+                        <div class="sim-desc">Breast milk production</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="lactation" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Foot Fetish</div>
+                        <div class="sim-desc">Focus on feet</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="feet" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Watersports</div>
+                        <div class="sim-desc">Urine related content</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="watersports" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Scat</div>
+                        <div class="sim-desc">Feces related content</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="scat" data-category="content">ON</button>
+                </div>
+                <div class="sim-item">
+                    <div>
+                        <div class="sim-label">Gore / Violence</div>
+                        <div class="sim-desc">Blood and injury</div>
+                    </div>
+                    <button class="setting-toggle-btn active" data-setting="goreViolence" data-category="content">ON</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- START GAME BUTTON -->
-    <div class="flex-center mt-4">
-        <a class="link-internal btn-style btn-accent" id="start-game-btn">Start Game</a>
+    <div class="flex-center mt-4 mb-4" id="start-game-container">
+        <<btn "Continue" "" "accent">>
     </div>
+
 </div>
 </div>
-<</nobr>>
+
 
 <<script>>
-// Save settings and navigate to confirmation page
 $(document).on(':passagedisplay', function(ev) {
-    // Only bind for settingsPage
     if (ev.passage.title !== 'settingsPage') return;
     
     const State = SugarCube.State;
-    const $ = jQuery;
     const vars = State.variables;
-    
-    // Populate form with saved values
-    if (vars.player) {
-        $('#characterFirstName').val(vars.player.firstName || 'Alex');
-        $('#characterLastName').val(vars.player.lastName || 'Taylor');
-        $('#charHair').val(vars.player.hairColor || 'Brown');
-        $('#charEyes').val(vars.player.eyeColor || 'Brown');
-        $('#charSkin').val(vars.player.skinTone || 'Fair');
-        $('#charBody').val(vars.player.bodyType || 'Average');
-    }
-    
-    // Populate toggle buttons with saved values
-    function setToggle(setting, value) {
+    const $ = jQuery;
+
+    // --- INITIALIZATION ---
+
+    // 1. Restore Toggles (Using .active instead of .on/.off to match accordion.js)
+    function restoreToggle(setting, obj) {
+        if (!obj || obj[setting] === undefined) return;
+        const val = obj[setting];
         const $btn = $(`.setting-toggle-btn[data-setting="${setting}"]`);
-        if (value) {
+        if (val) {
             $btn.addClass('active').text('ON');
         } else {
             $btn.removeClass('active').text('OFF');
         }
     }
-    
-    // Game Settings
+
+    // Restore Game Settings
     if (vars.gameSettings) {
-        setToggle('trackHunger', vars.gameSettings.trackHunger);
-        setToggle('trackThirst', vars.gameSettings.trackThirst);
-        setToggle('trackBladder', vars.gameSettings.trackBladder);
-        setToggle('trackCalories', vars.gameSettings.trackCalories);
-        setToggle('skillDecay', vars.gameSettings.skillDecay);
-        setToggle('relationshipDecay', vars.gameSettings.relationshipDecay);
+        Object.keys(vars.gameSettings).forEach(key => restoreToggle(key, vars.gameSettings));
     }
-    
-    // Content Preferences
+    // Restore Content Preferences
     if (vars.contentPreferences) {
-        setToggle('incest', vars.contentPreferences.incest);
-        setToggle('romantic', vars.contentPreferences.romantic);
-        setToggle('sexual', vars.contentPreferences.sexual);
-        setToggle('gore', vars.contentPreferences.gore);
-        setToggle('scat', vars.contentPreferences.scat);
+        Object.keys(vars.contentPreferences).forEach(key => restoreToggle(key, vars.contentPreferences));
     }
-    
-    // Video Settings
-    if (vars.videoSettings) {
-        setToggle('autoplaySet', vars.videoSettings.autoplaySet);
-        setToggle('loopSet', vars.videoSettings.loopSet);
+
+    // 2. Restore Visual Selections
+    function restoreSelection(group, value) {
+        if (!value) return;
+        const $container = $(`#grid${group}`);
+        $container.find('.selected').removeClass('selected');
+        $container.find(`[data-value="${value}"]`).addClass('selected');
+        $(`#val${group}`).val(value);
     }
-    
-    // Start Game button handler
-    $('#start-game-btn').off('click.settingsPage').on('click.settingsPage', function(e) {
+
+    if (vars.player) {
+        restoreSelection('EyeColor', vars.player.eyeColor);
+        restoreSelection('HairColor', vars.player.hairColor);
+        restoreSelection('HairLength', vars.player.hairLength);
+        restoreSelection('BustSize', vars.player.bustSize);
+        restoreSelection('HipSize', vars.player.hipSize);
+        if (vars.player.firstName) $('#characterFirstName').val(vars.player.firstName);
+        if (vars.player.lastName) $('#characterLastName').val(vars.player.lastName);
+    }
+
+    // --- EVENT LISTENERS ---
+
+    // 1. Color & Visual Options Click
+    $('.color-option, .visual-option').on('click', function() {
+        const $this = $(this);
+        const $container = $this.parent();
+        const value = $this.data('value');
+        
+        $container.find('.selected').removeClass('selected');
+        $this.addClass('selected');
+
+        const gridId = $container.attr('id');
+        const inputId = gridId.replace('grid', 'val');
+        $(`#${inputId}`).val(value);
+    });
+
+    // 2. Toggle Buttons Click -> HANDLED BY accordion.js
+
+    // 3. Start Game Click (Updated to target widget output)
+    $('#start-game-container .btn-style').on('click', function(e) {
         e.preventDefault();
+
+        // Ensure player object exists
+        if (!vars.player) {
+            vars.player = {};
+        }
+
+        // Save Character Info
+        vars.player.firstName = $('#characterFirstName').val() || "Alex";
+        vars.player.lastName = $('#characterLastName').val() || "Taylor";
         
-        // Character
-        vars.player.firstName = $('#characterFirstName').val() || 'Alex';
-        vars.player.lastName = $('#characterLastName').val() || 'Taylor';
-        vars.player.hairColor = $('#charHair').val();
-        vars.player.eyeColor = $('#charEyes').val();
-        vars.player.skinTone = $('#charSkin').val();
-        vars.player.bodyType = $('#charBody').val();
-        
-        // Simulation Settings
-        vars.gameSettings.trackHunger = $('.setting-toggle-btn[data-setting="trackHunger"]').hasClass('active');
-        vars.gameSettings.trackThirst = $('.setting-toggle-btn[data-setting="trackThirst"]').hasClass('active');
-        vars.gameSettings.trackBladder = $('.setting-toggle-btn[data-setting="trackBladder"]').hasClass('active');
-        vars.gameSettings.trackCalories = $('.setting-toggle-btn[data-setting="trackCalories"]').hasClass('active');
-        vars.gameSettings.skillDecay = $('.setting-toggle-btn[data-setting="skillDecay"]').hasClass('active');
-        vars.gameSettings.relationshipDecay = $('.setting-toggle-btn[data-setting="relationshipDecay"]').hasClass('active');
-        
-        // Content Preferences
-        vars.contentPreferences.incest = $('.setting-toggle-btn[data-setting="incest"]').hasClass('active');
-        vars.contentPreferences.romantic = $('.setting-toggle-btn[data-setting="romantic"]').hasClass('active');
-        vars.contentPreferences.sexual = $('.setting-toggle-btn[data-setting="sexual"]').hasClass('active');
-        vars.contentPreferences.gore = $('.setting-toggle-btn[data-setting="gore"]').hasClass('active');
-        vars.contentPreferences.scat = $('.setting-toggle-btn[data-setting="scat"]').hasClass('active');
-        
-        // Video Settings
-        vars.videoSettings.autoplaySet = $('.setting-toggle-btn[data-setting="autoplaySet"]').hasClass('active');
-        vars.videoSettings.loopSet = $('.setting-toggle-btn[data-setting="loopSet"]').hasClass('active');
-        
-        // Navigate to confirmation page
+        // Save Body Customization
+        vars.player.eyeColor = $('#valEyeColor').val();
+        vars.player.hairColor = $('#valHairColor').val();
+        vars.player.hairLength = $('#valHairLength').val();
+        vars.player.bustSize = $('#valBustSize').val();
+        vars.player.hipSize = $('#valHipSize').val();
+
+        // Save Simulation Settings
+        $('.setting-toggle-btn[data-category!="content"]').each(function() {
+            const key = $(this).data('setting');
+            vars.gameSettings[key] = $(this).hasClass('active');
+        });
+
+        // Save Content Preferences
+        $('.setting-toggle-btn[data-category="content"]').each(function() {
+            const key = $(this).data('setting');
+            vars.contentPreferences[key] = $(this).hasClass('active');
+        });
+
+        // Navigate
         SugarCube.Engine.play('confirmationPage');
     });
+
 });
 <</script>>
+<</nobr>>

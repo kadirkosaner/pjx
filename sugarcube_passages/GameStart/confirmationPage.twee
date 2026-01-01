@@ -1,130 +1,106 @@
-:: confirmationPage
+<<nobr>>
 <<set $hideTopbarNav = true>>
 <<set $hideTopbarTimebox = true>>
 <<set $hideTopbarNotifications = true>>
 <<set $hideRightbar = true>>
-<<run $('body').addClass('layout-centered')>>
-<<nobr>>
+<<set $hideTopbar = true>>
+<<run $('body').addClass('fullscreen-centered')>>
+
 <div class="page-wrapper">
 <div class="game-setup-container">
-    <h1 class="page-title">Confirm Your Settings</h1>
-    <p class="page-subtitle">Review your choices before starting the game.</p>
+    <h1 class="page-title">Confirm Your Choices</h1>
+    <div class="setup-header-line"></div>
+    <p class="page-subtitle">
+        Review your character settings before beginning your new life.
+    </p>
 
     <div class="info-grid">
-    <!-- CHARACTER -->
-    <div class="info-card">
-        <div class="info-card-header">
-            <span class="icon icon-user"></span> Character
-        </div>
-        <div class="info-card-body">
-            <div class="info-line">
-                <span class="info-key">Name</span>
-                <span class="info-val">$player.firstName $player.lastName</span>
+        <!-- 1. IDENTITY (Full Width) -->
+        <div class="info-card" style="grid-column: 1 / -1;">
+            <div class="info-card-header">
+                <span class="icon icon-user"></span> CHARACTER IDENTITY
             </div>
-            <div class="info-line">
-                <span class="info-key">Hair</span>
-                <span class="info-val">$player.hairColor</span>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Eyes</span>
-                <span class="info-val">$player.eyeColor</span>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Skin</span>
-                <span class="info-val">$player.skinTone</span>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Body</span>
-                <span class="info-val">$player.bodyType</span>
+            <div class="info-card-body">
+                <div style="text-align: center;">
+                    <div style="font-size: 0.75rem; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Full Name</div>
+                    <div style="font-size: 1.25rem; color: var(--color-accent); font-weight: 600;">$player.firstName $player.lastName</div>
+                </div>
             </div>
         </div>
+
+        <!-- 2. BODY (Full Width) -->
+        <div class="info-card" style="grid-column: 1 / -1;">
+            <div class="info-card-header">
+                <span class="icon icon-body"></span> BODY DETAILS
+            </div>
+            <div class="info-card-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <div class="info-line"><span class="label">Eye Color</span> <span class="value">$player.eyeColor</span></div>
+                        <div class="info-line"><span class="label">Hair Color</span> <span class="value">$player.hairColor</span></div>
+                        <div class="info-line"><span class="label">Hair Length</span> <span class="value">$player.hairLength</span></div>
+                    </div>
+                    <div>
+                        <div class="info-line"><span class="label">Bust Size</span> <span class="value">$player.bustSize</span></div>
+                        <div class="info-line"><span class="label">Hip Size</span> <span class="value">$player.hipSize</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. SIMULATION (Left Col) -->
+        <div class="info-card">
+            <div class="info-card-header">
+                <span class="icon icon-settings"></span> SIMULATION SETTINGS
+            </div>
+            <div class="info-card-body">
+                <div class="info-line"><span class="label">Hunger Tracking</span> <span class="value"><<if $gameSettings.trackHunger>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Thirst Tracking</span> <span class="value"><<if $gameSettings.trackThirst>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Bladder Tracking</span> <span class="value"><<if $gameSettings.trackBladder>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Calorie Tracking</span> <span class="value"><<if $gameSettings.trackCalories>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Hygiene Requirement</span> <span class="value"><<if $gameSettings.hygieneRequirement>>ON<<else>>OFF<</if>></span></div>
+                <div class="separator-line"></div>
+                <div class="info-line"><span class="label">Hair Growth</span> <span class="value"><<if $gameSettings.hairGrowth>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Hair Messiness</span> <span class="value"><<if $gameSettings.hairMessiness>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Body Hair Growth</span> <span class="value"><<if $gameSettings.bodyHairGrowth>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Makeup Fade</span> <span class="value"><<if $gameSettings.makeupWearOff>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Body Weight Changes</span> <span class="value"><<if $gameSettings.bodyDegradation>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Skill Decay</span> <span class="value"><<if $gameSettings.skillDecay>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Relationship Decay</span> <span class="value"><<if $gameSettings.relationshipDecay>>ON<<else>>OFF<</if>></span></div>
+            </div>
+        </div>
+
+        <!-- 4. CONTENT (Right Col) -->
+        <div class="info-card">
+            <div class="info-card-header">
+                <span class="icon icon-eye"></span> CONTENT PREFERENCES
+            </div>
+            <div class="info-card-body">
+                <div class="info-line"><span class="label">Male Sexual Content</span> <span class="value"><<if $contentPreferences.maleSexual>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Female Sexual Content</span> <span class="value"><<if $contentPreferences.femaleSexual>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Trans / Futa Content</span> <span class="value"><<if $contentPreferences.futaTrans>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Pregnancy Content</span> <span class="value"><<if $contentPreferences.pregnancy>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Incest Content</span> <span class="value"><<if $contentPreferences.incest>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">NTR / Cheating</span> <span class="value"><<if $contentPreferences.ntr>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">BDSM Content</span> <span class="value"><<if $contentPreferences.bdsm>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Non-Consensual</span> <span class="value"><<if $contentPreferences.nonConsensual>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Public Exhibition</span> <span class="value"><<if $contentPreferences.publicExhibition>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Lactation</span> <span class="value"><<if $contentPreferences.lactation>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Foot Fetish</span> <span class="value"><<if $contentPreferences.feet>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Watersports</span> <span class="value"><<if $contentPreferences.watersports>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Scat Content</span> <span class="value"><<if $contentPreferences.scat>>ON<<else>>OFF<</if>></span></div>
+                <div class="info-line"><span class="label">Gore / Violence</span> <span class="value"><<if $contentPreferences.goreViolence>>ON<<else>>OFF<</if>></span></div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- SIMULATION -->
-    <div class="info-card">
-        <div class="info-card-header">
-            <span class="icon icon-simulation"></span> Simulation
-        </div>
-        <div class="info-card-body">
-            <div class="info-line">
-                <span class="info-key">Hunger</span>
-                <<if $gameSettings.trackHunger>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Thirst</span>
-                <<if $gameSettings.trackThirst>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Bladder</span>
-                <<if $gameSettings.trackBladder>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Calories</span>
-                <<if $gameSettings.trackCalories>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Skill Decay</span>
-                <<if $gameSettings.skillDecay>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Relationship Decay</span>
-                <<if $gameSettings.relationshipDecay>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-        </div>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="info-card">
-        <div class="info-card-header">
-            <span class="icon icon-eye"></span> Content
-        </div>
-        <div class="info-card-body">
-            <div class="info-line">
-                <span class="info-key">Incest</span>
-                <<if $contentPreferences.incest>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Romantic</span>
-                <<if $contentPreferences.romantic>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Sexual</span>
-                <<if $contentPreferences.sexual>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Gore</span>
-                <<if $contentPreferences.gore>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Scat</span>
-                <<if $contentPreferences.scat>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-        </div>
-    </div>
-
-    <!-- VIDEO -->
-    <div class="info-card">
-        <div class="info-card-header">
-            <span class="icon icon-settings"></span> Video
-        </div>
-        <div class="info-card-body">
-            <div class="info-line">
-                <span class="info-key">Autoplay</span>
-                <<if $videoSettings.autoplaySet>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-            <div class="info-line">
-                <span class="info-key">Loop</span>
-                <<if $videoSettings.loopSet>>@@color:#ec4899;ON@@<<else>>@@color:#666;OFF@@<</if>>
-            </div>
-        </div>
-    </div>
-    </div>
-
-    <!-- BUTTONS -->
-    <div class="flex-center gap-2 mt-4">
+    <!-- NAVIGATION BUTTONS -->
+    <div class="form-actions mt-4">
         <<btn "Go Back" "settingsPage" "default">>
-        <<btn "Continue" "prologuePage" "accent">>
+        <<btn "Start Life" "prologuePage" "accent">>
     </div>
+
 </div>
 </div>
 <</nobr>>

@@ -2461,38 +2461,7 @@ body.startscreen-active #passages {
   margin-left: 4px;
 }
 
-.setting-toggle-btn {
-  background: #222;
-  border: 1px solid #333;
-  color: #666;
-  padding: 8px 20px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 80px;
-}
 
-.setting-toggle-btn.active {
-  background: rgba(236, 72, 153, 0.15);
-  border-color: #ec4899;
-  color: #ec4899;
-  box-shadow: 0 0 10px rgba(236, 72, 153, 0.2);
-}
-
-.setting-toggle-btn:hover {
-  border-color: #555;
-  color: #999;
-}
-
-.setting-toggle-btn.active:hover {
-  border-color: #f472b6;
-  color: #f472b6;
-  background: rgba(236, 72, 153, 0.2);
-}
 
 .volume-control {
   position: relative;
@@ -3629,6 +3598,23 @@ body.startscreen-active #passages {
 }
 
 /* Force full width on SugarCube's passage container for wardrobe */
+/* LOGIC FIX: Enforcing NO TOP OFFSET for all fullscreen pages */
+body.fullscreen-centered #passages {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    position: static !important; /* Forces natural flow, removing fixed layout gap */
+    top: auto !important; /* Removes 180px top gap */
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Conditional Logic not needed as we enforce static above, but kept for safety */
+body.topbar-hidden #passages {
+    top: 0 !important;
+    margin-top: 0 !important;
+}
+
 body.wardrobe-active #story,
 body.wardrobe-active #passages,
 body.wardrobe-active .passage {
@@ -4763,12 +4749,48 @@ body.wardrobe-active .passage {
   padding: 2rem;
 }
 
+/* ==========================================
+   GAME SETUP PAGE LAYOUT
+========================================== */
+
+.game-setup-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.page-subtitle {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.setup-header-line {
+  width: 60px;
+  height: 2px;
+  background: var(--color-accent);
+  margin: 0 auto 1rem auto;
+}
+
+/* ==========================================
+   GAME SETUP PAGE ACCORDION
+   (Welcome page styles moved to gamestart.css)
+========================================== */
+
 .setup-accordion-item {
   margin-bottom: 1rem;
   border: 1px solid var(--color-border-primary);
   border-radius: 8px;
   overflow: hidden;
-  background: var(--color-bg-tertiary);
+  background: var(--color-bg-secondary);
 }
 
 .setup-accordion-header {
@@ -4804,18 +4826,20 @@ body.wardrobe-active .passage {
 }
 
 .setup-accordion-content {
-  max-height: 0;
+  max-height: 0 !important;
+  padding: 0 !important;
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  /* No transition - instant open/close */
 }
 
 .setup-accordion-item.active .setup-accordion-content {
-  max-height: 2000px;
+  max-height: none !important;
+  padding: 1.5rem !important;
 }
 
 .setup-accordion-body {
-  padding: 1.5rem;
-  border-top: 1px solid var(--color-border-primary);
+  padding: 0;
+  border-top: none;
 }
 
 .form-input-group {
@@ -4977,9 +5001,8 @@ body.wardrobe-active .passage {
   gap: 1.5rem;
 }
 
-/* Centered Layout - When rightbar is hidden */
-body.layout-centered #passages {
-  padding-right: var(--spacing-xl);
+/* Centered Layout - Used for game setup screens */
+.game-setup-container {
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -4990,6 +5013,96 @@ body.layout-centered .top-bar-wrapper {
 
 body.layout-centered .right-bar {
   display: none;
+}
+
+/* NO TOPBAR MODE - Full screen without topbar space */
+body.no-topbar .top-bar-wrapper {
+  display: none !important;
+}
+
+/* TOPBAR HIDDEN - Page centered, no top offset */
+body.topbar-hidden .top-bar-wrapper {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+body.topbar-hidden .top-bar-wrapper .center-section {
+  display: none !important;
+}
+
+/* Center page content when topbar and rightbar are hidden */
+body.topbar-hidden .page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+body.topbar-hidden .game-setup-container {
+  max-width: 900px;
+  width: 100%;
+}
+
+/* NO RIGHTBAR MODE */
+body.no-rightbar .right-bar {
+  display: none !important;
+}
+
+/* FULLSCREEN CENTERED - For welcome page etc */
+body.fullscreen-centered {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.fullscreen-centered .top-bar-wrapper {
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  right: auto !important;
+  display: block !important;
+}
+
+body.fullscreen-centered .top-bar-wrapper .center-section {
+  display: none !important;
+}
+
+body.fullscreen-centered .right-bar {
+  display: none !important;
+}
+
+/* FULLSCREEN LAYOUT - When hideTopbar AND hideRightbar are true */
+body.fullscreen-layout {
+  /* Remove any topbar offset */
+}
+
+body.fullscreen-layout .top-bar-wrapper {
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  right: auto !important;
+}
+
+body.fullscreen-layout .top-bar-wrapper .center-section {
+  display: none !important;
+}
+
+body.fullscreen-layout .right-bar {
+  display: none !important;
+}
+
+body.fullscreen-layout .page-wrapper {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+body.fullscreen-layout .game-setup-container {
+  max-width: 900px;
+  width: 100%;
 }
 
 /* ===========================
@@ -5130,3 +5243,530 @@ button.btn-secondary,
   background-color: var(--color-bg-tertiary) !important;
   color: var(--color-text-primary) !important;
 }
+
+/* ==========================================
+   SETTINGS PAGE STYLES (New)
+   For character creation & system toggles
+========================================== */
+
+/* Visual Description Label */
+.visual-label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Visual Grid (Images) */
+.visual-grid {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.visual-option {
+  width: 80px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.visual-img {
+  width: 80px;
+  height: 100px;
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.visual-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visual-option:hover .visual-img {
+  border-color: var(--color-text-secondary);
+}
+
+.visual-option.selected .visual-img {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
+}
+
+.visual-name {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* Color Grid */
+.color-grid {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 50px;
+  cursor: pointer;
+}
+
+.color-swatch {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--color-border-primary);
+  border-radius: 50%;
+  margin-bottom: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
+.color-option.selected .color-swatch {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
+}
+
+.color-name {
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--color-text-tertiary);
+}
+
+/* Toggle Grid */
+.toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.5rem;
+}
+
+.toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--color-bg-tertiary); /* Lighter than secondary */
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-primary);
+}
+
+.toggle-label {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.toggle-btn {
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  width: 50px;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.toggle-btn.on {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.toggle-btn.off {
+  background: transparent;
+  color: var(--color-text-tertiary);
+  border-color: var(--color-border-secondary);
+}
+
+/* Simulation Grid (Detailed items) */
+.sim-group-title {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 1rem 0 0.5rem 0;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--color-border-secondary);
+  grid-column: 1 / -1; /* Span full width in grid */
+}
+
+.sim-group-title:first-child {
+  margin-top: 0;
+}
+
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.75rem;
+}
+
+.sim-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-primary);
+}
+
+.sim-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.sim-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  margin-top: 0.2rem;
+}
+
+.sim-group-title {
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 1.5rem 0 0.75rem 0;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--color-border-primary);
+  grid-column: 1 / -1;
+}
+
+.sim-group-title:first-child {
+  margin-top: 0;
+}
+
+/* Note Box */
+.note-box {
+  background: rgba(236, 72, 153, 0.1);
+  border-left: 3px solid var(--color-accent);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.note-box.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-left-color: #f59e0b;
+  color: #e0e0e0;
+}
+
+/* ==========================================
+   CONFIRMATION PAGE STYLES
+========================================== */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.info-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.info-card-header {
+  background: var(--color-bg-tertiary);
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-card-body {
+  padding: 1.5rem;
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+
+.info-line:last-child {
+  border-bottom: none;
+}
+
+.info-line .label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.info-line .value {
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.separator-line {
+  height: 1px;
+  background: var(--color-border-primary);
+  margin: 1rem 0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* ========================================================================
+   MODULE: GAME START & FULLSCREEN LAYOUT (Migrated)
+   ======================================================================== */
+
+/* --- HAMBURGER MENU STABILITY STABILIZER --- */
+button#ui-bar-toggle, 
+#ui-bar-toggle,
+.mainmenu-btn {
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 1500 !important; /* Lowered from 5000 to be below Modals (usu. 2000+) */
+    display: flex !important;
+    width: 45px !important;
+    height: 45px !important;
+}
+
+/* Ensure wrapper doesn't interfere but acts as anchor if needed */
+.top-bar-wrapper {
+    position: fixed !important;
+    z-index: 1400; /* Below button */
+    top: 0; left: 0;
+    pointer-events: none;
+}
+.top-bar-wrapper .left-section {
+    pointer-events: auto;
+}
+
+/* Topbar Visibility & Padding */
+.top-bar-wrapper .center-section {
+    padding-top: 15px; /* "Topbar yukarıdan padding almalı" */
+}
+
+
+/* LOGIC FIX: Enforcing NO TOP OFFSET for all fullscreen pages */
+body.fullscreen-centered {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.fullscreen-centered #passages { 
+    margin: 0 !important; 
+    padding: 0 !important; 
+    max-width: 100% !important; 
+    position: static !important; /* Forces natural flow, removing fixed layout gap */
+    top: auto !important; /* Removes 180px top gap */
+    height: auto !important; 
+    overflow: visible !important;
+}
+
+/* 2. Unified Wrapper (Natural Flex Flow) */
+body.fullscreen-centered .page-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: var(--color-bg-primary);
+    box-sizing: border-box !important;
+    z-index: 40;
+}
+
+/* 3. Content Container (The "Perfect Centering" Secret) */
+/* margin: auto on a flex child centers it perfectly horizontally & vertically */
+body.fullscreen-centered .page-wrapper > div {
+    width: 100% !important;
+    max-width: 800px !important;
+    margin: auto !important; 
+    padding: 3rem 1.5rem !important; /* Better breathing room */
+    box-sizing: border-box !important;
+    flex-shrink: 0;
+}
+
+/* --- GAMESTART COMPONENTS (Migrated) --- */
+
+/* Welcome Page Styles */
+.welcome-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Removed min-height: 100% to allow parent flex centering to work */
+}
+
+.welcome-glow {
+  position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%);
+  pointer-events: none; z-index: -1;
+}
+.welcome-header { margin-bottom: 2rem; text-align: center; }
+.welcome-logo { display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
+.welcome-title { font-size: 3rem; font-weight: 700; color: var(--color-accent); margin: 0; }
+.welcome-version { background: var(--color-accent); color: #000; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+.welcome-tagline { font-size: 0.9rem; color: var(--color-text-tertiary); letter-spacing: 0.05em; margin-top: 0.5rem; }
+.welcome-divider { width: 60px; height: 2px; background: var(--color-accent); margin: 1rem auto 0; }
+.welcome-card { background: var(--color-bg-secondary); border: 1px solid var(--color-border-primary); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; width: 100%; max-width: 800px; box-sizing: border-box; }
+
+/* --- SETTINGS PAGE LAYOUT (Restored) --- */
+.game-setup-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settings-section {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+.settings-section:hover {
+    border-color: var(--color-border-secondary);
+}
+
+.settings-section-header {
+    padding: 1rem 1.25rem;
+    background: var(--color-bg-tertiary);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s;
+}
+.settings-section-header:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.settings-section-body {
+    padding: 1.25rem;
+    background: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border-primary);
+}
+
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+@media (max-width: 600px) {
+    .form-grid-2 { grid-template-columns: 1fr; }
+}
+
+.form-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.form-input-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+.form-input-group input[type="text"] {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-secondary);
+    color: var(--color-text-primary);
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+.form-input-group input[type="text"]:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.1);
+}
+
+.setup-accordion-toggle {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+    transition: transform 0.3s;
+}
+
+/* Warning Section */
+.warning-section { margin-bottom: 1.5rem; }
+.warning-header { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1rem; }
+.warning-header h2 { margin: 0; color: var(--color-accent); font-size: 1.25rem; }
+.warning-text { color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 1rem; text-align: center; }
+.warning-notice { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(236, 72, 153, 0.1); border: 1px solid var(--color-accent); padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 0.9rem; }
+
+/* Features Grid */
+.features-section h3 { font-size: 1rem; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; text-align: center; }
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.feature-card { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--color-bg-tertiary); border-radius: 8px; text-align: left; }
+.feature-icon-box { font-size: 1.25rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(236, 72, 153, 0.1); border-radius: 8px; flex-shrink: 0; }
+.feature-title { font-weight: 600; font-size: 0.85rem; color: var(--color-text-primary); }
+.feature-desc { font-size: 0.7rem; color: var(--color-text-tertiary); }
+
+/* Verification */
+.verification-prompt { font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 1.5rem; line-height: 1.5; text-align: center; }
+.verification-buttons { display: flex; justify-content: center; gap: 1rem; }
+.welcome-footer { display: flex; justify-content: center; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--color-text-tertiary); margin-top: 2rem; }
+.footer-dot { opacity: 0.5; }
+
+/* Settings Page Visual Components */
+.visual-label { margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--color-text-secondary); }
+.color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 0.5rem; margin-bottom: 1.5rem; }
+.color-option { cursor: pointer; border: 1px solid var(--color-border-secondary); border-radius: 6px; padding: 4px; transition: all 0.2s; background: var(--color-bg-secondary); }
+.color-option:hover { border-color: var(--color-text-tertiary); transform: translateY(-2px); }
+.color-option.selected { border-color: var(--color-accent); background: rgba(236, 72, 153, 0.1); }
+.color-swatch { height: 30px; border-radius: 4px; margin-bottom: 4px; border: 1px solid rgba(255,255,255,0.1); }
+.color-name { font-size: 0.65rem; text-align: center; color: var(--color-text-tertiary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.visual-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+.visual-option { cursor: pointer; border: 1px solid var(--color-border-secondary); border-radius: 8px; padding: 0.5rem; transition: all 0.2s; background: var(--color-bg-secondary); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.visual-option:hover { border-color: var(--color-text-tertiary); transform: translateY(-2px); }
+.visual-option.selected { border-color: var(--color-accent); background: rgba(236, 72, 153, 0.1); }
+.visual-img { width: 100%; aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: #000; }
+.visual-img img { width: 100%; height: 100%; object-fit: cover; }
+.visual-name { font-size: 0.75rem; color: var(--color-text-secondary); font-weight: 500; }
+
+.note-box { background: rgba(255, 193, 7, 0.1); border-left: 3px solid #ffc107; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #e0e0e0; display: flex; align-items: center; gap: 0.75rem; border-radius: 0 4px 4px 0; }
+.note-box.warning { background: rgba(236, 72, 153, 0.1); border-color: var(--color-accent); }
+
+.sim-grid { display: grid; gap: 1rem; }
+.sim-group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-tertiary); margin: 1.5rem 0 0.5rem 0; padding-bottom: 0.25rem; border-bottom: 1px solid var(--color-border-primary); }
+.sim-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--color-bg-tertiary); border: 1px solid var(--color-border-secondary); border-radius: 8px; transition: all 0.2s; }
+.sim-item:hover { border-color: var(--color-text-tertiary); }
+.sim-label { font-weight: 500; font-size: 0.95rem; color: var(--color-text-primary); margin-bottom: 0.2rem; }
+.sim-desc { font-size: 0.75rem; color: var(--color-text-tertiary); }
+.setting-toggle-btn { background: transparent; border: 1px solid var(--color-border-secondary); color: var(--color-text-tertiary); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; min-width: 60px; }
+.setting-toggle-btn.active { background: var(--color-accent); border-color: var(--color-accent); color: #000; }
+
+/* Page Title & Subtitle */
+.page-title { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; color: var(--color-text-primary); margin-top: 0; }
+.page-subtitle { text-align: center; color: var(--color-text-tertiary); margin-bottom: 2rem; font-size: 0.9rem; }
+.setup-header-line { width: 60px; height: 2px; background: var(--color-accent); margin: 0 auto 1rem auto; }
+

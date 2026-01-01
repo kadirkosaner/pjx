@@ -17,19 +17,16 @@ $(document).on(':passagerender', function () {
 
     const vars = TopbarAPI.State.variables;
 
-    // Check if current passage is Start (startscreen) - skip topbar creation
-    if (TopbarAPI.State.passage === 'Start') {
-        console.log('[Topbar] Skipping - Start passage (startscreen)');
-        $('.top-bar-wrapper').remove();
-        return;
-    }
+    // Check if current passage is Start (startscreen) - ALLOW topbar for hamburger menu
+    // if (TopbarAPI.State.passage === 'Start') {
+    //    console.log('[Topbar] Skipping - Start passage (startscreen)');
+    //    $('.top-bar-wrapper').remove();
+    //    return;
+    // }
 
-    // Check State variable for UI control (flexible per-passage control)
-    if (vars.hideTopbar === true) {
-        console.log('[Topbar] Skipping - hideTopbar === true');
-        $('.top-bar-wrapper').remove();
-        return; // Skip topbar creation
-    }
+    // hideTopbar now only hides the content, hamburger still shows
+    // Body class is now set by smart detection below (when Nav+Timebox+Notifications are all hidden)
+    const hideTopbarContent = vars.hideTopbar === true;
 
     console.log('[Topbar] Creating topbar...');
 
@@ -123,6 +120,15 @@ $(document).on(':passagerender', function () {
     const hideNav = vars.hideTopbarNav === true; // Combined Nav (both left and right)
     const hideTimebox = vars.hideTopbarTimebox === true;
     const hideNotifications = vars.hideTopbarNotifications === true;
+    
+    // Smart detection: if ALL content is hidden, apply topbar-hidden class for full-screen layout
+    const allContentHidden = hideNav && hideTimebox && hideNotifications;
+    
+    if (allContentHidden) {
+        $('body').addClass('topbar-hidden');
+    } else {
+        $('body').removeClass('topbar-hidden');
+    }
 
     // Build complete HTML with visibility control (layout preserved)
     const html = `
@@ -133,7 +139,7 @@ $(document).on(':passagerender', function () {
                 </button>
             </div>
             
-            <div class="center-section">
+            <div class="center-section" style="${hideTopbarContent ? 'display: none;' : ''}">
                 <div class="navbar-container" style="position: relative;">
                     <div class="navbar-left" style="${hideNav ? 'visibility: hidden;' : ''}">
                         <div class="nav-item" data-action="character">Character</div>

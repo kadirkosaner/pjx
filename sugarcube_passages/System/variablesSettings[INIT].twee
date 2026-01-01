@@ -4,12 +4,21 @@
    Simulation toggles for optional features
 ========================================== */
 <<set $gameSettings = {
-    trackHunger: false,
-    trackThirst: false,
-    trackBladder: false,
-    trackCalories: false,
-    skillDecay: false,
-    relationshipDecay: false
+    /* Basic Needs */
+    trackHunger: true,
+    trackThirst: true,
+    trackBladder: true,
+    trackCalories: true,
+    hygieneRequirement: true,
+    /* Appearance Changes */
+    hairGrowth: true,
+    hairMessiness: true,
+    bodyHairGrowth: true,
+    makeupWearOff: true,
+    bodyDegradation: true,
+    /* Decay Systems */
+    skillDecay: true,
+    relationshipDecay: true
 }>>
 
 /* ==========================================
@@ -27,13 +36,21 @@ State.variables.videoSettings = State.variables.videoSettings || {
 
 /* ==========================================
    CONTENT PREFERENCES
-   Controls which content types are visible
+   Controls which content types are visible (14 categories)
 ========================================== */
 <<set $contentPreferences = {
-    incest: true,      /* Family romantic content */
-    romantic: true,    /* Romantic/flirting content */
-    sexual: true,      /* Sexual content */
-    gore: true,        /* Blood, violence, graphic content */
-    violence: true,    /* Physical combat, fights */
-    scat: false        /* Bathroom related content */
+    maleSexual: true,
+    femaleSexual: true,
+    futaTrans: true,
+    ntr: true,
+    pregnancy: true,
+    incest: true,
+    bdsm: true,
+    nonConsensual: true,
+    publicExhibition: true,
+    lactation: true,
+    feet: true,
+    watersports: true,
+    scat: true,
+    goreViolence: true
 }>>

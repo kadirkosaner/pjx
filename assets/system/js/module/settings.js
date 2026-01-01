@@ -23,8 +23,56 @@ window.SettingsInit = function (API) {
                                 <div class="settings-list" style="display: grid; gap: 20px; padding: 10px;">
                                     <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
                                         <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Male Sexual Content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Scenes with men</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.maleSexual !== false ? 'active' : ''}" 
+                                                data-setting="maleSexual"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.maleSexual !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Female Sexual Content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Scenes with women</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.femaleSexual !== false ? 'active' : ''}" 
+                                                data-setting="femaleSexual"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.femaleSexual !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Trans/Futa Content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Characters with both characteristics</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.futaTrans !== false ? 'active' : ''}" 
+                                                data-setting="futaTrans"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.futaTrans !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Pregnancy Content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Risk of getting pregnant</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.pregnancy !== false ? 'active' : ''}" 
+                                                data-setting="pregnancy"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.pregnancy !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
                                             <div style="font-weight: 500; margin-bottom: 4px;">Incest Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Family romantic/sexual interactions</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Family relations</div>
                                         </div>
                                         <button class="setting-toggle-btn ${vars.contentPreferences?.incest !== false ? 'active' : ''}" 
                                                 data-setting="incest"
@@ -35,49 +83,109 @@ window.SettingsInit = function (API) {
 
                                     <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
                                         <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Romantic Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Flirting, romance scenes</div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">NTR / Cheating</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Betrayal content</div>
                                         </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.romantic !== false ? 'active' : ''}" 
-                                                data-setting="romantic"
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.ntr !== false ? 'active' : ''}" 
+                                                data-setting="ntr"
                                                 data-category="content">
-                                            ${vars.contentPreferences?.romantic !== false ? 'ON' : 'OFF'}
+                                            ${vars.contentPreferences?.ntr !== false ? 'ON' : 'OFF'}
                                         </button>
                                     </div>
 
                                     <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
                                         <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Sexual Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Explicit sexual scenes</div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">BDSM Content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Bondage and dominance</div>
                                         </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.sexual !== false ? 'active' : ''}" 
-                                                data-setting="sexual"
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.bdsm !== false ? 'active' : ''}" 
+                                                data-setting="bdsm"
                                                 data-category="content">
-                                            ${vars.contentPreferences?.sexual !== false ? 'ON' : 'OFF'}
+                                            ${vars.contentPreferences?.bdsm !== false ? 'ON' : 'OFF'}
                                         </button>
                                     </div>
 
                                     <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
                                         <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Gore & Violence</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Blood, graphic violence, combat</div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Non-Consensual Content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Forced interactions</div>
                                         </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.gore !== false ? 'active' : ''}" 
-                                                data-setting="gore"
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.nonConsensual !== false ? 'active' : ''}" 
+                                                data-setting="nonConsensual"
                                                 data-category="content">
-                                            ${vars.contentPreferences?.gore !== false ? 'ON' : 'OFF'}
+                                            ${vars.contentPreferences?.nonConsensual !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Public Exhibition</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Being seen in public</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.publicExhibition !== false ? 'active' : ''}" 
+                                                data-setting="publicExhibition"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.publicExhibition !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Lactation Content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Breast milk production</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.lactation !== false ? 'active' : ''}" 
+                                                data-setting="lactation"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.lactation !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Foot Fetish</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Focus on feet</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.feet !== false ? 'active' : ''}" 
+                                                data-setting="feet"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.feet !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Watersports</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Urine related content</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.watersports !== false ? 'active' : ''}" 
+                                                data-setting="watersports"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.watersports !== false ? 'ON' : 'OFF'}
                                         </button>
                                     </div>
 
                                     <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
                                         <div>
                                             <div style="font-weight: 500; margin-bottom: 4px;">Scat Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Bathroom related content</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Feces related content</div>
                                         </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.scat === true ? 'active' : ''}" 
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.scat !== false ? 'active' : ''}" 
                                                 data-setting="scat"
                                                 data-category="content">
-                                            ${vars.contentPreferences?.scat === true ? 'ON' : 'OFF'}
+                                            ${vars.contentPreferences?.scat !== false ? 'ON' : 'OFF'}
+                                        </button>
+                                    </div>
+
+                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+                                        <div>
+                                            <div style="font-weight: 500; margin-bottom: 4px;">Gore / Violence</div>
+                                            <div style="font-size: 0.8rem; color: #777;">Blood and injury</div>
+                                        </div>
+                                        <button class="setting-toggle-btn ${vars.contentPreferences?.goreViolence !== false ? 'active' : ''}" 
+                                                data-setting="goreViolence"
+                                                data-category="content">
+                                            ${vars.contentPreferences?.goreViolence !== false ? 'ON' : 'OFF'}
                                         </button>
                                     </div>
                                 </div>

@@ -80,8 +80,7 @@ $(document).one(':storyready', async function () {
                 window[initFn](API);
             }
         });
-
-        // Trigger initial render
+        
         // Trigger initial render
         $(document).trigger(':passagerender');
 
@@ -92,32 +91,51 @@ $(document).one(':storyready', async function () {
     }
 });
 
+/* ================== Fullscreen Layout Detection =================== */
+// When topbar and rightbar are hidden, center the page content
+$(document).on(':passagerender', function () {
+    const vars = State.variables;
+    
+    // Check if both topbar content and rightbar are hidden
+    const topbarHidden = vars.hideTopbar === true || 
+        (vars.hideTopbarNav === true && vars.hideTopbarTimebox === true && vars.hideTopbarNotifications === true);
+    const rightbarHidden = vars.hideRightbar === true;
+    
+    if (topbarHidden && rightbarHidden) {
+        $('body').addClass('fullscreen-layout');
+    } else {
+        $('body').removeClass('fullscreen-layout');
+    }
+});
+
 /* ================== Custom Link Macro =================== */
 Macro.add('btn', {
     handler: function () {
-        if (this.args.length < 2) {
-            return this.error('btn macro requires at least 2 arguments: text and passage');
+        if (this.args.length < 1) {
+            return this.error('btn macro requires at least 1 argument: text');
         }
 
         const text = this.args[0];
-        const passage = this.args[1];
+        const passage = this.args[1]; // Optional
         const style = this.args[2] ? this.args[2].toLowerCase() : 'default';
 
         const link = $('<a>')
             .addClass('link-internal')
             .addClass('btn-style')
             .addClass('btn-' + style)
-            .attr('data-passage', passage)
             .attr('tabindex', '0')
             .text(text)
             .appendTo(this.output);
 
-        link.ariaClick({
-            namespace: '.macros',
-            one: true
-        }, function () {
-            Engine.play(passage);
-        });
+        if (passage) {
+            link.attr('data-passage', passage);
+            link.ariaClick({
+                namespace: '.macros',
+                one: true
+            }, function () {
+                Engine.play(passage);
+            });
+        }
     }
 });
 

@@ -94,10 +94,6 @@ function createStartScreenContainer() {
                         <span class="icon icon-save icon-18"></span>
                         <span>Load Game</span>
                     </button>
-                    <button class="startscreen-btn" onclick="window.startscreenSettings()">
-                        <span class="icon icon-settings icon-18"></span>
-                        <span>Settings</span>
-                    </button>
                 </div>
                 
                 <div class="startscreen-footer">
@@ -199,13 +195,4 @@ window.startscreenLoad = function () {
         console.error('[StartScreen] openCustomSaveLoad not available');
     }
     window._startscreenProcessing = false;
-};
-
-window.startscreenSettings = function () {
-    if (!StartScreenAPI) return;
-
-    console.log('[StartScreen] Settings clicked');
-
-    // Open settings dialog (keep startscreen)
-    StartScreenAPI.UI.settings();
 };

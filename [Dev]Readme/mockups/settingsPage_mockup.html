@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page Mockup v2</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 2rem;
+        }
+
+        /* Sections */
+        .section {
+            background: #0f0f0f;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #1a1a1a;
+            padding: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header::before {
+            content: "◆";
+            color: #ec4899;
+            font-size: 0.8rem;
+        }
+
+        .section-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Inputs */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .form-group input,
+        .form-group select {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 0.75rem;
+            color: #e0e0e0;
+            font-size: 0.9rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ec4899;
+        }
+
+        /* Visual Selection Grid */
+        .visual-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .visual-grid {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .visual-option {
+            width: 80px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .visual-option.selected .visual-img {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
+        }
+
+        .visual-img {
+            width: 80px;
+            height: 100px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.7rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .visual-option:hover .visual-img {
+            border-color: #666;
+        }
+
+        .visual-name {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #ccc;
+        }
+
+        /* Color Grid (smaller) */
+        .color-grid {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 50px;
+            cursor: pointer;
+        }
+
+        .color-option.selected .color-swatch {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
+        }
+
+        .color-swatch {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            margin-bottom: 0.4rem;
+        }
+
+        .color-name {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #999;
+        }
+
+        /* Simulation Grid */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .sim-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+
+        .sim-label {
+            font-size: 0.85rem;
+        }
+
+        .sim-desc {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .sim-group-title {
+            font-size: 0.75rem;
+            color: #ec4899;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 1rem 0 0.5rem 0;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .sim-group-title:first-child {
+            margin-top: 0;
+        }
+
+        /* Toggle */
+        .toggle-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+        }
+
+        .toggle-btn {
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.on {
+            background: #ec4899;
+            color: #fff;
+        }
+
+        .toggle-btn.off {
+            background: transparent;
+            color: #666;
+            border: 1px solid #333;
+        }
+
+        /* Note Box */
+        .note-box {
+            background: rgba(236, 72, 153, 0.1);
+            border-left: 3px solid #ec4899;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        .note-box.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left-color: #f59e0b;
+        }
+
+        /* Buttons */
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-default {
+            background: transparent;
+            border: 1px solid #333;
+            color: #999;
+        }
+
+        .btn-default:hover {
+            border-color: #666;
+            color: #e0e0e0;
+        }
+
+        .btn-accent {
+            background: #ec4899;
+            border: 1px solid #ec4899;
+            color: #fff;
+        }
+
+        .btn-accent:hover {
+            background: #db2777;
+            border-color: #db2777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>New Game Settings</h1>
+        <p class="subtitle">Customize your character and preferences</p>
+
+        <!-- 1. CHARACTER INFO (only name now) -->
+        <div class="section">
+            <div class="section-header">Character Info</div>
+            <div class="section-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" value="Alex">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" value="Taylor">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. BODY CUSTOMIZATION (includes colors now) -->
+        <div class="section">
+            <div class="section-header">Body Customization</div>
+            <div class="section-body">
+                
+                <!-- Eye Color (FIRST) -->
+                <div class="visual-label">Eye Color</div>
+                <div class="color-grid">
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #1a1a1a;"></div>
+                        <div class="color-name">Black</div>
+                    </div>
+                    <div class="color-option selected">
+                        <div class="color-swatch" style="background: #5D4037;"></div>
+                        <div class="color-name">Brown</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #8B6914;"></div>
+                        <div class="color-name">Hazel</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #4A7C59;"></div>
+                        <div class="color-name">Green</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #5B8FA8;"></div>
+                        <div class="color-name">Blue</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #7A8B8B;"></div>
+                        <div class="color-name">Gray</div>
+                    </div>
+                </div>
+
+                <!-- Hair Color (SECOND) -->
+                <div class="visual-label">Hair Color</div>
+                <div class="color-grid">
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #1a1a1a;"></div>
+                        <div class="color-name">Black</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #2C1810;"></div>
+                        <div class="color-name">Dark Brown</div>
+                    </div>
+                    <div class="color-option selected">
+                        <div class="color-swatch" style="background: #6B4423;"></div>
+                        <div class="color-name">Brown</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #A0522D;"></div>
+                        <div class="color-name">Auburn</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #CD853F;"></div>
+                        <div class="color-name">Light Brown</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #DAA520;"></div>
+                        <div class="color-name">Blonde</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #8B0000;"></div>
+                        <div class="color-name">Red</div>
+                    </div>
+                    <div class="color-option">
+                        <div class="color-swatch" style="background: #C0C0C0;"></div>
+                        <div class="color-name">Gray</div>
+                    </div>
+                </div>
+
+                <!-- Hair Length (THIRD) -->
+                <div class="visual-label">Hair Length</div>
+                <div class="visual-grid">
+                    <div class="visual-option">
+                        <div class="visual-img">Short</div>
+                        <div class="visual-name">Short</div>
+                    </div>
+                    <div class="visual-option">
+                        <div class="visual-img">Medium</div>
+                        <div class="visual-name">Medium</div>
+                    </div>
+                    <div class="visual-option selected">
+                        <div class="visual-img">Long</div>
+                        <div class="visual-name">Long</div>
+                    </div>
+                    <div class="visual-option">
+                        <div class="visual-img">Very Long</div>
+                        <div class="visual-name">Very Long</div>
+                    </div>
+                </div>
+
+                <!-- Bust Size -->
+                <div class="visual-label">Bust Size</div>
+                <div class="visual-grid">
+                    <div class="visual-option">
+                        <div class="visual-img">A</div>
+                        <div class="visual-name">A Cup</div>
+                    </div>
+                    <div class="visual-option">
+                        <div class="visual-img">B</div>
+                        <div class="visual-name">B Cup</div>
+                    </div>
+                    <div class="visual-option selected">
+                        <div class="visual-img">C</div>
+                        <div class="visual-name">C Cup</div>
+                    </div>
+                    <div class="visual-option">
+                        <div class="visual-img">D</div>
+                        <div class="visual-name">D Cup</div>
+                    </div>
+                    <div class="visual-option">
+                        <div class="visual-img">DD+</div>
+                        <div class="visual-name">DD+ Cup</div>
+                    </div>
+                </div>
+
+                <!-- Hip Size -->
+                <div class="visual-label">Hip Size</div>
+                <div class="visual-grid">
+                    <div class="visual-option">
+                        <div class="visual-img">Slim</div>
+                        <div class="visual-name">Slim</div>
+                    </div>
+                    <div class="visual-option selected">
+                        <div class="visual-img">Medium</div>
+                        <div class="visual-name">Medium</div>
+                    </div>
+                    <div class="visual-option">
+                        <div class="visual-img">Wide</div>
+                        <div class="visual-name">Wide</div>
+                    </div>
+                    <div class="visual-option">
+                        <div class="visual-img">Curvy</div>
+                        <div class="visual-name">Curvy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. SIMULATION SETTINGS -->
+        <div class="section">
+            <div class="section-header">Simulation Settings</div>
+            <div class="section-body">
+                <div class="note-box warning">
+                    ⚠️ These settings cannot be changed after starting the game.
+                </div>
+
+                <!-- Basic Needs -->
+                <div class="sim-group-title">Basic Needs</div>
+                <div class="sim-grid">
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Track Hunger</div>
+                            <div class="sim-desc">Need to eat regularly</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Track Thirst</div>
+                            <div class="sim-desc">Need to drink water</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Track Bladder</div>
+                            <div class="sim-desc">Bathroom breaks needed</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Calorie Tracking</div>
+                            <div class="sim-desc">Track food calories</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Hygiene Requirement</div>
+                            <div class="sim-desc">Bad smell repels people</div>
+                        </div>
+                        <button class="toggle-btn on">ON</button>
+                    </div>
+                </div>
+
+                <!-- Appearance Changes -->
+                <div class="sim-group-title">Appearance Changes</div>
+                <div class="sim-grid">
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Hair Growth</div>
+                            <div class="sim-desc">Hair grows over time</div>
+                        </div>
+                        <button class="toggle-btn on">ON</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Hair Messiness</div>
+                            <div class="sim-desc">Hair gets messy daily</div>
+                        </div>
+                        <button class="toggle-btn on">ON</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Body Hair Growth</div>
+                            <div class="sim-desc">Body hair grows back</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Makeup Wear Off</div>
+                            <div class="sim-desc">Makeup fades over time</div>
+                        </div>
+                        <button class="toggle-btn on">ON</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Body Degradation</div>
+                            <div class="sim-desc">Body changes if not maintained</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                </div>
+
+                <!-- Decay Systems -->
+                <div class="sim-group-title">Decay Systems</div>
+                <div class="sim-grid">
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Skill Decay</div>
+                            <div class="sim-desc">Skills decrease over time</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="sim-item">
+                        <div>
+                            <div class="sim-label">Relationship Decay</div>
+                            <div class="sim-desc">Relationships weaken if ignored</div>
+                        </div>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. CONTENT PREFERENCES -->
+        <div class="section">
+            <div class="section-header">Content Preferences</div>
+            <div class="section-body">
+                <div class="note-box">
+                    Toggle content types you want to see. Can be changed in settings later.
+                </div>
+                <div class="toggle-grid">
+                    <div class="toggle-item">
+                        <span class="toggle-label">Male Sexual Content</span>
+                        <button class="toggle-btn on">ON</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Female Sexual Content</span>
+                        <button class="toggle-btn on">ON</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Futa/Trans Content</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">NTR/Netorare</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Pregnancy Content</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Incest Content</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">BDSM Content</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Non-Consensual</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Public/Exhibition</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Lactation Content</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Feet Content</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Watersports</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Scat Content</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                    <div class="toggle-item">
+                        <span class="toggle-label">Gore/Violence</span>
+                        <button class="toggle-btn off">OFF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="button-row">
+            <button class="btn btn-default">GO BACK</button>
+            <button class="btn btn-accent">CONTINUE</button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle functionality
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('on')) {
+                    btn.classList.remove('on');
+                    btn.classList.add('off');
+                    btn.textContent = 'OFF';
+                } else {
+                    btn.classList.remove('off');
+                    btn.classList.add('on');
+                    btn.textContent = 'ON';
+                }
+            });
+        });
+
+        // Visual selection
+        document.querySelectorAll('.visual-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const parent = option.parentElement;
+                parent.querySelectorAll('.visual-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        // Color selection
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const parent = option.parentElement;
+                parent.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>
