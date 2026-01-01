@@ -1,9 +1,13 @@
-:: settingsPage
 <<nobr>>
-<div style="padding-top: 3rem;">
+<<set $hideTopbarNav = true>>
+<<set $hideTopbarTimebox = true>>
+<<set $hideTopbarNotifications = true>>
+<<set $hideRightbar = true>>
+<<run $('body').addClass('layout-centered')>>
+<div class="page-wrapper">
 <div class="game-setup-container">
-    <h1 style="text-align: center; font-size: 2rem; margin-bottom: 0.5rem;">Game Setup</h1>
-    <p style="text-align: center; color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem;">
+    <h1 class="page-title">Game Setup</h1>
+    <p class="page-subtitle">
         Configure your character and game preferences. These settings can only be configured once at game start.
     </p>
 
@@ -11,7 +15,7 @@
     <div class="setup-accordion-item active" data-accordion="character">
         <div class="setup-accordion-header">
             <h3><span class="icon icon-user"></span> Character Creation</h3>
-            <span class="setup-accordion-toggle">▼</span>
+            <span class="setup-accordion-toggle icon icon-chevron-down"></span>
         </div>
         <div class="setup-accordion-content">
             <div class="setup-accordion-body">
@@ -34,7 +38,6 @@
                             <option value="Blonde">Blonde</option>
                             <option value="Red">Red</option>
                             <option value="White">White</option>
-                            <option value="Dyed">Dyed</option>
                         </select>
                     </div>
 
@@ -83,8 +86,8 @@
     <!-- 2. SIMULATION SETTINGS -->
     <div class="setup-accordion-item" data-accordion="simulation">
         <div class="setup-accordion-header">
-            <h3><span class="icon icon-chart"></span> Simulation Settings</h3>
-            <span class="setup-accordion-toggle">▼</span>
+            <h3><span class="icon icon-simulation"></span> Simulation Settings</h3>
+            <span class="setup-accordion-toggle icon icon-chevron-down"></span>
         </div>
         <div class="setup-accordion-content">
             <div class="setup-accordion-body">
@@ -92,73 +95,73 @@
                     <strong>Note:</strong> These simulation options affect realism but can be changed later in the settings menu.
                 </div>
 
-                <h4 style="margin-bottom: 1rem;">Basic Needs</h4>
+                <h4 class="section-title mb-2">Basic Needs</h4>
                 <div class="settings-list">
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Track Hunger
-                                <span class="icon icon-info" data-tooltip="Your character needs to eat regularly. If you get too hungry, you'll feel tired and grumpy. Extreme hunger prevents working or studying." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Your character needs to eat regularly. If you get too hungry, you'll feel tired and grumpy. Extreme hunger prevents working or studying."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Manage hunger and eating habits</div>
+                            <div class="setting-description">Manage hunger and eating habits</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="trackHunger">ON</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Track Thirst
-                                <span class="icon icon-info" data-tooltip="Your character must stay hydrated. Being too thirsty drains your energy and damages your health. You can't exercise when severely dehydrated." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Your character must stay hydrated. Being too thirsty drains your energy and damages your health. You can't exercise when severely dehydrated."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Manage thirst and drinking</div>
+                            <div class="setting-description">Manage thirst and drinking</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="trackThirst">ON</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Track Bladder
-                                <span class="icon icon-info" data-tooltip="Bathroom breaks become necessary. Wait too long and you risk embarrassing accidents that hurt your hygiene and mood." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Bathroom breaks become necessary. Wait too long and you risk embarrassing accidents that hurt your hygiene and mood."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Manage bathroom needs</div>
+                            <div class="setting-description">Manage bathroom needs</div>
                         </div>
                         <button class="setting-toggle-btn" data-setting="trackBladder">OFF</button>
                     </div>
                 </div>
 
-                <h4 style="margin-top: 2rem; margin-bottom: 1rem;">Advanced Options</h4>
+                <h4 class="section-title mt-4 mb-2">Advanced Options</h4>
                 <div class="settings-list">
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Calorie Tracking
-                                <span class="icon icon-info" data-tooltip="See detailed nutrition information when eating. Daily target is 2000 calories. Helps you manage your character's body weight and composition more precisely." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="See detailed nutrition information when eating. Daily target is 2000 calories. Helps you manage your character's body weight and composition more precisely."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Show calorie counts when eating</div>
+                            <div class="setting-description">Show calorie counts when eating</div>
                         </div>
                         <button class="setting-toggle-btn" data-setting="trackCalories">OFF</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Skill Decay
-                                <span class="icon icon-info" data-tooltip="Skills rust if you don't practice them regularly. Makes the game more challenging as you need to maintain your abilities over time." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Skills rust if you don't practice them regularly. Makes the game more challenging as you need to maintain your abilities over time."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Skills decrease over time if unused</div>
+                            <div class="setting-description">Skills decrease over time if unused</div>
                         </div>
                         <button class="setting-toggle-btn" data-setting="skillDecay">OFF</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Relationship Decay
-                                <span class="icon icon-info" data-tooltip="Friendships and romances fade if you neglect them. You'll need to spend quality time with people to keep relationships strong." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Friendships and romances fade if you neglect them. You'll need to spend quality time with people to keep relationships strong."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Relationships weaken if not maintained</div>
+                            <div class="setting-description">Relationships weaken if not maintained</div>
                         </div>
                         <button class="setting-toggle-btn" data-setting="relationshipDecay">OFF</button>
                     </div>
@@ -171,7 +174,7 @@
     <div class="setup-accordion-item" data-accordion="content">
         <div class="setup-accordion-header">
             <h3><span class="icon icon-eye"></span> Content Preferences</h3>
-            <span class="setup-accordion-toggle">▼</span>
+            <span class="setup-accordion-toggle icon icon-chevron-down"></span>
         </div>
         <div class="setup-accordion-content">
             <div class="setup-accordion-body">
@@ -182,55 +185,55 @@
                <div class="settings-list">
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Incest Content
-                                <span class="icon icon-info" data-tooltip="Family romantic or sexual interactions. You can change this anytime in settings." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Family romantic or sexual interactions. You can change this anytime in settings."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Family romantic/sexual interactions</div>
+                            <div class="setting-description">Family romantic/sexual interactions</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="incest" data-category="content">ON</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Romantic Content
-                                <span class="icon icon-info" data-tooltip="Flirting and romance scenes. Change anytime in settings." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Flirting and romance scenes. Change anytime in settings."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Flirting, romance scenes</div>
+                            <div class="setting-description">Flirting, romance scenes</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="romantic" data-category="content">ON</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Sexual Content
-                                <span class="icon icon-info" data-tooltip="Explicit sexual scenes. Change anytime in settings." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Explicit sexual scenes. Change anytime in settings."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Explicit sexual scenes</div>
+                            <div class="setting-description">Explicit sexual scenes</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="sexual" data-category="content">ON</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Gore & Violence
-                                <span class="icon icon-info" data-tooltip="Blood, graphic violence, and combat scenes. Change anytime in settings." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Blood, graphic violence, and combat scenes. Change anytime in settings."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Blood, graphic violence, combat</div>
+                            <div class="setting-description">Blood, graphic violence, combat</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="gore" data-category="content">ON</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Scat Content
-                                <span class="icon icon-info" data-tooltip="Bathroom-related content. Change anytime in settings." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Bathroom-related content. Change anytime in settings."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Bathroom related content</div>
+                            <div class="setting-description">Bathroom related content</div>
                         </div>
                         <button class="setting-toggle-btn" data-setting="scat" data-category="content">OFF</button>
                     </div>
@@ -243,7 +246,7 @@
     <div class="setup-accordion-item" data-accordion="gameplay">
         <div class="setup-accordion-header">
             <h3><span class="icon icon-settings"></span> Gameplay Settings</h3>
-            <span class="setup-accordion-toggle">▼</span>
+            <span class="setup-accordion-toggle icon icon-chevron-down"></span>
         </div>
         <div class="setup-accordion-content">
             <div class="setup-accordion-body">
@@ -251,26 +254,26 @@
                     <strong>Note:</strong> Video and audio settings can be adjusted anytime in the settings menu.
                 </div>
 
-                <h4 style="margin-bottom: 1rem;">Video Options</h4>
+                <h4 class="section-title mb-2">Video Options</h4>
                 <div class="settings-list">
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Video Autoplay
-                                <span class="icon icon-info" data-tooltip="Videos play automatically when you enter a passage. Change anytime in settings." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Videos play automatically when you enter a passage. Change anytime in settings."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Automatically play videos in passages</div>
+                            <div class="setting-description">Automatically play videos in passages</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="autoplaySet" data-category="video">ON</button>
                     </div>
 
                     <div class="settings-control">
                         <div>
-                            <div style="font-weight: 500; margin-bottom: 4px;">
+                            <div class="setting-label">
                                 Video Loop
-                                <span class="icon icon-info" data-tooltip="Videos repeat automatically when they end. Change anytime in settings." style="margin-left: 6px; font-size: 0.9em; opacity: 0.7;"></span>
+                                <span class="icon icon-info setting-info-icon" data-tooltip="Videos repeat automatically when they end. Change anytime in settings."></span>
                             </div>
-                            <div style="font-size: 0.8rem; color: #777;">Automatically repeat videos when they end</div>
+                            <div class="setting-description">Automatically repeat videos when they end</div>
                         </div>
                         <button class="setting-toggle-btn active" data-setting="loopSet" data-category="video">ON</button>
                     </div>
@@ -280,44 +283,101 @@
     </div>
 
     <!-- START GAME BUTTON -->
-    <div style="display: flex; justify-content: center; margin-top: 2rem;">
-        <<link "Start Game">>
-            <<set $player.firstName = $('#characterFirstName').val() || 'Alex'>>
-            <<set $player.lastName = $('#characterLastName').val() || 'Taylor'>>
-            <<set $player.hairColor = $('#charHair').val()>>
-            <<set $player.eyeColor = $('#charEyes').val()>>
-            <<set $player.skinTone = $('#charSkin').val()>>
-            <<set $player.bodyType = $('#charBody').val()>>
-            
-            <<set $gameSettings.trackHunger = $('.setting-toggle-btn[data-setting="trackHunger"]').hasClass('active')>>
-            <<set $gameSettings.trackThirst = $('.setting-toggle-btn[data-setting="trackThirst"]').hasClass('active')>>
-            <<set $gameSettings.trackBladder = $('.setting-toggle-btn[data-setting="trackBladder"]').hasClass('active')>>
-            <<set $gameSettings.trackCalories = $('.setting-toggle-btn[data-setting="trackCalories"]').hasClass('active')>>
-            <<set $gameSettings.skillDecay = $('.setting-toggle-btn[data-setting="skillDecay"]').hasClass('active')>>
-            <<set $gameSettings.relationshipDecay = $('.setting-toggle-btn[data-setting="relationshipDecay"]').hasClass('active')>>
-            
-            <<set $contentPreferences.incest = $('.setting-toggle-btn[data-setting="incest"]').hasClass('active')>>
-            <<set $contentPreferences.romantic = $('.setting-toggle-btn[data-setting="romantic"]').hasClass('active')>>
-            <<set $contentPreferences.sexual = $('.setting-toggle-btn[data-setting="sexual"]').hasClass('active')>>
-            <<set $contentPreferences.gore = $('.setting-toggle-btn[data-setting="gore"]').hasClass('active')>>
-            <<set $contentPreferences.scat = $('.setting-toggle-btn[data-setting="scat"]').hasClass('active')>>
-            
-            <<set $videoSettings.autoplaySet = $('.setting-toggle-btn[data-setting="autoplaySet"]').hasClass('active')>>
-            <<set $videoSettings.loopSet = $('.setting-toggle-btn[data-setting="loopSet"]').hasClass('active')>>
-            
-            <<goto "confirmationPage">>
-        <</link>>
+    <div class="flex-center mt-4">
+        <a class="link-internal btn-style btn-accent" id="start-game-btn">Start Game</a>
     </div>
 </div>
 </div>
+<</nobr>>
 
 <<script>>
-// Toggle button functionality
-$(document).off('click.settingToggle').on('click.settingToggle', '.setting-toggle-btn', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    $(this).toggleClass('active');
-    $(this).text($(this).hasClass('active') ? 'ON' : 'OFF');
+// Save settings and navigate to confirmation page
+$(document).on(':passagedisplay', function(ev) {
+    // Only bind for settingsPage
+    if (ev.passage.title !== 'settingsPage') return;
+    
+    const State = SugarCube.State;
+    const $ = jQuery;
+    const vars = State.variables;
+    
+    // Populate form with saved values
+    if (vars.player) {
+        $('#characterFirstName').val(vars.player.firstName || 'Alex');
+        $('#characterLastName').val(vars.player.lastName || 'Taylor');
+        $('#charHair').val(vars.player.hairColor || 'Brown');
+        $('#charEyes').val(vars.player.eyeColor || 'Brown');
+        $('#charSkin').val(vars.player.skinTone || 'Fair');
+        $('#charBody').val(vars.player.bodyType || 'Average');
+    }
+    
+    // Populate toggle buttons with saved values
+    function setToggle(setting, value) {
+        const $btn = $(`.setting-toggle-btn[data-setting="${setting}"]`);
+        if (value) {
+            $btn.addClass('active').text('ON');
+        } else {
+            $btn.removeClass('active').text('OFF');
+        }
+    }
+    
+    // Game Settings
+    if (vars.gameSettings) {
+        setToggle('trackHunger', vars.gameSettings.trackHunger);
+        setToggle('trackThirst', vars.gameSettings.trackThirst);
+        setToggle('trackBladder', vars.gameSettings.trackBladder);
+        setToggle('trackCalories', vars.gameSettings.trackCalories);
+        setToggle('skillDecay', vars.gameSettings.skillDecay);
+        setToggle('relationshipDecay', vars.gameSettings.relationshipDecay);
+    }
+    
+    // Content Preferences
+    if (vars.contentPreferences) {
+        setToggle('incest', vars.contentPreferences.incest);
+        setToggle('romantic', vars.contentPreferences.romantic);
+        setToggle('sexual', vars.contentPreferences.sexual);
+        setToggle('gore', vars.contentPreferences.gore);
+        setToggle('scat', vars.contentPreferences.scat);
+    }
+    
+    // Video Settings
+    if (vars.videoSettings) {
+        setToggle('autoplaySet', vars.videoSettings.autoplaySet);
+        setToggle('loopSet', vars.videoSettings.loopSet);
+    }
+    
+    // Start Game button handler
+    $('#start-game-btn').off('click.settingsPage').on('click.settingsPage', function(e) {
+        e.preventDefault();
+        
+        // Character
+        vars.player.firstName = $('#characterFirstName').val() || 'Alex';
+        vars.player.lastName = $('#characterLastName').val() || 'Taylor';
+        vars.player.hairColor = $('#charHair').val();
+        vars.player.eyeColor = $('#charEyes').val();
+        vars.player.skinTone = $('#charSkin').val();
+        vars.player.bodyType = $('#charBody').val();
+        
+        // Simulation Settings
+        vars.gameSettings.trackHunger = $('.setting-toggle-btn[data-setting="trackHunger"]').hasClass('active');
+        vars.gameSettings.trackThirst = $('.setting-toggle-btn[data-setting="trackThirst"]').hasClass('active');
+        vars.gameSettings.trackBladder = $('.setting-toggle-btn[data-setting="trackBladder"]').hasClass('active');
+        vars.gameSettings.trackCalories = $('.setting-toggle-btn[data-setting="trackCalories"]').hasClass('active');
+        vars.gameSettings.skillDecay = $('.setting-toggle-btn[data-setting="skillDecay"]').hasClass('active');
+        vars.gameSettings.relationshipDecay = $('.setting-toggle-btn[data-setting="relationshipDecay"]').hasClass('active');
+        
+        // Content Preferences
+        vars.contentPreferences.incest = $('.setting-toggle-btn[data-setting="incest"]').hasClass('active');
+        vars.contentPreferences.romantic = $('.setting-toggle-btn[data-setting="romantic"]').hasClass('active');
+        vars.contentPreferences.sexual = $('.setting-toggle-btn[data-setting="sexual"]').hasClass('active');
+        vars.contentPreferences.gore = $('.setting-toggle-btn[data-setting="gore"]').hasClass('active');
+        vars.contentPreferences.scat = $('.setting-toggle-btn[data-setting="scat"]').hasClass('active');
+        
+        // Video Settings
+        vars.videoSettings.autoplaySet = $('.setting-toggle-btn[data-setting="autoplaySet"]').hasClass('active');
+        vars.videoSettings.loopSet = $('.setting-toggle-btn[data-setting="loopSet"]').hasClass('active');
+        
+        // Navigate to confirmation page
+        SugarCube.Engine.play('confirmationPage');
+    });
 });
 <</script>>
-<</nobr>>

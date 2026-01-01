@@ -188,6 +188,7 @@ $(document).one(':storyready', async function () {
         });
 
         // Trigger initial render
+        // Trigger initial render
         $(document).trigger(':passagerender');
 
         // Destroy UIBar
@@ -224,6 +225,70 @@ Macro.add('btn', {
             Engine.play(passage);
         });
     }
+});
+
+/* ================== Dynamic Button Styles =================== */
+// Generate button styles from CSS variables
+$(document).one(':storyready', function() {
+    const generateButtonStyles = () => {
+        const root = document.documentElement;
+        const styles = getComputedStyle(root);
+        let cssRules = '';
+
+        // Get all CSS custom properties from root
+        const allProps = [];
+        for (let i = 0; i < styles.length; i++) {
+            const prop = styles[i];
+            if (prop.startsWith('--color-')) {
+                allProps.push(prop);
+            }
+        }
+
+        // Filter: only pure color variables (exclude bg, border, text)
+        const colorVars = allProps.filter(prop => 
+            !prop.includes('-bg-') && 
+            !prop.includes('-border-') && 
+            !prop.includes('-text-')
+        );
+
+        colorVars.forEach(varName => {
+            const colorName = varName.replace('--color-', '');
+            const colorValue = `var(${varName})`;
+
+            cssRules += `
+            .passage a.btn-${colorName},
+            .btn-${colorName} {
+                background: transparent !important;
+                border-color: ${colorValue} !important;
+                color: ${colorValue} !important;
+            }
+
+            .passage a.btn-${colorName}:hover,
+            .btn-${colorName}:hover {
+                background: ${colorValue} !important;
+                border-color: ${colorValue} !important;
+                color: #fff !important;
+                transform: translateY(-1px);
+            }
+            `;
+        });
+
+        // Inject dynamic styles
+        const existingStyle = document.getElementById('dynamic-button-styles');
+        if (existingStyle) {
+            existingStyle.remove();
+        }
+        
+        const styleTag = document.createElement('style');
+        styleTag.id = 'dynamic-button-styles';
+        styleTag.textContent = cssRules;
+        document.head.appendChild(styleTag);
+
+        console.log('[ButtonStyles] Generated button classes:', colorVars.map(v => '.btn-' + v.replace('--color-', '')));
+    };
+
+    // Wait for CSS to fully load
+    setTimeout(generateButtonStyles, 100);
 });
 
 /* ================== WARDROBE MACRO =================== */
@@ -726,10 +791,15 @@ Macro.add('locationMenu', {
     &lt;&lt;set $energyMax = 100 + Math.floor($fitness / 4)&gt;&gt;
 &lt;&lt;/widget&gt;&gt;
 </tw-passagedata><tw-passagedata pid="3" name="settingsPage" tags="" position="1050,400" size="100,100">&lt;&lt;nobr&gt;&gt;
-&lt;div style=&quot;padding-top: 3rem;&quot;&gt;
+&lt;&lt;set $hideTopbarNav = true&gt;&gt;
+&lt;&lt;set $hideTopbarTimebox = true&gt;&gt;
+&lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
+&lt;&lt;set $hideRightbar = true&gt;&gt;
+&lt;&lt;run $(&#39;body&#39;).addClass(&#39;layout-centered&#39;)&gt;&gt;
+&lt;div class=&quot;page-wrapper&quot;&gt;
 &lt;div class=&quot;game-setup-container&quot;&gt;
-    &lt;h1 style=&quot;text-align: center; font-size: 2rem; margin-bottom: 0.5rem;&quot;&gt;Game Setup&lt;/h1&gt;
-    &lt;p style=&quot;text-align: center; color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 2rem;&quot;&gt;
+    &lt;h1 class=&quot;page-title&quot;&gt;Game Setup&lt;/h1&gt;
+    &lt;p class=&quot;page-subtitle&quot;&gt;
         Configure your character and game preferences. These settings can only be configured once at game start.
     &lt;/p&gt;
 
@@ -737,7 +807,7 @@ Macro.add('locationMenu', {
     &lt;div class=&quot;setup-accordion-item active&quot; data-accordion=&quot;character&quot;&gt;
         &lt;div class=&quot;setup-accordion-header&quot;&gt;
             &lt;h3&gt;&lt;span class=&quot;icon icon-user&quot;&gt;&lt;/span&gt; Character Creation&lt;/h3&gt;
-            &lt;span class=&quot;setup-accordion-toggle&quot;&gt;▼&lt;/span&gt;
+            &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;
         &lt;div class=&quot;setup-accordion-content&quot;&gt;
             &lt;div class=&quot;setup-accordion-body&quot;&gt;
@@ -760,7 +830,6 @@ Macro.add('locationMenu', {
                             &lt;option value=&quot;Blonde&quot;&gt;Blonde&lt;/option&gt;
                             &lt;option value=&quot;Red&quot;&gt;Red&lt;/option&gt;
                             &lt;option value=&quot;White&quot;&gt;White&lt;/option&gt;
-                            &lt;option value=&quot;Dyed&quot;&gt;Dyed&lt;/option&gt;
                         &lt;/select&gt;
                     &lt;/div&gt;
 
@@ -809,8 +878,8 @@ Macro.add('locationMenu', {
     &lt;!-- 2. SIMULATION SETTINGS --&gt;
     &lt;div class=&quot;setup-accordion-item&quot; data-accordion=&quot;simulation&quot;&gt;
         &lt;div class=&quot;setup-accordion-header&quot;&gt;
-            &lt;h3&gt;&lt;span class=&quot;icon icon-chart&quot;&gt;&lt;/span&gt; Simulation Settings&lt;/h3&gt;
-            &lt;span class=&quot;setup-accordion-toggle&quot;&gt;▼&lt;/span&gt;
+            &lt;h3&gt;&lt;span class=&quot;icon icon-simulation&quot;&gt;&lt;/span&gt; Simulation Settings&lt;/h3&gt;
+            &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;
         &lt;div class=&quot;setup-accordion-content&quot;&gt;
             &lt;div class=&quot;setup-accordion-body&quot;&gt;
@@ -818,73 +887,73 @@ Macro.add('locationMenu', {
                     &lt;strong&gt;Note:&lt;/strong&gt; These simulation options affect realism but can be changed later in the settings menu.
                 &lt;/div&gt;
 
-                &lt;h4 style=&quot;margin-bottom: 1rem;&quot;&gt;Basic Needs&lt;/h4&gt;
+                &lt;h4 class=&quot;section-title mb-2&quot;&gt;Basic Needs&lt;/h4&gt;
                 &lt;div class=&quot;settings-list&quot;&gt;
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Track Hunger
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Your character needs to eat regularly. If you get too hungry, you&#39;ll feel tired and grumpy. Extreme hunger prevents working or studying.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Your character needs to eat regularly. If you get too hungry, you&#39;ll feel tired and grumpy. Extreme hunger prevents working or studying.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Manage hunger and eating habits&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Manage hunger and eating habits&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackHunger&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Track Thirst
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Your character must stay hydrated. Being too thirsty drains your energy and damages your health. You can&#39;t exercise when severely dehydrated.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Your character must stay hydrated. Being too thirsty drains your energy and damages your health. You can&#39;t exercise when severely dehydrated.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Manage thirst and drinking&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Manage thirst and drinking&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;trackThirst&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Track Bladder
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Bathroom breaks become necessary. Wait too long and you risk embarrassing accidents that hurt your hygiene and mood.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Bathroom breaks become necessary. Wait too long and you risk embarrassing accidents that hurt your hygiene and mood.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Manage bathroom needs&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Manage bathroom needs&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;trackBladder&quot;&gt;OFF&lt;/button&gt;
                     &lt;/div&gt;
                 &lt;/div&gt;
 
-                &lt;h4 style=&quot;margin-top: 2rem; margin-bottom: 1rem;&quot;&gt;Advanced Options&lt;/h4&gt;
+                &lt;h4 class=&quot;section-title mt-4 mb-2&quot;&gt;Advanced Options&lt;/h4&gt;
                 &lt;div class=&quot;settings-list&quot;&gt;
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Calorie Tracking
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;See detailed nutrition information when eating. Daily target is 2000 calories. Helps you manage your character&#39;s body weight and composition more precisely.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;See detailed nutrition information when eating. Daily target is 2000 calories. Helps you manage your character&#39;s body weight and composition more precisely.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Show calorie counts when eating&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Show calorie counts when eating&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;trackCalories&quot;&gt;OFF&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Skill Decay
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Skills rust if you don&#39;t practice them regularly. Makes the game more challenging as you need to maintain your abilities over time.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Skills rust if you don&#39;t practice them regularly. Makes the game more challenging as you need to maintain your abilities over time.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Skills decrease over time if unused&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Skills decrease over time if unused&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;skillDecay&quot;&gt;OFF&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Relationship Decay
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Friendships and romances fade if you neglect them. You&#39;ll need to spend quality time with people to keep relationships strong.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Friendships and romances fade if you neglect them. You&#39;ll need to spend quality time with people to keep relationships strong.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Relationships weaken if not maintained&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Relationships weaken if not maintained&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;relationshipDecay&quot;&gt;OFF&lt;/button&gt;
                     &lt;/div&gt;
@@ -897,7 +966,7 @@ Macro.add('locationMenu', {
     &lt;div class=&quot;setup-accordion-item&quot; data-accordion=&quot;content&quot;&gt;
         &lt;div class=&quot;setup-accordion-header&quot;&gt;
             &lt;h3&gt;&lt;span class=&quot;icon icon-eye&quot;&gt;&lt;/span&gt; Content Preferences&lt;/h3&gt;
-            &lt;span class=&quot;setup-accordion-toggle&quot;&gt;▼&lt;/span&gt;
+            &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;
         &lt;div class=&quot;setup-accordion-content&quot;&gt;
             &lt;div class=&quot;setup-accordion-body&quot;&gt;
@@ -908,55 +977,55 @@ Macro.add('locationMenu', {
                &lt;div class=&quot;settings-list&quot;&gt;
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Incest Content
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Family romantic or sexual interactions. You can change this anytime in settings.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Family romantic or sexual interactions. You can change this anytime in settings.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Family romantic/sexual interactions&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Family romantic/sexual interactions&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;incest&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Romantic Content
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Flirting and romance scenes. Change anytime in settings.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Flirting and romance scenes. Change anytime in settings.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Flirting, romance scenes&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Flirting, romance scenes&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;romantic&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Sexual Content
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Explicit sexual scenes. Change anytime in settings.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Explicit sexual scenes. Change anytime in settings.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Explicit sexual scenes&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Explicit sexual scenes&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;sexual&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Gore &amp; Violence
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Blood, graphic violence, and combat scenes. Change anytime in settings.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Blood, graphic violence, and combat scenes. Change anytime in settings.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Blood, graphic violence, combat&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Blood, graphic violence, combat&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;gore&quot; data-category=&quot;content&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Scat Content
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Bathroom-related content. Change anytime in settings.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Bathroom-related content. Change anytime in settings.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Bathroom related content&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Bathroom related content&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn&quot; data-setting=&quot;scat&quot; data-category=&quot;content&quot;&gt;OFF&lt;/button&gt;
                     &lt;/div&gt;
@@ -969,7 +1038,7 @@ Macro.add('locationMenu', {
     &lt;div class=&quot;setup-accordion-item&quot; data-accordion=&quot;gameplay&quot;&gt;
         &lt;div class=&quot;setup-accordion-header&quot;&gt;
             &lt;h3&gt;&lt;span class=&quot;icon icon-settings&quot;&gt;&lt;/span&gt; Gameplay Settings&lt;/h3&gt;
-            &lt;span class=&quot;setup-accordion-toggle&quot;&gt;▼&lt;/span&gt;
+            &lt;span class=&quot;setup-accordion-toggle icon icon-chevron-down&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;
         &lt;div class=&quot;setup-accordion-content&quot;&gt;
             &lt;div class=&quot;setup-accordion-body&quot;&gt;
@@ -977,26 +1046,26 @@ Macro.add('locationMenu', {
                     &lt;strong&gt;Note:&lt;/strong&gt; Video and audio settings can be adjusted anytime in the settings menu.
                 &lt;/div&gt;
 
-                &lt;h4 style=&quot;margin-bottom: 1rem;&quot;&gt;Video Options&lt;/h4&gt;
+                &lt;h4 class=&quot;section-title mb-2&quot;&gt;Video Options&lt;/h4&gt;
                 &lt;div class=&quot;settings-list&quot;&gt;
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Video Autoplay
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Videos play automatically when you enter a passage. Change anytime in settings.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Videos play automatically when you enter a passage. Change anytime in settings.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Automatically play videos in passages&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Automatically play videos in passages&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;autoplaySet&quot; data-category=&quot;video&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
 
                     &lt;div class=&quot;settings-control&quot;&gt;
                         &lt;div&gt;
-                            &lt;div style=&quot;font-weight: 500; margin-bottom: 4px;&quot;&gt;
+                            &lt;div class=&quot;setting-label&quot;&gt;
                                 Video Loop
-                                &lt;span class=&quot;icon icon-info&quot; data-tooltip=&quot;Videos repeat automatically when they end. Change anytime in settings.&quot; style=&quot;margin-left: 6px; font-size: 0.9em; opacity: 0.7;&quot;&gt;&lt;/span&gt;
+                                &lt;span class=&quot;icon icon-info setting-info-icon&quot; data-tooltip=&quot;Videos repeat automatically when they end. Change anytime in settings.&quot;&gt;&lt;/span&gt;
                             &lt;/div&gt;
-                            &lt;div style=&quot;font-size: 0.8rem; color: #777;&quot;&gt;Automatically repeat videos when they end&lt;/div&gt;
+                            &lt;div class=&quot;setting-description&quot;&gt;Automatically repeat videos when they end&lt;/div&gt;
                         &lt;/div&gt;
                         &lt;button class=&quot;setting-toggle-btn active&quot; data-setting=&quot;loopSet&quot; data-category=&quot;video&quot;&gt;ON&lt;/button&gt;
                     &lt;/div&gt;
@@ -1006,47 +1075,104 @@ Macro.add('locationMenu', {
     &lt;/div&gt;
 
     &lt;!-- START GAME BUTTON --&gt;
-    &lt;div style=&quot;display: flex; justify-content: center; margin-top: 2rem;&quot;&gt;
-        &lt;&lt;link &quot;Start Game&quot;&gt;&gt;
-            &lt;&lt;set $player.firstName = $(&#39;#characterFirstName&#39;).val() || &#39;Alex&#39;&gt;&gt;
-            &lt;&lt;set $player.lastName = $(&#39;#characterLastName&#39;).val() || &#39;Taylor&#39;&gt;&gt;
-            &lt;&lt;set $player.hairColor = $(&#39;#charHair&#39;).val()&gt;&gt;
-            &lt;&lt;set $player.eyeColor = $(&#39;#charEyes&#39;).val()&gt;&gt;
-            &lt;&lt;set $player.skinTone = $(&#39;#charSkin&#39;).val()&gt;&gt;
-            &lt;&lt;set $player.bodyType = $(&#39;#charBody&#39;).val()&gt;&gt;
-            
-            &lt;&lt;set $gameSettings.trackHunger = $(&#39;.setting-toggle-btn[data-setting=&quot;trackHunger&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $gameSettings.trackThirst = $(&#39;.setting-toggle-btn[data-setting=&quot;trackThirst&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $gameSettings.trackBladder = $(&#39;.setting-toggle-btn[data-setting=&quot;trackBladder&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $gameSettings.trackCalories = $(&#39;.setting-toggle-btn[data-setting=&quot;trackCalories&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $gameSettings.skillDecay = $(&#39;.setting-toggle-btn[data-setting=&quot;skillDecay&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $gameSettings.relationshipDecay = $(&#39;.setting-toggle-btn[data-setting=&quot;relationshipDecay&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            
-            &lt;&lt;set $contentPreferences.incest = $(&#39;.setting-toggle-btn[data-setting=&quot;incest&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $contentPreferences.romantic = $(&#39;.setting-toggle-btn[data-setting=&quot;romantic&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $contentPreferences.sexual = $(&#39;.setting-toggle-btn[data-setting=&quot;sexual&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $contentPreferences.gore = $(&#39;.setting-toggle-btn[data-setting=&quot;gore&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $contentPreferences.scat = $(&#39;.setting-toggle-btn[data-setting=&quot;scat&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            
-            &lt;&lt;set $videoSettings.autoplaySet = $(&#39;.setting-toggle-btn[data-setting=&quot;autoplaySet&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            &lt;&lt;set $videoSettings.loopSet = $(&#39;.setting-toggle-btn[data-setting=&quot;loopSet&quot;]&#39;).hasClass(&#39;active&#39;)&gt;&gt;
-            
-            &lt;&lt;goto &quot;confirmationPage&quot;&gt;&gt;
-        &lt;&lt;/link&gt;&gt;
+    &lt;div class=&quot;flex-center mt-4&quot;&gt;
+        &lt;a class=&quot;link-internal btn-style btn-accent&quot; id=&quot;start-game-btn&quot;&gt;Start Game&lt;/a&gt;
     &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+&lt;&lt;/nobr&gt;&gt;
 
 &lt;&lt;script&gt;&gt;
-// Toggle button functionality
-$(document).off(&#39;click.settingToggle&#39;).on(&#39;click.settingToggle&#39;, &#39;.setting-toggle-btn&#39;, function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    $(this).toggleClass(&#39;active&#39;);
-    $(this).text($(this).hasClass(&#39;active&#39;) ? &#39;ON&#39; : &#39;OFF&#39;);
+// Save settings and navigate to confirmation page
+$(document).on(&#39;:passagedisplay&#39;, function(ev) {
+    // Only bind for settingsPage
+    if (ev.passage.title !== &#39;settingsPage&#39;) return;
+    
+    const State = SugarCube.State;
+    const $ = jQuery;
+    const vars = State.variables;
+    
+    // Populate form with saved values
+    if (vars.player) {
+        $(&#39;#characterFirstName&#39;).val(vars.player.firstName || &#39;Alex&#39;);
+        $(&#39;#characterLastName&#39;).val(vars.player.lastName || &#39;Taylor&#39;);
+        $(&#39;#charHair&#39;).val(vars.player.hairColor || &#39;Brown&#39;);
+        $(&#39;#charEyes&#39;).val(vars.player.eyeColor || &#39;Brown&#39;);
+        $(&#39;#charSkin&#39;).val(vars.player.skinTone || &#39;Fair&#39;);
+        $(&#39;#charBody&#39;).val(vars.player.bodyType || &#39;Average&#39;);
+    }
+    
+    // Populate toggle buttons with saved values
+    function setToggle(setting, value) {
+        const $btn = $(`.setting-toggle-btn[data-setting=&quot;${setting}&quot;]`);
+        if (value) {
+            $btn.addClass(&#39;active&#39;).text(&#39;ON&#39;);
+        } else {
+            $btn.removeClass(&#39;active&#39;).text(&#39;OFF&#39;);
+        }
+    }
+    
+    // Game Settings
+    if (vars.gameSettings) {
+        setToggle(&#39;trackHunger&#39;, vars.gameSettings.trackHunger);
+        setToggle(&#39;trackThirst&#39;, vars.gameSettings.trackThirst);
+        setToggle(&#39;trackBladder&#39;, vars.gameSettings.trackBladder);
+        setToggle(&#39;trackCalories&#39;, vars.gameSettings.trackCalories);
+        setToggle(&#39;skillDecay&#39;, vars.gameSettings.skillDecay);
+        setToggle(&#39;relationshipDecay&#39;, vars.gameSettings.relationshipDecay);
+    }
+    
+    // Content Preferences
+    if (vars.contentPreferences) {
+        setToggle(&#39;incest&#39;, vars.contentPreferences.incest);
+        setToggle(&#39;romantic&#39;, vars.contentPreferences.romantic);
+        setToggle(&#39;sexual&#39;, vars.contentPreferences.sexual);
+        setToggle(&#39;gore&#39;, vars.contentPreferences.gore);
+        setToggle(&#39;scat&#39;, vars.contentPreferences.scat);
+    }
+    
+    // Video Settings
+    if (vars.videoSettings) {
+        setToggle(&#39;autoplaySet&#39;, vars.videoSettings.autoplaySet);
+        setToggle(&#39;loopSet&#39;, vars.videoSettings.loopSet);
+    }
+    
+    // Start Game button handler
+    $(&#39;#start-game-btn&#39;).off(&#39;click.settingsPage&#39;).on(&#39;click.settingsPage&#39;, function(e) {
+        e.preventDefault();
+        
+        // Character
+        vars.player.firstName = $(&#39;#characterFirstName&#39;).val() || &#39;Alex&#39;;
+        vars.player.lastName = $(&#39;#characterLastName&#39;).val() || &#39;Taylor&#39;;
+        vars.player.hairColor = $(&#39;#charHair&#39;).val();
+        vars.player.eyeColor = $(&#39;#charEyes&#39;).val();
+        vars.player.skinTone = $(&#39;#charSkin&#39;).val();
+        vars.player.bodyType = $(&#39;#charBody&#39;).val();
+        
+        // Simulation Settings
+        vars.gameSettings.trackHunger = $(&#39;.setting-toggle-btn[data-setting=&quot;trackHunger&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.gameSettings.trackThirst = $(&#39;.setting-toggle-btn[data-setting=&quot;trackThirst&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.gameSettings.trackBladder = $(&#39;.setting-toggle-btn[data-setting=&quot;trackBladder&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.gameSettings.trackCalories = $(&#39;.setting-toggle-btn[data-setting=&quot;trackCalories&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.gameSettings.skillDecay = $(&#39;.setting-toggle-btn[data-setting=&quot;skillDecay&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.gameSettings.relationshipDecay = $(&#39;.setting-toggle-btn[data-setting=&quot;relationshipDecay&quot;]&#39;).hasClass(&#39;active&#39;);
+        
+        // Content Preferences
+        vars.contentPreferences.incest = $(&#39;.setting-toggle-btn[data-setting=&quot;incest&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.contentPreferences.romantic = $(&#39;.setting-toggle-btn[data-setting=&quot;romantic&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.contentPreferences.sexual = $(&#39;.setting-toggle-btn[data-setting=&quot;sexual&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.contentPreferences.gore = $(&#39;.setting-toggle-btn[data-setting=&quot;gore&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.contentPreferences.scat = $(&#39;.setting-toggle-btn[data-setting=&quot;scat&quot;]&#39;).hasClass(&#39;active&#39;);
+        
+        // Video Settings
+        vars.videoSettings.autoplaySet = $(&#39;.setting-toggle-btn[data-setting=&quot;autoplaySet&quot;]&#39;).hasClass(&#39;active&#39;);
+        vars.videoSettings.loopSet = $(&#39;.setting-toggle-btn[data-setting=&quot;loopSet&quot;]&#39;).hasClass(&#39;active&#39;);
+        
+        // Navigate to confirmation page
+        SugarCube.Engine.play(&#39;confirmationPage&#39;);
+    });
 });
 &lt;&lt;/script&gt;&gt;
-&lt;&lt;/nobr&gt;&gt;
 </tw-passagedata><tw-passagedata pid="4" name="variablesImage" tags="init" position="225,200" size="100,100">&lt;&lt;set $imageProfile = &quot;assets/content/ProfilePlaceholder.png&quot;&gt;&gt;
 &lt;&lt;set $imageMap = &quot;assets/content/map.png&quot;&gt;&gt;
 
@@ -1256,17 +1382,171 @@ $(document).off(&#39;click.settingToggle&#39;).on(&#39;click.settingToggle&#39;,
     &lt;&lt;/for&gt;&gt;
 &lt;&lt;/widget&gt;&gt;
 
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="8" name="GameStart" tags="" position="925,400" size="100,100">Oyuna hoş geldin beş gittin bu böyle şu böyle.
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="8" name="GameStart" tags="" position="925,400" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;set $hideTopbarNav = true&gt;&gt;
+&lt;&lt;set $hideTopbarTimebox = true&gt;&gt;
+&lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
+&lt;&lt;set $hideRightbar = true&gt;&gt;
+&lt;&lt;run $(&#39;body&#39;).addClass(&#39;layout-centered&#39;)&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+Oyuna hoş geldin beş gittin bu böyle şu böyle.
 
-[[settingsPage]] </tw-passagedata><tw-passagedata pid="9" name="confirmationPage" tags="" position="1175,400" size="100,100">bak bunları seçtin onayladınmı
+[[settingsPage]] </tw-passagedata><tw-passagedata pid="9" name="confirmationPage" tags="" position="1175,400" size="100,100">:: confirmationPage
+&lt;&lt;set $hideTopbarNav = true&gt;&gt;
+&lt;&lt;set $hideTopbarTimebox = true&gt;&gt;
+&lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
+&lt;&lt;set $hideRightbar = true&gt;&gt;
+&lt;&lt;run $(&#39;body&#39;).addClass(&#39;layout-centered&#39;)&gt;&gt;
+&lt;&lt;nobr&gt;&gt;
+&lt;div class=&quot;page-wrapper&quot;&gt;
+&lt;div class=&quot;game-setup-container&quot;&gt;
+    &lt;h1 class=&quot;page-title&quot;&gt;Confirm Your Settings&lt;/h1&gt;
+    &lt;p class=&quot;page-subtitle&quot;&gt;Review your choices before starting the game.&lt;/p&gt;
 
-[[prologuePage]] </tw-passagedata><tw-passagedata pid="10" name="variablesSettings" tags="init" position="725,200" size="100,100">// Initialize video settings in State.variables
+    &lt;div class=&quot;info-grid&quot;&gt;
+    &lt;!-- CHARACTER --&gt;
+    &lt;div class=&quot;info-card&quot;&gt;
+        &lt;div class=&quot;info-card-header&quot;&gt;
+            &lt;span class=&quot;icon icon-user&quot;&gt;&lt;/span&gt; Character
+        &lt;/div&gt;
+        &lt;div class=&quot;info-card-body&quot;&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Name&lt;/span&gt;
+                &lt;span class=&quot;info-val&quot;&gt;$player.firstName $player.lastName&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Hair&lt;/span&gt;
+                &lt;span class=&quot;info-val&quot;&gt;$player.hairColor&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Eyes&lt;/span&gt;
+                &lt;span class=&quot;info-val&quot;&gt;$player.eyeColor&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Skin&lt;/span&gt;
+                &lt;span class=&quot;info-val&quot;&gt;$player.skinTone&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Body&lt;/span&gt;
+                &lt;span class=&quot;info-val&quot;&gt;$player.bodyType&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- SIMULATION --&gt;
+    &lt;div class=&quot;info-card&quot;&gt;
+        &lt;div class=&quot;info-card-header&quot;&gt;
+            &lt;span class=&quot;icon icon-simulation&quot;&gt;&lt;/span&gt; Simulation
+        &lt;/div&gt;
+        &lt;div class=&quot;info-card-body&quot;&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Hunger&lt;/span&gt;
+                &lt;&lt;if $gameSettings.trackHunger&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Thirst&lt;/span&gt;
+                &lt;&lt;if $gameSettings.trackThirst&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Bladder&lt;/span&gt;
+                &lt;&lt;if $gameSettings.trackBladder&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Calories&lt;/span&gt;
+                &lt;&lt;if $gameSettings.trackCalories&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Skill Decay&lt;/span&gt;
+                &lt;&lt;if $gameSettings.skillDecay&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Relationship Decay&lt;/span&gt;
+                &lt;&lt;if $gameSettings.relationshipDecay&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- CONTENT --&gt;
+    &lt;div class=&quot;info-card&quot;&gt;
+        &lt;div class=&quot;info-card-header&quot;&gt;
+            &lt;span class=&quot;icon icon-eye&quot;&gt;&lt;/span&gt; Content
+        &lt;/div&gt;
+        &lt;div class=&quot;info-card-body&quot;&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Incest&lt;/span&gt;
+                &lt;&lt;if $contentPreferences.incest&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Romantic&lt;/span&gt;
+                &lt;&lt;if $contentPreferences.romantic&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Sexual&lt;/span&gt;
+                &lt;&lt;if $contentPreferences.sexual&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Gore&lt;/span&gt;
+                &lt;&lt;if $contentPreferences.gore&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Scat&lt;/span&gt;
+                &lt;&lt;if $contentPreferences.scat&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- VIDEO --&gt;
+    &lt;div class=&quot;info-card&quot;&gt;
+        &lt;div class=&quot;info-card-header&quot;&gt;
+            &lt;span class=&quot;icon icon-settings&quot;&gt;&lt;/span&gt; Video
+        &lt;/div&gt;
+        &lt;div class=&quot;info-card-body&quot;&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Autoplay&lt;/span&gt;
+                &lt;&lt;if $videoSettings.autoplaySet&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;info-line&quot;&gt;
+                &lt;span class=&quot;info-key&quot;&gt;Loop&lt;/span&gt;
+                &lt;&lt;if $videoSettings.loopSet&gt;&gt;&lt;span style=&quot;color:#ec4899;font-weight:600;&quot;&gt;ON&lt;/span&gt;&lt;&lt;else&gt;&gt;&lt;span style=&quot;color:#666;&quot;&gt;OFF&lt;/span&gt;&lt;&lt;/if&gt;&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- BUTTONS --&gt;
+    &lt;div class=&quot;flex-center gap-2 mt-4&quot;&gt;
+        &lt;&lt;btn &quot;Go Back&quot; &quot;settingsPage&quot; &quot;default&quot;&gt;&gt;
+        &lt;&lt;btn &quot;Continue&quot; &quot;prologuePage&quot; &quot;accent&quot;&gt;&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;&lt;/nobr&gt;&gt;
+</tw-passagedata><tw-passagedata pid="10" name="variablesSettings" tags="init" position="725,200" size="100,100">:: variablesSettings [init]
+/* ==========================================
+   GAME SETTINGS
+   Simulation toggles for optional features
+========================================== */
+&lt;&lt;set $gameSettings = {
+    trackHunger: false,
+    trackThirst: false,
+    trackBladder: false,
+    trackCalories: false,
+    skillDecay: false,
+    relationshipDecay: false
+}&gt;&gt;
+
+/* ==========================================
+   VIDEO SETTINGS
+   Initialize video settings in State.variables
+========================================== */
+&lt;&lt;script&gt;&gt;
 State.variables.videoSettings = State.variables.videoSettings || {
     autoplaySet: true,
     loopSet: true,
     masterVolume: 100,
     videoVolume: 100
 };
+&lt;&lt;/script&gt;&gt;
 
 /* ==========================================
    CONTENT PREFERENCES
@@ -1772,14 +2052,14 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
    Player Character Definition
 ========================================== */
 
-/* GAME SETTINGS */
-&lt;&lt;set $gameSettings = {
-    trackHunger: false,
-    trackThirst: false,
-    trackBladder: false,
-    trackCalories: false,
-    skillDecay: false,
-    relationshipDecay: false
+/* CHARACTER APPEARANCE DEFAULTS */
+&lt;&lt;set $player = {
+    firstName: &quot;Alex&quot;,
+    lastName: &quot;Taylor&quot;,
+    hairColor: &quot;Brown&quot;,
+    eyeColor: &quot;Brown&quot;,
+    skinTone: &quot;Fair&quot;,
+    bodyType: &quot;Average&quot;
 }&gt;&gt;
 
 /* CORE STATS */

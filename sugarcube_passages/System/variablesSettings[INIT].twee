@@ -1,5 +1,18 @@
 :: variablesSettings [init]
 /* ==========================================
+   GAME SETTINGS
+   Simulation toggles for optional features
+========================================== */
+<<set $gameSettings = {
+    trackHunger: false,
+    trackThirst: false,
+    trackBladder: false,
+    trackCalories: false,
+    skillDecay: false,
+    relationshipDecay: false
+}>>
+
+/* ==========================================
    VIDEO SETTINGS
    Initialize video settings in State.variables
 ========================================== */

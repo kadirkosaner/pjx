@@ -82,6 +82,7 @@ $(document).one(':storyready', async function () {
         });
 
         // Trigger initial render
+        // Trigger initial render
         $(document).trigger(':passagerender');
 
         // Destroy UIBar
@@ -118,6 +119,70 @@ Macro.add('btn', {
             Engine.play(passage);
         });
     }
+});
+
+/* ================== Dynamic Button Styles =================== */
+// Generate button styles from CSS variables
+$(document).one(':storyready', function() {
+    const generateButtonStyles = () => {
+        const root = document.documentElement;
+        const styles = getComputedStyle(root);
+        let cssRules = '';
+
+        // Get all CSS custom properties from root
+        const allProps = [];
+        for (let i = 0; i < styles.length; i++) {
+            const prop = styles[i];
+            if (prop.startsWith('--color-')) {
+                allProps.push(prop);
+            }
+        }
+
+        // Filter: only pure color variables (exclude bg, border, text)
+        const colorVars = allProps.filter(prop => 
+            !prop.includes('-bg-') && 
+            !prop.includes('-border-') && 
+            !prop.includes('-text-')
+        );
+
+        colorVars.forEach(varName => {
+            const colorName = varName.replace('--color-', '');
+            const colorValue = `var(${varName})`;
+
+            cssRules += `
+            .passage a.btn-${colorName},
+            .btn-${colorName} {
+                background: transparent !important;
+                border-color: ${colorValue} !important;
+                color: ${colorValue} !important;
+            }
+
+            .passage a.btn-${colorName}:hover,
+            .btn-${colorName}:hover {
+                background: ${colorValue} !important;
+                border-color: ${colorValue} !important;
+                color: #fff !important;
+                transform: translateY(-1px);
+            }
+            `;
+        });
+
+        // Inject dynamic styles
+        const existingStyle = document.getElementById('dynamic-button-styles');
+        if (existingStyle) {
+            existingStyle.remove();
+        }
+        
+        const styleTag = document.createElement('style');
+        styleTag.id = 'dynamic-button-styles';
+        styleTag.textContent = cssRules;
+        document.head.appendChild(styleTag);
+
+        console.log('[ButtonStyles] Generated button classes:', colorVars.map(v => '.btn-' + v.replace('--color-', '')));
+    };
+
+    // Wait for CSS to fully load
+    setTimeout(generateButtonStyles, 100);
 });
 
 /* ================== WARDROBE MACRO =================== */

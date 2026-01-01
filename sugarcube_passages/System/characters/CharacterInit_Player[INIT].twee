@@ -1,17 +1,8 @@
+:: CharacterInit_Player [init]
 /* ==========================================
    PLAYER - You
    Player Character Definition
 ========================================== */
-
-/* GAME SETTINGS */
-<<set $gameSettings = {
-    trackHunger: false,
-    trackThirst: false,
-    trackBladder: false,
-    trackCalories: false,
-    skillDecay: false,
-    relationshipDecay: false
-}>>
 
 /* CHARACTER APPEARANCE DEFAULTS */
 <<set $player = {

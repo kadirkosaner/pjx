@@ -690,7 +690,7 @@ function WardrobeInit(API) {
     s.calculateTotalLooks = calculateTotalLooks;
     s.getOverallStyle = getOverallStyle;
     
-    console.log('[Wardrobe] Helper functions exported, API State:', API.State);
+    console.log('[Wardrobe] Helper functions exported');
 }
 
 // Export to window for macro access
