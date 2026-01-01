@@ -1421,102 +1421,88 @@ $(document).on(&#39;:passagedisplay&#39;, function(ev) {
 &lt;&lt;set $hideTopbar = true&gt;&gt;
 &lt;&lt;run $(&#39;body&#39;).addClass(&#39;fullscreen-centered&#39;)&gt;&gt;
 
-&lt;div class=&quot;page-wrapper welcome-page&quot;&gt;
-&lt;div class=&quot;welcome-container&quot;&gt;
-
-    &lt;!-- Animated Background Accent --&gt;
-    &lt;div class=&quot;welcome-glow&quot;&gt;&lt;/div&gt;
-
-    &lt;!-- Game Logo/Title --&gt;
-    &lt;div class=&quot;welcome-header&quot;&gt;
-        &lt;div class=&quot;welcome-logo&quot;&gt;
-            &lt;h1 class=&quot;welcome-title&quot;&gt;$gameName&lt;/h1&gt;
-            &lt;div class=&quot;welcome-version&quot;&gt;v $gameVersion&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;welcome-tagline&quot;&gt;An Adult Life Simulation Experience&lt;/div&gt;
-        &lt;div class=&quot;welcome-divider&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;seductive-landing&quot;&gt;
+    
+    &lt;!-- Silhouette Background --&gt;
+    &lt;div class=&quot;silhouette-layer&quot;&gt;
+        &lt;div class=&quot;silhouette silhouette-1&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;silhouette silhouette-2&quot;&gt;&lt;/div&gt;
     &lt;/div&gt;
-
-    &lt;!-- Main Content Card --&gt;
-    &lt;div class=&quot;welcome-card&quot;&gt;
+    
+    &lt;!-- Pink Glow Effects --&gt;
+    &lt;div class=&quot;mystery-glow glow-1&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;mystery-glow glow-2&quot;&gt;&lt;/div&gt;
+    
+    &lt;!-- Content --&gt;
+    &lt;div class=&quot;mystery-content&quot;&gt;
         
-        &lt;!-- Warning Section --&gt;
-        &lt;div class=&quot;warning-section&quot;&gt;
-            &lt;div class=&quot;warning-header&quot;&gt;
-                &lt;span class=&quot;warning-icon&quot;&gt;🔞&lt;/span&gt;
-                &lt;h2&gt;Adult Content Warning&lt;/h2&gt;
-            &lt;/div&gt;
-            &lt;p class=&quot;warning-text&quot;&gt;
-                This game contains &lt;strong&gt;explicit adult content&lt;/strong&gt; including sexual themes, 
-                strong language, and mature situations. All characters depicted are 18 years or older.
+        &lt;div class=&quot;mystery-tagline&quot;&gt;
+            Where desire meets consequence
+        &lt;/div&gt;
+        
+        &lt;h1 class=&quot;mystery-question&quot;&gt;
+            What kind of person&lt;br&gt;
+            will you become?
+        &lt;/h1&gt;
+        
+        &lt;div class=&quot;mystery-hint&quot;&gt;
+            Every choice matters. Every relationship changes you.
+        &lt;/div&gt;
+        
+        &lt;button class=&quot;btn-style btn-mystery-enter&quot; id=&quot;welcomeEnterBtn&quot;&gt;Enter&lt;/button&gt;
+        
+        &lt;div class=&quot;mystery-warning&quot;&gt;18+ · Adult Content&lt;/div&gt;
+        
+    &lt;/div&gt;
+    
+    &lt;!-- Age Verification Modal --&gt;
+    &lt;div class=&quot;age-modal&quot; id=&quot;ageModal&quot;&gt;
+        &lt;div class=&quot;age-modal-overlay&quot; id=&quot;ageModalOverlay&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;age-modal-content&quot;&gt;
+            &lt;div class=&quot;age-modal-icon&quot;&gt;🔞&lt;/div&gt;
+            &lt;h2 class=&quot;age-modal-title&quot;&gt;Adult Content&lt;/h2&gt;
+            &lt;p class=&quot;age-modal-text&quot;&gt;
+                This experience contains explicit adult content including sexual themes, 
+                mature situations, and strong language.
             &lt;/p&gt;
-            &lt;div class=&quot;warning-notice&quot;&gt;
-                &lt;span class=&quot;notice-icon&quot;&gt;⚠️&lt;/span&gt;
-                &lt;span&gt;You must be &lt;strong&gt;18 years or older&lt;/strong&gt; to continue.&lt;/span&gt;
+            &lt;p class=&quot;age-modal-confirm&quot;&gt;
+                By continuing, you confirm that you are &lt;strong&gt;18 years or older&lt;/strong&gt; 
+                and consent to view adult material.
+            &lt;/p&gt;
+            &lt;div class=&quot;age-modal-actions&quot;&gt;
+                &lt;&lt;btn &quot;I Accept&quot; &quot;settingsPage&quot; &quot;age-accept&quot;&gt;&gt;
+                &lt;a href=&quot;https://www.google.com&quot; class=&quot;btn-style btn-age-decline&quot;&gt;Exit&lt;/a&gt;
             &lt;/div&gt;
         &lt;/div&gt;
-
-        &lt;!-- Divider --&gt;
-        &lt;div class=&quot;section-divider&quot;&gt;&lt;/div&gt;
-
-        &lt;!-- Game Features --&gt;
-        &lt;div class=&quot;features-section&quot;&gt;
-            &lt;h3&gt;What Awaits You&lt;/h3&gt;
-            &lt;div class=&quot;feature-grid&quot;&gt;
-                &lt;div class=&quot;feature-card&quot;&gt;
-                    &lt;div class=&quot;feature-icon-box&quot;&gt;🎭&lt;/div&gt;
-                    &lt;div class=&quot;feature-info&quot;&gt;
-                        &lt;div class=&quot;feature-title&quot;&gt;Deep Storytelling&lt;/div&gt;
-                        &lt;div class=&quot;feature-desc&quot;&gt;Shape your narrative through meaningful choices&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class=&quot;feature-card&quot;&gt;
-                    &lt;div class=&quot;feature-icon-box&quot;&gt;💕&lt;/div&gt;
-                    &lt;div class=&quot;feature-info&quot;&gt;
-                        &lt;div class=&quot;feature-title&quot;&gt;Relationships&lt;/div&gt;
-                        &lt;div class=&quot;feature-desc&quot;&gt;Build connections with unique characters&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class=&quot;feature-card&quot;&gt;
-                    &lt;div class=&quot;feature-icon-box&quot;&gt;🏠&lt;/div&gt;
-                    &lt;div class=&quot;feature-info&quot;&gt;
-                        &lt;div class=&quot;feature-title&quot;&gt;Open World&lt;/div&gt;
-                        &lt;div class=&quot;feature-desc&quot;&gt;Explore a living, reactive environment&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class=&quot;feature-card&quot;&gt;
-                    &lt;div class=&quot;feature-icon-box&quot;&gt;⚙️&lt;/div&gt;
-                    &lt;div class=&quot;feature-info&quot;&gt;
-                        &lt;div class=&quot;feature-title&quot;&gt;Content Control&lt;/div&gt;
-                        &lt;div class=&quot;feature-desc&quot;&gt;Customize your experience with filters&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-
     &lt;/div&gt;
-
-    &lt;!-- Age Verification --&gt;
-    &lt;div class=&quot;verification-section&quot;&gt;
-        &lt;p class=&quot;verification-prompt&quot;&gt;By continuing, you confirm that you are &lt;strong&gt;18 years of age or older&lt;/strong&gt; and legally permitted to view adult content in your jurisdiction.&lt;/p&gt;
-        &lt;div class=&quot;verification-buttons&quot;&gt;
-            &lt;&lt;btn &quot;I Confirm - Enter Game&quot; &quot;settingsPage&quot; &quot;accent&quot;&gt;&gt;
-            &lt;a href=&quot;https://www.google.com&quot; class=&quot;btn-style btn-default&quot;&gt;Exit&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;!-- Footer --&gt;
-    &lt;div class=&quot;welcome-footer&quot;&gt;
-        &lt;span&gt;© 2024 $gameName&lt;/span&gt;
-        &lt;span class=&quot;footer-dot&quot;&gt;•&lt;/span&gt;
-        &lt;span&gt;All Rights Reserved&lt;/span&gt;
-        &lt;span class=&quot;footer-dot&quot;&gt;•&lt;/span&gt;
-        &lt;span&gt;Version $gameVersion&lt;/span&gt;
-    &lt;/div&gt;
-
+    
 &lt;/div&gt;
-&lt;/div&gt;
+
 &lt;&lt;/nobr&gt;&gt;
+&lt;&lt;script&gt;&gt;
+$(document).ready(function() {
+    $(&#39;#welcomeEnterBtn&#39;).on(&#39;click&#39;, function() {
+        $(&#39;#ageModal&#39;).addClass(&#39;active&#39;);
+        $(&#39;body&#39;).css(&#39;overflow&#39;, &#39;hidden&#39;);
+    });
+    
+    $(&#39;#ageModalOverlay&#39;).on(&#39;click&#39;, function() {
+        $(&#39;#ageModal&#39;).removeClass(&#39;active&#39;);
+        $(&#39;body&#39;).css(&#39;overflow&#39;, &#39;auto&#39;);
+    });
+});
+
+// Cleanup when leaving this passage
+$(document).one(&#39;:passagestart&#39;, function(ev) {
+    // Only run cleanup if we&#39;re leaving welcomePage
+    if (ev.passage &amp;&amp; ev.passage.title !== &#39;welcomePage&#39;) {
+        // Remove any inline styles added by modal
+        $(&#39;body&#39;).css(&#39;overflow&#39;, &#39;&#39;);
+        // Remove fullscreen-centered class
+        $(&#39;body&#39;).removeClass(&#39;fullscreen-centered&#39;);
+    }
+});
+&lt;&lt;/script&gt;&gt;
 </tw-passagedata><tw-passagedata pid="9" name="confirmationPage" tags="" position="1175,400" size="100,100">&lt;&lt;nobr&gt;&gt;
 &lt;&lt;set $hideTopbarNav = true&gt;&gt;
 &lt;&lt;set $hideTopbarTimebox = true&gt;&gt;

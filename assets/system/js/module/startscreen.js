@@ -104,6 +104,45 @@ function createStartScreenContainer() {
     `;
 
     StartScreenAPI.$('body').append(html);
+    
+    // Check if saves exist and disable Continue button if not
+    checkAndUpdateContinueButton();
+}
+
+// Check saves and update Continue button state
+function checkAndUpdateContinueButton() {
+    if (!StartScreenAPI) return;
+    
+    let hasSaves = false;
+    
+    // Check regular save slots
+    for (let i = 0; i < StartScreenAPI.Save.slots.length; i++) {
+        if (StartScreenAPI.Save.slots.has(i)) {
+            hasSaves = true;
+            break;
+        }
+    }
+    
+    // Check autosave if no regular saves
+    if (!hasSaves && StartScreenAPI.Save.autosave.has()) {
+        hasSaves = true;
+    }
+    
+    const $continueBtn = $('.startscreen-btn-primary');
+    
+    if (!hasSaves) {
+        // No saves - disable and style the button
+        $continueBtn.prop('disabled', true);
+        $continueBtn.addClass('disabled');
+        $continueBtn.css('opacity', '0.3');
+        $continueBtn.css('cursor', 'not-allowed');
+    } else {
+        // Has saves - ensure button is enabled
+        $continueBtn.prop('disabled', false);
+        $continueBtn.removeClass('disabled');
+        $continueBtn.css('opacity', '1');
+        $continueBtn.css('cursor', 'pointer');
+    }
 }
 
 // Startscreen button actions
