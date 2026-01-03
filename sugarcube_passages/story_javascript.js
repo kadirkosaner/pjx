@@ -51,39 +51,39 @@ $(document).one(':storyready', async function () {
         // Load config first to get module definitions
         await loadJS("assets/system/config.js");
 
-        // Load CSS - SAFE MIGRATION STRATEGY
-        // base.css is the source of truth, split files are loaded AFTER
-        // As split progresses, styles are removed from base.css
+        // Load CSS - MODULAR STRUCTURE
+        // All styles are now split into modular files
         
-        // 1. Load base.css (main source of truth)
-        await loadCSS("assets/system/css/base.css");
-
-        // 2. Load split CSS files (will override base.css as migration progresses)
         const cssBase = "assets/system/css/";
         
-        // Core CSS
-        for (const module of window.SystemCSS.core) {
-            try { await loadCSS(`${cssBase}core/${module}.css`); } catch (e) { }
+        // Base - Variables, reset (MUST load first)
+        for (const module of window.SystemCSS.base) {
+            try { await loadCSS(`${cssBase}base/${module}.css`); } catch (e) { }
         }
 
-        // Components CSS
-        for (const module of window.SystemCSS.components) {
-            try { await loadCSS(`${cssBase}components/${module}.css`); } catch (e) { }
+        // Layout - Structure, topbar, rightbar
+        for (const module of window.SystemCSS.layout) {
+            try { await loadCSS(`${cssBase}layout/${module}.css`); } catch (e) { }
         }
 
-        // Features CSS
-        for (const module of window.SystemCSS.features) {
-            try { await loadCSS(`${cssBase}features/${module}.css`); } catch (e) { }
+        // UI - Buttons, modals, tabs, forms
+        for (const module of window.SystemCSS.ui) {
+            try { await loadCSS(`${cssBase}ui/${module}.css`); } catch (e) { }
         }
 
-        // Pages CSS
-        for (const module of window.SystemCSS.pages) {
-            try { await loadCSS(`${cssBase}pages/${module}.css`); } catch (e) { }
+        // Screens - Welcome, startscreen, gamesetup
+        for (const module of window.SystemCSS.screens) {
+            try { await loadCSS(`${cssBase}screens/${module}.css`); } catch (e) { }
         }
 
-        // Utilities CSS - Load last
-        for (const module of window.SystemCSS.utilities) {
-            try { await loadCSS(`${cssBase}utilities/${module}.css`); } catch (e) { }
+        // Systems - Phone, map, wardrobe, relations, etc.
+        for (const module of window.SystemCSS.systems) {
+            try { await loadCSS(`${cssBase}systems/${module}.css`); } catch (e) { }
+        }
+
+        // Utils - Notifications, tooltips, animations (load last)
+        for (const module of window.SystemCSS.utils) {
+            try { await loadCSS(`${cssBase}utils/${module}.css`); } catch (e) { }
         }
 
         // 3. Existing CSS files
@@ -550,27 +550,27 @@ $(document).on(':passageend', function () {
         passages.scrollTop = 0;
     }
 });
-/* ================== Location Handlers =================== */
+/* ================== Navigation Card Handlers =================== */
 
-// Helper function for Location Navigation
-// Moved here from navigation.js to ensure immediate availability
-window.processLocTag = function(tag, $container, passedSetup) {
+// Helper function for Navigation Cards
+// Processes <<navCard>> tags and renders navigation menu cards
+window.processNavCard = function(tag, $container, passedSetup) {
     // Ensure we have access to setup
-    const locSetup = passedSetup || window.setup || {};
+    const navSetup = passedSetup || window.setup || {};
 
     const args = tag.args;
-    let locId = args[0];
+    let cardId = args[0];
     let displayName = args[0];
     let passageName = args[1];
     let imagePath = args[2];
     
-    // Check if ID exists in database (setup.locations)
-    if (locSetup.locations && locSetup.locations[locId]) {
-        const dbLoc = locSetup.locations[locId];
+    // Check if ID exists in database (setup.navCards)
+    if (navSetup.navCards && navSetup.navCards[cardId]) {
+        const dbCard = navSetup.navCards[cardId];
         // Use DB values if not overridden
-        displayName = args[1] || dbLoc.name; 
-        passageName = dbLoc.passage || locId; // If passage not in DB, assume ID is passage
-        imagePath = args[2] || dbLoc.image;
+        displayName = args[1] || dbCard.name; 
+        passageName = dbCard.passage || cardId; // If passage not in DB, assume ID is passage
+        imagePath = args[2] || dbCard.image;
     } 
     else {
         // First arg is just display name if 2nd arg exists (Manual Mode)
@@ -585,14 +585,14 @@ window.processLocTag = function(tag, $container, passedSetup) {
     }
 
     // Default image if missing
-    if (!imagePath) imagePath = "assets/system/images/placeholder_loc.png";
+    if (!imagePath) imagePath = "assets/system/images/placeholder_nav.png";
 
-    // Create Card HTML
+    // Create Navigation Card HTML
     const $card = $(`
-        <div class="location-card">
+        <div class="nav-card">
             <img src="${imagePath}" class="card-bg">
             <div class="gradient-overlay"></div>
-            <div class="location-name">${displayName}</div>
+            <div class="nav-card-name">${displayName}</div>
         </div>
     `);
 
@@ -609,22 +609,22 @@ window.processLocTag = function(tag, $container, passedSetup) {
 };
 
 
-Macro.add('locationMenu', {
-    tags: ['loc'],
+Macro.add('navMenu', {
+    tags: ['navCard'],
     handler: function () {
         const payload = this.payload;
         
         // Create Accordion Container
         const $container = $('<div class="accordion-container"></div>');
 
-        // Process child tags (<<loc>>)
+        // Process child tags (<<navCard>>)
         payload.forEach(tag => {
-            if (tag.name === 'loc') {
-                // Call global helper from navigation.js
-                if(window.processLocTag) {
-                    window.processLocTag(tag, $container, setup);
+            if (tag.name === 'navCard') {
+                // Call global helper
+                if(window.processNavCard) {
+                    window.processNavCard(tag, $container, setup);
                 } else {
-                    console.error('[Navigation] processLocTag helper not found!');
+                    console.error('[Navigation] processNavCard helper not found!');
                 }
             }
         });

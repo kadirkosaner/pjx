@@ -1,10 +1,13 @@
-:: Navigation [INIT]
 <<script>>
-setup.locations = {
+setup.navCards = {
     // === HOME ===
     "fhBedroom": {
         name: "My Bedroom",
         image: "assets/content/locations/bedroom.jpg"
+    },
+        "fhWardrobe": {
+        name: "Wardrobe",
+        image: "assets/content/locations/wardrobe.jpg"
     },
     "fhBrotherRoom": {
         name: "Brother's Room",
@@ -20,15 +23,15 @@ setup.locations = {
     },
     "fhUpperBath": {
         name: "Bathroom",
-        image: "assets/content/locations/bedroom.jpg"
+        image: "assets/content/locations/bath.jpg"
     },
-    "fhUpperHall": {
+    "fhUpperstairs": {
         name: "Upper Hall",
-        image: "assets/content/locations/williams_house.jpg"
+        image: "assets/content/locations/hallway.jpg"
     },
     "fhDownstairs": {
         name: "Downstairs",
-        image: "assets/content/locations/williams_house.jpg"
+        image: "assets/content/locations/stairs.jpg"
     },
 
     // === CITY ===
@@ -53,6 +56,41 @@ setup.locations = {
     "schoolMain": {
         name: "School Entrance",
         image: "assets/content/locations/school.jpg"
+    },
+
+    // === EXTRAS (Merged from variablesImage) ===
+    "fhOffice": {
+        name: "Office",
+        image: "assets/content/locations/office.jpg"
+    },
+    "fhGarden": {
+        name: "Garden",
+        image: "assets/content/locations/garden.jpg"
+    },
+    "cityStreet": {
+        name: "Street",
+        image: "assets/content/locations/street.jpg"
+    },
+    "cityBar": {
+        name: "Bar",
+        image: "assets/content/locations/bar.jpg"
+    },
+    "cityRestaurant": {
+        name: "Restaurant",
+        image: "assets/content/locations/restaurant.jpg"
+    },
+    "cityGym": {
+        name: "Gym",
+        image: "assets/content/locations/gym.jpg"
+    },
+    "cityBeach": {
+        name: "Beach",
+        image: "assets/content/locations/beach.jpg"
+    },
+    "locCastle": {
+        name: "Castle",
+        image: "assets/content/locations/castle.jpg"
     }
 };
+
 <</script>>

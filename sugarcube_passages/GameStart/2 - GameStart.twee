@@ -4,6 +4,7 @@
 <<set $hideTopbarNotifications = true>>
 <<set $hideRightbar = true>>
 <<set $hideTopbar = true>>
+<<set $hideTopbarHamburger = true>>
 <<run $('body').addClass('fullscreen-centered')>>
 
 <div class="seductive-landing">

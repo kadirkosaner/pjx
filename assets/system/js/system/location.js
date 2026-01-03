@@ -21,20 +21,31 @@ function LocationInit(API) {
             // Set dynamic background image if exists in variables
             if (locationImages[location]) {
                 const rawPath = locationImages[location];
-                // CSS variables with url() resolve relative to the CSS file, not the document.
-                // Our CSS is in assets/system/css/. To reach root reliably:
-                // ../ (system) -> ../../ (assets) -> ../../../ (root)
-                const imagePath = rawPath.startsWith('assets/') ? '../../../' + rawPath : rawPath;
+                // Inline styles on document.body resolve relative to the HTML document (Root),
+                // NOT the CSS file. So we do NOT need to backtrack.
+                const imagePath = rawPath;
 
-                document.body.style.setProperty('--location-bg-image', `url('${imagePath}')`);
+                // FIX: Inject explicit style tag to ensure URL resolves relative to Document
+                // Bypasses any issues with CSS variable resolution in external stylesheets
+                $('#dynamic-location-bg').remove();
+                $(`<style id="dynamic-location-bg">
+                    body::before { 
+                        background-image: url('${imagePath}') !important; 
+                        opacity: 1;
+                    }
+                </style>`).appendTo('head');
+                
+                // Keep the data attribute for CSS transitions/logic
+                document.body.setAttribute('data-location', location);
+                
                 console.log(`[Location] Background set to: ${location} (${imagePath})`);
             } else {
-                document.body.style.setProperty('--location-bg-image', 'none');
+                $('#dynamic-location-bg').remove();
                 console.log(`[Location] No image found for: ${location}`);
             }
         } else {
             document.body.removeAttribute('data-location');
-            document.body.style.setProperty('--location-bg-image', 'none');
+            $('#dynamic-location-bg').remove();
             console.log('[Location] Background cleared - no location set');
         }
     }

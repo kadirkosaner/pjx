@@ -1,0 +1,291 @@
+/* ============================================
+   UI/MODALS.CSS
+   Modals, overlays, buttons
+   ============================================ */
+/*#region COMMON COMPONENTS */
+/* Close Button */
+.close-btn {
+  width: 35px;
+  height: 35px;
+  background: transparent;
+  border: 1px solid var(--color-border-secondary);
+  color: var(--color-text-tertiary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.close-btn:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Back Button */
+.back-btn {
+  width: 35px;
+  height: 35px;
+  background: transparent;
+  border: 1px solid var(--color-border-secondary);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.back-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: var(--color-border-secondary);
+  color: var(--color-border-secondary);
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+}
+
+.overlay.active {
+  display: flex;
+}
+
+.map-overlay {
+  display: none !important;
+  z-index: 200;
+}
+
+.map-overlay.active {
+  display: flex !important;
+}
+
+[style*="visibility: hidden"] {
+  pointer-events: none !important;
+}
+
+.overlay-dark {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.overlay-medium {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Modal Container */
+.modal {
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: inherit;
+}
+
+/* Modal Header */
+.modal-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg-primary);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Modal Content */
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-lg);
+  min-height: 0;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/* Preview Container */
+.preview-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  overflow: visible;
+  padding: 0;
+  margin: 0;
+}
+
+.preview-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.preview-container:hover .preview-content {
+  transform: scale(1.2);
+}
+
+/*#endregion */
+
+/* ==========================================
+   MODAL OVERLAY (High z-index for modals)
+========================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-medium);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-overlay .modal {
+  max-width: 500px;
+  width: 90%;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--color-border-primary);
+  background: var(--color-bg-primary);
+  justify-content: flex-end;
+}
+
+/* ==========================================
+   CONFIRMATION & PROMPT OVERLAYS
+   Higher z-index than saveload (15000)
+========================================== */
+#confirmation-overlay,
+#prompt-overlay,
+#save-title-overlay {
+  z-index: 20000 !important;
+}
+
+/* ==========================================
+   CONSOLIDATED MODAL OVERLAY POSITIONING
+   Ensures modals are centered relative to content area
+========================================== */
+#save-title-overlay,
+#confirmation-overlay,
+#saveload-overlay,
+#prompt-overlay,
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  padding-top: 10vh !important;
+  padding-right: var(--rightbar-width) !important; /* Center relative to content */
+  padding-bottom: 10vh !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Override padding for mobile or fullscreen if needed (handled by media queries usually) */
+body.topbar-hidden .modal-overlay, 
+body.fullscreen-layout .modal-overlay,
+body.fullscreen-centered .modal-overlay {
+    padding-right: 0 !important;
+}
+
+.modal-overlay .modal {
+  max-height: 80vh !important;
+}
+
+/* FORCE Z-INDEX HIERARCHY (FINAL) */
+#saveload-overlay { z-index: 15000 !important; }
+#confirmation-overlay { z-index: 20000 !important; }
+#save-title-overlay { z-index: 20000 !important; }
+#prompt-overlay { z-index: 20000 !important; }
+
+/* ================== JOURNAL MODAL OVERRIDE =================== */
+#journal-modal {
+  max-width: 1000px !important;
+  width: 90% !important;
+}
+
+
+/* ==========================================
+   FORCE SPECIFIC MODAL WIDTHS (FINAL)
+   Targeting via data-modal attribute (from modal.js)
+========================================== */
+.modal-overlay[data-modal="character-modal"] .modal,
+.modal-overlay[data-modal="stats-modal"] .modal,
+.modal-overlay[data-modal="journal-modal"] .modal,
+.modal-overlay[data-modal="settings-modal"] .modal {
+  max-width: 1000px !important;
+  width: 90% !important;
+}
+
+.modal-overlay[data-modal="relations-modal"] .modal {
+  max-width: 1200px !important;
+  width: 95% !important;
+}
+

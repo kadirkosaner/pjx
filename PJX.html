@@ -157,39 +157,39 @@ $(document).one(':storyready', async function () {
         // Load config first to get module definitions
         await loadJS("assets/system/config.js");
 
-        // Load CSS - SAFE MIGRATION STRATEGY
-        // base.css is the source of truth, split files are loaded AFTER
-        // As split progresses, styles are removed from base.css
+        // Load CSS - MODULAR STRUCTURE
+        // All styles are now split into modular files
         
-        // 1. Load base.css (main source of truth)
-        await loadCSS("assets/system/css/base.css");
-
-        // 2. Load split CSS files (will override base.css as migration progresses)
         const cssBase = "assets/system/css/";
         
-        // Core CSS
-        for (const module of window.SystemCSS.core) {
-            try { await loadCSS(`${cssBase}core/${module}.css`); } catch (e) { }
+        // Base - Variables, reset (MUST load first)
+        for (const module of window.SystemCSS.base) {
+            try { await loadCSS(`${cssBase}base/${module}.css`); } catch (e) { }
         }
 
-        // Components CSS
-        for (const module of window.SystemCSS.components) {
-            try { await loadCSS(`${cssBase}components/${module}.css`); } catch (e) { }
+        // Layout - Structure, topbar, rightbar
+        for (const module of window.SystemCSS.layout) {
+            try { await loadCSS(`${cssBase}layout/${module}.css`); } catch (e) { }
         }
 
-        // Features CSS
-        for (const module of window.SystemCSS.features) {
-            try { await loadCSS(`${cssBase}features/${module}.css`); } catch (e) { }
+        // UI - Buttons, modals, tabs, forms
+        for (const module of window.SystemCSS.ui) {
+            try { await loadCSS(`${cssBase}ui/${module}.css`); } catch (e) { }
         }
 
-        // Pages CSS
-        for (const module of window.SystemCSS.pages) {
-            try { await loadCSS(`${cssBase}pages/${module}.css`); } catch (e) { }
+        // Screens - Welcome, startscreen, gamesetup
+        for (const module of window.SystemCSS.screens) {
+            try { await loadCSS(`${cssBase}screens/${module}.css`); } catch (e) { }
         }
 
-        // Utilities CSS - Load last
-        for (const module of window.SystemCSS.utilities) {
-            try { await loadCSS(`${cssBase}utilities/${module}.css`); } catch (e) { }
+        // Systems - Phone, map, wardrobe, relations, etc.
+        for (const module of window.SystemCSS.systems) {
+            try { await loadCSS(`${cssBase}systems/${module}.css`); } catch (e) { }
+        }
+
+        // Utils - Notifications, tooltips, animations (load last)
+        for (const module of window.SystemCSS.utils) {
+            try { await loadCSS(`${cssBase}utils/${module}.css`); } catch (e) { }
         }
 
         // 3. Existing CSS files
@@ -656,27 +656,27 @@ $(document).on(':passageend', function () {
         passages.scrollTop = 0;
     }
 });
-/* ================== Location Handlers =================== */
+/* ================== Navigation Card Handlers =================== */
 
-// Helper function for Location Navigation
-// Moved here from navigation.js to ensure immediate availability
-window.processLocTag = function(tag, $container, passedSetup) {
+// Helper function for Navigation Cards
+// Processes <<navCard>> tags and renders navigation menu cards
+window.processNavCard = function(tag, $container, passedSetup) {
     // Ensure we have access to setup
-    const locSetup = passedSetup || window.setup || {};
+    const navSetup = passedSetup || window.setup || {};
 
     const args = tag.args;
-    let locId = args[0];
+    let cardId = args[0];
     let displayName = args[0];
     let passageName = args[1];
     let imagePath = args[2];
     
-    // Check if ID exists in database (setup.locations)
-    if (locSetup.locations && locSetup.locations[locId]) {
-        const dbLoc = locSetup.locations[locId];
+    // Check if ID exists in database (setup.navCards)
+    if (navSetup.navCards && navSetup.navCards[cardId]) {
+        const dbCard = navSetup.navCards[cardId];
         // Use DB values if not overridden
-        displayName = args[1] || dbLoc.name; 
-        passageName = dbLoc.passage || locId; // If passage not in DB, assume ID is passage
-        imagePath = args[2] || dbLoc.image;
+        displayName = args[1] || dbCard.name; 
+        passageName = dbCard.passage || cardId; // If passage not in DB, assume ID is passage
+        imagePath = args[2] || dbCard.image;
     } 
     else {
         // First arg is just display name if 2nd arg exists (Manual Mode)
@@ -691,14 +691,14 @@ window.processLocTag = function(tag, $container, passedSetup) {
     }
 
     // Default image if missing
-    if (!imagePath) imagePath = "assets/system/images/placeholder_loc.png";
+    if (!imagePath) imagePath = "assets/system/images/placeholder_nav.png";
 
-    // Create Card HTML
+    // Create Navigation Card HTML
     const $card = $(`
-        <div class="location-card">
+        <div class="nav-card">
             <img src="${imagePath}" class="card-bg">
             <div class="gradient-overlay"></div>
-            <div class="location-name">${displayName}</div>
+            <div class="nav-card-name">${displayName}</div>
         </div>
     `);
 
@@ -715,22 +715,22 @@ window.processLocTag = function(tag, $container, passedSetup) {
 };
 
 
-Macro.add('locationMenu', {
-    tags: ['loc'],
+Macro.add('navMenu', {
+    tags: ['navCard'],
     handler: function () {
         const payload = this.payload;
         
         // Create Accordion Container
         const $container = $('<div class="accordion-container"></div>');
 
-        // Process child tags (<<loc>>)
+        // Process child tags (<<navCard>>)
         payload.forEach(tag => {
-            if (tag.name === 'loc') {
-                // Call global helper from navigation.js
-                if(window.processLocTag) {
-                    window.processLocTag(tag, $container, setup);
+            if (tag.name === 'navCard') {
+                // Call global helper
+                if(window.processNavCard) {
+                    window.processNavCard(tag, $container, setup);
                 } else {
-                    console.error('[Navigation] processLocTag helper not found!');
+                    console.error('[Navigation] processNavCard helper not found!');
                 }
             }
         });
@@ -739,8 +739,7 @@ Macro.add('locationMenu', {
     }
 });
 
-</script><tw-tag name="widget" color="blue"></tw-tag><tw-tag name="startscreen" color="green"></tw-tag><tw-tag name="no-ui" color="yellow"></tw-tag><tw-tag name="init" color="red"></tw-tag><tw-passagedata pid="1" name="Start" tags="startscreen" position="800,400" size="100,100"></tw-passagedata><tw-passagedata pid="2" name="variablesBase" tags="init" position="100,200" size="100,100">:: variablesBase [init]
-/* ==========================================
+</script><tw-tag name="widget" color="blue"></tw-tag><tw-tag name="startscreen" color="green"></tw-tag><tw-tag name="no-ui" color="yellow"></tw-tag><tw-tag name="init" color="red"></tw-tag><tw-passagedata pid="1" name="Start" tags="startscreen" position="800,400" size="100,100"></tw-passagedata><tw-passagedata pid="2" name="variablesBase" tags="init" position="100,200" size="100,100">/* ==========================================
    BASE GAME VARIABLES
 ========================================== */
 
@@ -817,6 +816,7 @@ Macro.add('locationMenu', {
 &lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
 &lt;&lt;set $hideRightbar = true&gt;&gt;
 &lt;&lt;set $hideTopbar = true&gt;&gt;
+&lt;&lt;set $hideTopbarHamburger = false&gt;&gt;
 &lt;&lt;run $(&#39;body&#39;).addClass(&#39;fullscreen-centered&#39;)&gt;&gt;
 
 &lt;div class=&quot;page-wrapper&quot;&gt;
@@ -1465,6 +1465,7 @@ $(document).on(&#39;:passagedisplay&#39;, function(ev) {
 &lt;&lt;set $hideTopbarNotifications = true&gt;&gt;
 &lt;&lt;set $hideRightbar = true&gt;&gt;
 &lt;&lt;set $hideTopbar = true&gt;&gt;
+&lt;&lt;set $hideTopbarHamburger = true&gt;&gt;
 &lt;&lt;run $(&#39;body&#39;).addClass(&#39;fullscreen-centered&#39;)&gt;&gt;
 
 &lt;div class=&quot;seductive-landing&quot;&gt;
@@ -1523,7 +1524,6 @@ $(document).on(&#39;:passagedisplay&#39;, function(ev) {
     &lt;/div&gt;
     
 &lt;/div&gt;
-
 &lt;&lt;/nobr&gt;&gt;
 &lt;&lt;script&gt;&gt;
 $(document).ready(function() {
@@ -1654,8 +1654,7 @@ $(document).one(&#39;:passagestart&#39;, function(ev) {
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;&lt;/nobr&gt;&gt;
-</tw-passagedata><tw-passagedata pid="10" name="variablesSettings" tags="init" position="725,200" size="100,100">:: variablesSettings [init]
-/* ==========================================
+</tw-passagedata><tw-passagedata pid="10" name="variablesSettings" tags="init" position="725,200" size="100,100">/* ==========================================
    GAME SETTINGS
    Simulation toggles for optional features
 ========================================== */
@@ -1879,10 +1878,10 @@ Risk-taker / Cautious
 &lt;&lt;set $hideTopbarNotifications = false&gt;&gt;
 &lt;&lt;set $hideRightbar = false&gt;&gt;
 &lt;&lt;set $hideTopbar = false&gt;&gt;
-[[fhBedroom]] </tw-passagedata><tw-passagedata pid="20" name="fhBedroom" tags="" position="1250,725" size="100,100">&lt;&lt;locationMenu&gt;&gt;
-	&lt;&lt;loc &quot;fhWardrobe&quot;&gt;&gt;
-	&lt;&lt;loc &quot;fhUpperstairs&quot;&gt;&gt;
-&lt;&lt;/locationMenu&gt;&gt;
+[[fhBedroom]] </tw-passagedata><tw-passagedata pid="20" name="fhBedroom" tags="" position="1250,725" size="100,100">&lt;&lt;navMenu&gt;&gt;
+	&lt;&lt;navCard &quot;fhWardrobe&quot;&gt;&gt;
+	&lt;&lt;navCard &quot;fhUpperstairs&quot;&gt;&gt;
+&lt;&lt;/navMenu&gt;&gt;
 
 &lt;&lt;set $location = &quot;Kitchen&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="fhUpperBath" tags="" position="1100,725" size="100,100">[[fhUpperstairs]] </tw-passagedata><tw-passagedata pid="22" name="fhBrotherRoom" tags="" position="1400,725" size="100,100">[[fhUpperstairs]] </tw-passagedata><tw-passagedata pid="23" name="fhDownstairs" tags="" position="1250,1000" size="100,100">[[fhKitchen]] 
 [[fhLivingroom]] 
@@ -1945,12 +1944,12 @@ The master bedroom is elegant and well-kept. A large bed dominates the room, and
 &lt;div class=&quot;location-actions&quot;&gt;
 &lt;&lt;btn &quot;Parents Bathroom&quot; &quot;fhParentsBath&quot;&gt;&gt;
 &lt;&lt;btn &quot;Upstairs&quot; &quot;fhUpperstairs&quot;&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="fhParentsBath" tags="" position="1550,1050" size="100,100">[[fhParentsRoom]] </tw-passagedata><tw-passagedata pid="29" name="fhBackyard" tags="" position="1700,1200" size="100,100">[[fhDownstairs]] </tw-passagedata><tw-passagedata pid="30" name="fhUpperstairs" tags="" position="1250,875" size="100,100">&lt;&lt;locationMenu&gt;&gt;
-	&lt;&lt;loc &quot;fhBedroom&quot;&gt;&gt;
-    &lt;&lt;loc &quot;fhBrotherRoom&quot;&gt;&gt;
-    &lt;&lt;loc &quot;fhUpperBath&quot;&gt;&gt;
-    &lt;&lt;loc &quot;fhDownstairs&quot;&gt;&gt;
-&lt;&lt;/locationMenu&gt;&gt;</tw-passagedata><tw-passagedata pid="31" name="charMother" tags="init" position="675,0" size="100,100">/* ==========================================
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="fhParentsBath" tags="" position="1550,1050" size="100,100">[[fhParentsRoom]] </tw-passagedata><tw-passagedata pid="29" name="fhBackyard" tags="" position="1700,1200" size="100,100">[[fhDownstairs]] </tw-passagedata><tw-passagedata pid="30" name="fhUpperstairs" tags="" position="1250,875" size="100,100">&lt;&lt;navMenu&gt;&gt;
+	&lt;&lt;navCard &quot;fhBedroom&quot;&gt;&gt;
+    &lt;&lt;navCard &quot;fhBrotherRoom&quot;&gt;&gt;
+    &lt;&lt;navCard &quot;fhUpperBath&quot;&gt;&gt;
+    &lt;&lt;navCard &quot;fhDownstairs&quot;&gt;&gt;
+&lt;&lt;/navMenu&gt;&gt;</tw-passagedata><tw-passagedata pid="31" name="charMother" tags="init" position="675,0" size="100,100">/* ==========================================
    MOTHER - Sarah Williams
    Complete Character Definition
 ========================================== */
@@ -2769,8 +2768,7 @@ You settle onto the couch beside her. For the next hour, you watch together, occ
 &lt;/div&gt;
 
 &lt;&lt;btn &quot;Continue&quot; &quot;CharacterInteraction&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="44" name="CharacterWidgets" tags="widget" position="300,0" size="100,100">:: CharacterWidgets [widget]
-/* ==================================================
+</tw-passagedata><tw-passagedata pid="44" name="CharacterWidgets" tags="widget" position="300,0" size="100,100">/* ==================================================
    CHARACTER DISPLAY WIDGETS
    Widgets for rendering character cards in locations
 ================================================== */
@@ -2831,7 +2829,7 @@ You settle onto the couch beside her. For the next hour, you watch together, occ
 &gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
 &lt;&lt;/widget&gt;&gt;</tw-passagedata><tw-passagedata pid="45" name="variablesNavigation" tags="init" position="475,200" size="100,100">&lt;&lt;script&gt;&gt;
-setup.locations = {
+setup.navCards = {
     // === HOME ===
     &quot;fhBedroom&quot;: {
         name: &quot;My Bedroom&quot;,
@@ -2888,8 +2886,43 @@ setup.locations = {
     &quot;schoolMain&quot;: {
         name: &quot;School Entrance&quot;,
         image: &quot;assets/content/locations/school.jpg&quot;
+    },
+
+    // === EXTRAS (Merged from variablesImage) ===
+    &quot;fhOffice&quot;: {
+        name: &quot;Office&quot;,
+        image: &quot;assets/content/locations/office.jpg&quot;
+    },
+    &quot;fhGarden&quot;: {
+        name: &quot;Garden&quot;,
+        image: &quot;assets/content/locations/garden.jpg&quot;
+    },
+    &quot;cityStreet&quot;: {
+        name: &quot;Street&quot;,
+        image: &quot;assets/content/locations/street.jpg&quot;
+    },
+    &quot;cityBar&quot;: {
+        name: &quot;Bar&quot;,
+        image: &quot;assets/content/locations/bar.jpg&quot;
+    },
+    &quot;cityRestaurant&quot;: {
+        name: &quot;Restaurant&quot;,
+        image: &quot;assets/content/locations/restaurant.jpg&quot;
+    },
+    &quot;cityGym&quot;: {
+        name: &quot;Gym&quot;,
+        image: &quot;assets/content/locations/gym.jpg&quot;
+    },
+    &quot;cityBeach&quot;: {
+        name: &quot;Beach&quot;,
+        image: &quot;assets/content/locations/beach.jpg&quot;
+    },
+    &quot;locCastle&quot;: {
+        name: &quot;Castle&quot;,
+        image: &quot;assets/content/locations/castle.jpg&quot;
     }
 };
+
 &lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="46" name="wardrobePlayerState" tags="init" position="225,500" size="100,100">&lt;&lt;nobr&gt;&gt;
 /* Player Wardrobe State
  * This initializes the player&#39;s wardrobe state at game start

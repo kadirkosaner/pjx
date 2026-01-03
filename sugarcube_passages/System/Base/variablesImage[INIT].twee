@@ -1,0 +1,32 @@
+<<set $imageProfile = "assets/content/ProfilePlaceholder.png">>
+<<set $imageMap = "assets/content/map.png">>
+
+<<set $locationImages = {
+    "Living Room": "assets/content/locations/williams_house.jpg",
+    "Bedroom": "assets/content/locations/bedroom.jpg",
+    "My Bedroom": "assets/content/locations/bedroom.jpg",
+    "Brother's Room": "assets/content/locations/brother_room.jpg",
+    "Kitchen": "assets/content/locations/kitchen.jpg",
+    "Bathroom": "assets/content/locations/bath.jpg",
+    "Parents Room": "assets/content/locations/bedroom-parents.jpg",
+    "Office": "assets/content/locations/office.jpg",
+    "Garden": "assets/content/locations/garden.jpg",
+    "Street": "assets/content/locations/street.jpg",
+    "Park": "assets/content/locations/park.jpg",
+    "Central Park": "assets/content/locations/park.jpg",
+    "Cafe": "assets/content/locations/cafe.jpg",
+    "City Cafe": "assets/content/locations/cafe.jpg",
+    "School": "assets/content/locations/school.jpg",
+    "School Entrance": "assets/content/locations/school.jpg",
+    "Bar": "assets/content/locations/bar.jpg",
+    "Restaurant": "assets/content/locations/restaurant.jpg",
+    "Gym": "assets/content/locations/gym.jpg",
+    "Mall": "assets/content/locations/mall.jpg",
+    "Shopping Mall": "assets/content/locations/mall.jpg",
+    "Beach": "assets/content/locations/beach.jpg",
+    "castle": "assets/content/locations/castle.jpg",
+    "Downtown": "assets/content/locations/downtown.jpg",
+    "Upper Hall": "assets/content/locations/hallway.jpg",
+    "Downstairs": "assets/content/locations/stairs.jpg",
+    "Wardrobe": "assets/content/locations/wardrobe.jpg"
+}>>

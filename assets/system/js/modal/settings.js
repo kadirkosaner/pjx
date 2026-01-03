@@ -224,8 +224,8 @@ window.SettingsInit = function (API) {
 
                                 <h3 style="margin-top: 2rem;">Volume Settings</h3>
                                 <div class="settings-list" style="display: grid; gap: 20px; padding: 10px;">
-                                    <div class="settings-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div class="settings-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; align-items: stretch;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                             <div>
                                                 <div style="font-weight: 500; margin-bottom: 4px;">Master Volume</div>
                                                 <div style="font-size: 0.8rem; color: #777;">Global volume for all sounds</div>
@@ -242,8 +242,8 @@ window.SettingsInit = function (API) {
                                         </div>
                                     </div>
 
-                                    <div class="settings-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div class="settings-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; align-items: stretch;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                             <div>
                                                 <div style="font-weight: 500; margin-bottom: 4px;">Video Volume</div>
                                                 <div style="font-size: 0.8rem; color: #777;">Volume for video playback only</div>

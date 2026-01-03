@@ -1,4 +1,3 @@
-:: CharacterInteraction
 <<nobr>>
 /* Safety check - ensure we have a valid character */
 <<if !$interactingChar || !$characters[$interactingChar]>>

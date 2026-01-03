@@ -1,0 +1,170 @@
+/* ============================================
+   UI/BUTTONS.CSS
+   Passage links, button variants
+   ============================================ */
+
+/*#region PASSAGE LINKS & BUTTONS */
+.passage a.link-internal {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid transparent;
+}
+
+.passage a.link-internal:hover {
+  color: #f472b6;
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.passage a.link-internal:active {
+  color: #db2777;
+}
+
+.passage a.btn-style {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid var(--color-border-secondary);
+  color: var(--color-text-tertiary);
+  padding: 0.8rem var(--spacing-lg);
+  text-decoration: none;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  margin: var(--spacing-xs);
+}
+
+.passage a.btn-style:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.btn-pink {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+.btn-pink:hover {
+  border-color: #f472b6 !important;
+  color: #f472b6 !important;
+  background: rgba(236, 72, 153, 0.1) !important;
+}
+
+.btn-blue {
+  border-color: #3b82f6 !important;
+  color: #3b82f6 !important;
+}
+
+.btn-blue:hover {
+  border-color: #60a5fa !important;
+  color: #60a5fa !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+}
+
+.btn-green {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.btn-green:hover {
+  border-color: #34d399 !important;
+  color: #34d399 !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+}
+
+.btn-red {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.btn-red:hover {
+  border-color: #f87171 !important;
+  color: #f87171 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+.btn-yellow {
+  border-color: #f59e0b !important;
+  color: #f59e0b !important;
+}
+
+.btn-yellow:hover {
+  border-color: #fbbf24 !important;
+  color: #fbbf24 !important;
+  background: rgba(245, 158, 11, 0.1) !important;
+}
+
+.btn-purple {
+  border-color: #8b5cf6 !important;
+  color: #8b5cf6 !important;
+}
+
+.btn-purple:hover {
+  border-color: #a78bfa !important;
+  color: #a78bfa !important;
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+/*#endregion */
+
+/* ================== BUTTON VARIANTS =================== */
+/* Button variants */
+.btn-danger,
+button.btn-danger,
+.passage .btn-danger,
+.modal .btn-danger {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #fff !important;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+.btn-accent,
+button.btn-accent,
+.passage .btn-accent,
+.modal .btn-accent {
+  background-color: #ec4899 !important;
+  border-color: #ec4899 !important;
+  color: #fff !important;
+}
+
+.btn-accent:hover {
+  background-color: #db2777 !important;
+  border-color: #db2777 !important;
+}
+
+.btn-primary,
+button.btn-primary,
+.passage .btn-primary,
+.modal .btn-primary {
+  background-color: #ec4899 !important;
+  border-color: #ec4899 !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover {
+  background-color: #db2777 !important;
+  border-color: #db2777 !important;
+}
+
+.btn-secondary,
+button.btn-secondary,
+.passage .btn-secondary,
+.modal .btn-secondary {
+  background-color: transparent !important;
+  border: 1px solid var(--color-border-secondary) !important;
+  color: var(--color-text-secondary) !important;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg-tertiary) !important;
+  color: var(--color-text-primary) !important;
+}

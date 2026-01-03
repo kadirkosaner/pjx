@@ -38,51 +38,51 @@ window.SystemModules = {
 
 // CSS Module Configuration - Load order matters!
 window.SystemCSS = {
-    // Core - MUST load first (variables before everything)
-    core: [
-        'variables',
-        'reset',
-        'layout'
+    // Base - Variables, reset, body styles (MUST load first)
+    base: [
+        'variables',    // CSS custom properties (:root)
+        'reset'         // Body, links, scrollbars
     ],
 
-    // Components - UI building blocks
-    components: [
-        'buttons',
-        'modals',
-        'navigation',
-        'sidebar',
-        'tabs',
-        'forms',
-        'tooltips'
+    // Layout - Page structure, topbar, rightbar, passages
+    layout: [
+        'structure',    // #passages, .page-wrapper, body states
+        'topbar',       // Top navigation bar
+        'rightbar',     // Right sidebar + stats
+        'mainmenu'      // Main menu sliding panel
     ],
 
-    // Features - Game systems
-    features: [
-        'wardrobe',
-        'map',
-        'relations',
-        'profile',
-        'character',
-        'saveload'
+    // UI - Reusable components
+    ui: [
+        'buttons',      // All button variants
+        'modals',       // Modal/overlay system
+        'tabs',         // Tab navigation
+        'forms',        // Inputs, selects, sliders
+        'navigation'    // Navigation cards (hover accordion)
     ],
 
-    // Pages - Full page layouts
-    pages: [
-        'welcome',
-        'startscreen',
-        'settings'
+    // Screens - Full page layouts
+    screens: [
+        'welcome',      // Seductive landing + age modal
+        'startscreen',  // Start screen with logo
+        'gamesetup'     // Game setup accordion
     ],
 
-    // Utilities - Load last (animations, responsive)
-    utilities: [
-        'animations',
-        'responsive'
+    // Systems - Game feature modules
+    systems: [
+        'phone',        // Phone mockup + full overlay
+        'map',          // Map section + full modal
+        'wardrobe',     // Wardrobe system
+        'relations',    // Relations modal
+        'profile',      // Profile system
+        'character',    // Character interaction
+        'saveload'      // Save/load modal
     ],
 
-    // Existing - Legacy CSS files
-    existing: [
-        'dialog',
-        'debug',
-        'icons'
+    // Utils - Helpers (load last)
+    utils: [
+        'notifications', // Toast notifications
+        'tooltips',      // Tooltip popups
+        'animations'     // @keyframes
     ]
 };
