@@ -48,14 +48,43 @@ $(document).one(':storyready', async function () {
     };
 
     try {
-        // Load CSS
-        await loadCSS("assets/system/css/base.css");
-        await loadCSS("assets/system/css/dialog.css");
-        await loadCSS("assets/system/css/debug.css");
-        await loadCSS("assets/system/css/icons.css");
-
-        // Load config first
+        // Load config first (defines SystemCSS and SystemModules)
         await loadJS("assets/system/js/config.js");
+
+        // Load CSS modules in order
+        console.log("[Loader] Loading CSS modules...");
+
+        // Core CSS (variables, base, layout)
+        for (const cssFile of window.SystemCSS.core) {
+            await loadCSS(`assets/system/css/${cssFile}.css`);
+        }
+
+        // Component CSS
+        for (const cssFile of window.SystemCSS.components) {
+            await loadCSS(`assets/system/css/${cssFile}.css`);
+        }
+
+        // Feature CSS
+        for (const cssFile of window.SystemCSS.features) {
+            await loadCSS(`assets/system/css/${cssFile}.css`);
+        }
+
+        // Page CSS
+        for (const cssFile of window.SystemCSS.pages) {
+            await loadCSS(`assets/system/css/${cssFile}.css`);
+        }
+
+        // Responsive CSS
+        for (const cssFile of window.SystemCSS.responsive) {
+            await loadCSS(`assets/system/css/${cssFile}.css`);
+        }
+
+        // Legacy CSS (dialog, debug, icons)
+        for (const cssFile of window.SystemCSS.legacy) {
+            await loadCSS(`assets/system/css/${cssFile}.css`);
+        }
+
+        console.log("[Loader] All CSS modules loaded");
 
         // Collect all module names for auto-init
         const allModules = [];
