@@ -1,0 +1,249 @@
+/*#region COMMON COMPONENTS */
+/* Close Button */
+.close-btn {
+  width: 35px;
+  height: 35px;
+  background: transparent;
+  border: 1px solid var(--color-border-secondary);
+  color: var(--color-text-tertiary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.close-btn:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Back Button */
+.back-btn {
+  width: 35px;
+  height: 35px;
+  background: transparent;
+  border: 1px solid var(--color-border-secondary);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.back-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: var(--color-border-secondary);
+  color: var(--color-border-secondary);
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+}
+
+.overlay.active {
+  display: flex;
+}
+
+.map-overlay {
+  display: none !important;
+}
+
+.map-overlay.active {
+  display: flex !important;
+}
+
+[style*="visibility: hidden"] {
+  pointer-events: none !important;
+}
+
+.overlay-dark {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.overlay-medium {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Modal Container */
+.modal {
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: inherit;
+}
+
+/* Modal Header */
+.modal-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg-primary);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Modal Content */
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-lg);
+  min-height: 0;
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/* Preview Container */
+.preview-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  overflow: visible;
+  padding: 0;
+  margin: 0;
+}
+
+.preview-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.preview-container:hover .preview-content {
+  transform: scale(1.2);
+}
+
+/*#endregion */
+
+/*#region GLOBAL AVATAR STYLES */
+/* ================== UNIFIED AVATAR STYLES =================== */
+.character-avatar,
+.character-card-inner .character-avatar,
+.relations-avatar,
+.relations-profile-avatar,
+.map-resident-card .resident-avatar,
+.message-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-bg-tertiary);
+  position: relative;
+}
+
+/* ALL AVATAR IMAGES - CRITICAL FIX */
+.character-avatar img,
+.character-card-inner .character-avatar img,
+.relations-avatar img,
+.relations-profile-avatar img,
+.map-resident-card .resident-avatar img,
+.message-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ✅ Resmi tamamen kapla */
+  object-position: center; /* ✅ Resmi ortala */
+  display: block; /* ✅ Alt boşluğu kaldır */
+}
+
+/* Specific Avatar Sizes */
+.character-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 0.75rem;
+  border: 2px solid var(--color-border-secondary);
+}
+
+.character-card-inner .character-avatar {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 0.5rem;
+  border: 2px solid var(--color-border-secondary);
+  transition: border-color var(--transition-fast);
+}
+
+.relations-avatar {
+  width: 80px;
+  height: 80px;
+}
+
+.relations-profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.map-resident-card .resident-avatar {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.message-avatar {
+  width: 35px;
+  height: 35px;
+  background: linear-gradient(135deg, var(--color-border-primary), #2a2a2a);
+  flex-shrink: 0;
+}
+
+/*#endregion */

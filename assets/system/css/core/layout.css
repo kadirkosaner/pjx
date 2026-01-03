@@ -1,0 +1,25 @@
+/*#region SUGARCUBE STYLES */
+#passages {
+  position: fixed;
+  top: var(--topbar-offset);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  text-align: left;
+  padding: var(--spacing-xl);
+  padding-right: calc(var(--rightbar-width) + var(--spacing-xl));
+  z-index: 10;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#passages::-webkit-scrollbar {
+  display: none;
+}
+
+#story {
+  text-align: left;
+}
+
+/*#endregion */

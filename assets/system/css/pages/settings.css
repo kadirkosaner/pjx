@@ -1,0 +1,501 @@
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.setup-accordion-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.setup-accordion-header h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.setup-accordion-toggle {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+  background-color: var(--color-accent);
+}
+
+.setup-accordion-item.active .setup-accordion-toggle {
+  transform: rotate(180deg);
+}
+
+.setup-accordion-content {
+  max-height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  /* No transition - instant open/close */
+}
+
+.setup-accordion-item.active .setup-accordion-content {
+  max-height: none !important;
+  padding: 1.5rem !important;
+}
+
+.setup-accordion-body {
+  padding: 0;
+  border-top: none;
+}
+
+.form-input-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-input-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.form-input-group input[type="\u0022text\u0022"] {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+}
+
+.form-input-group input[type="\u0022text\u0022"]:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.settings-info-note {
+  background: rgba(236, 72, 153, 0.1);
+  border-left: 3px solid var(--color-accent);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.settings-select {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.settings-select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* ==========================================
+   GLOBAL UI COMPONENTS
+========================================== */
+
+/* Page Layout */
+.page-wrapper {
+  padding-top: 3rem;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+/* Section Headers */
+.section-title {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+/* Setting Item Components */
+.setting-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.setting-description {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+}
+
+.setting-info-icon {
+  font-size: 0.9em;
+  opacity: 0.7;
+  cursor: help;
+}
+
+/* Flex Utilities */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Spacing Utilities */
+.mt-1 {
+  margin-top: 0.5rem;
+}
+.mt-2 {
+  margin-top: 1rem;
+}
+.mt-3 {
+  margin-top: 1.5rem;
+}
+.mt-4 {
+  margin-top: 2rem;
+}
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+.mb-2 {
+  margin-bottom: 1rem;
+}
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+.mb-4 {
+  margin-bottom: 2rem;
+}
+.gap-1 {
+  gap: 0.5rem;
+}
+.gap-2 {
+  gap: 1rem;
+}
+.gap-3 {
+  gap: 1.5rem;
+}
+
+/* Centered Layout - Used for game setup screens */
+.game-setup-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+body.layout-centered .top-bar-wrapper {
+  right: 0;
+}
+
+body.layout-centered .right-bar {
+  display: none;
+}
+
+/* NO TOPBAR MODE - Full screen without topbar space */
+body.no-topbar .top-bar-wrapper {
+  display: none !important;
+}
+
+/* TOPBAR HIDDEN - Page centered, no top offset */
+body.topbar-hidden .top-bar-wrapper {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+body.topbar-hidden .top-bar-wrapper .center-section {
+  display: none !important;
+}
+
+/* Center page content when topbar and rightbar are hidden */
+body.topbar-hidden .page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+body.topbar-hidden .game-setup-container {
+  max-width: 900px;
+  width: 100%;
+}
+
+/* NO RIGHTBAR MODE */
+body.no-rightbar .right-bar {
+  display: none !important;
+}
+
+/* FULLSCREEN CENTERED - For welcome page etc */
+body.fullscreen-centered {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.fullscreen-centered .top-bar-wrapper {
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  right: auto !important;
+  display: block !important;
+}
+
+body.fullscreen-centered .top-bar-wrapper .center-section {
+  display: none !important;
+}
+
+body.fullscreen-centered .right-bar {
+  display: none !important;
+}
+
+/* FULLSCREEN LAYOUT - When hideTopbar AND hideRightbar are true */
+body.fullscreen-layout {
+  /* Remove any topbar offset */
+}
+
+body.fullscreen-layout .top-bar-wrapper {
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  right: auto !important;
+}
+
+body.fullscreen-layout .top-bar-wrapper .center-section {
+  display: none !important;
+}
+
+body.fullscreen-layout .right-bar {
+  display: none !important;
+}
+
+body.fullscreen-layout .page-wrapper {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+body.fullscreen-layout .game-setup-container {
+  max-width: 900px;
+  width: 100%;
+}
+
+/* ===========================
+   INFO CARD COMPONENT
+   Reusable card for displaying info
+=========================== */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.info-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.info-card-header {
+  background: var(--color-bg-tertiary);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.info-card-header .icon {
+  width: 18px;
+  height: 18px;
+  background-color: var(--color-accent);
+}
+
+.info-card-body {
+  padding: 0.5rem 0;
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.info-line:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.info-key {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.info-val {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+.status-on,
+.status-badge.status-on {
+  background-color: #ec4899 !important;
+  color: #fff !important;
+}
+
+.status-off,
+.status-badge.status-off {
+  background-color: transparent !important;
+  color: var(--color-text-tertiary) !important;
+  border: 1px solid var(--color-border-secondary);
+}
+
+/* Button variants */
+.btn-danger,
+button.btn-danger,
+.passage .btn-danger,
+.modal .btn-danger {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #fff !important;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+.btn-accent,
+button.btn-accent,
+.passage .btn-accent,
+.modal .btn-accent {
+  background-color: #ec4899 !important;
+  border-color: #ec4899 !important;
+  color: #fff !important;
+}
+
+.btn-accent:hover {
+  background-color: #db2777 !important;
+  border-color: #db2777 !important;
+}
+
+.btn-primary,
+button.btn-primary,
+.passage .btn-primary,
+.modal .btn-primary {
+  background-color: #ec4899 !important;
+  border-color: #ec4899 !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover {
+  background-color: #db2777 !important;
+  border-color: #db2777 !important;
+}
+
+.btn-secondary,
+button.btn-secondary,
+.passage .btn-secondary,
+.modal .btn-secondary {
+  background-color: transparent !important;
+  border: 1px solid var(--color-border-secondary) !important;
+  color: var(--color-text-secondary) !important;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg-tertiary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* ==========================================
+   SETTINGS PAGE STYLES (New)
+   For character creation & system toggles
+========================================== */
+
+/* Visual Description Label */
+.visual-label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Visual Grid (Images) */
+.visual-grid {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.visual-option {
+  width: 80px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.visual-img {
+  width: 80px;
+  height: 100px;
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.visual-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visual-option:hover .visual-img {
+  border-color: var(--color-text-secondary);
+}
+

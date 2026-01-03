@@ -1,0 +1,64 @@
+/**
+ * Main Stylesheet - Modular CSS Architecture
+ *
+ * This file imports all CSS modules in the correct order.
+ * Order is important - variables must load first, then base styles,
+ * then components, features, pages, and finally responsive overrides.
+ *
+ * Total Split Structure:
+ * - Core: Variables, Base, Layout (559 lines)
+ * - Components: Common, Navigation, Sidebar, UI (1740 lines)
+ * - Features: Map, Character, Wardrobe, Profile, Relations, SaveLoad (2363 lines)
+ * - Pages: Settings, GameStart (1337 lines)
+ * - Responsive: Media Queries (42 lines)
+ *
+ * Total: ~6041 lines (original: 6135 lines)
+ */
+
+/* ==========================================
+   CORE - Foundation
+   ========================================== */
+@import url('core/variables.css');  /* CSS Custom Properties */
+@import url('core/base.css');       /* Body, Animations, Backgrounds */
+@import url('core/layout.css');     /* SugarCube Layout (#passages, #story) */
+
+/* ==========================================
+   COMPONENTS - Reusable UI Elements
+   ========================================== */
+@import url('components/common.css');      /* Buttons, Modals, Avatars */
+@import url('components/navigation.css');  /* Top Bar, Main Menu */
+@import url('components/sidebar.css');     /* Right Bar, Phone Mockup */
+@import url('components/ui.css');          /* Tooltips, Notifications, Video */
+
+/* ==========================================
+   FEATURES - Complex Systems
+   ========================================== */
+@import url('features/map.css');          /* Map System, Location Cards */
+@import url('features/character.css');    /* Character Interaction */
+@import url('features/wardrobe.css');     /* Wardrobe System */
+@import url('features/profile.css');      /* Profile & Traits */
+@import url('features/relations.css');    /* Relations System */
+@import url('features/saveload.css');     /* Save/Load Screens */
+
+/* ==========================================
+   PAGES - Full Screen Layouts
+   ========================================== */
+@import url('pages/settings.css');    /* Settings, Game Setup, Accordions */
+@import url('pages/gamestart.css');   /* Welcome, Age Verification */
+
+/* ==========================================
+   RESPONSIVE - Media Queries
+   ========================================== */
+@import url('responsive/media-queries.css');
+
+/**
+ * Loading Order Explanation:
+ *
+ * 1. Variables - Loaded first so all modules can use CSS custom properties
+ * 2. Base - Body, resets, global animations
+ * 3. Layout - SugarCube specific positioning
+ * 4. Components - Small, reusable UI pieces
+ * 5. Features - Large, complex systems
+ * 6. Pages - Full screen layouts
+ * 7. Responsive - Media queries override everything when needed
+ */
