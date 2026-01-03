@@ -48,27 +48,67 @@ $(document).one(':storyready', async function () {
     };
 
     try {
-        // Load CSS
-        await loadCSS("assets/system/css/base.css");
-        await loadCSS("assets/system/css/dialog.css");
-        await loadCSS("assets/system/css/debug.css");
-        await loadCSS("assets/system/css/icons.css");
+        // Load config first to get module definitions
+        await loadJS("assets/system/config.js");
 
-        // Load config first
-        await loadJS("assets/system/js/config.js");
+        // Load CSS modules from config
+        const cssBase = "assets/system/css/";
+        
+        // Core CSS - MUST load first
+        for (const module of window.SystemCSS.core) {
+            await loadCSS(`${cssBase}core/${module}.css`);
+        }
+
+        // Components CSS
+        for (const module of window.SystemCSS.components) {
+            await loadCSS(`${cssBase}components/${module}.css`);
+        }
+
+        // Features CSS
+        for (const module of window.SystemCSS.features) {
+            await loadCSS(`${cssBase}features/${module}.css`);
+        }
+
+        // Pages CSS
+        for (const module of window.SystemCSS.pages) {
+            await loadCSS(`${cssBase}pages/${module}.css`);
+        }
+
+        // Utilities CSS - Load last
+        for (const module of window.SystemCSS.utilities) {
+            await loadCSS(`${cssBase}utilities/${module}.css`);
+        }
+
+        // Existing CSS files
+        for (const module of window.SystemCSS.existing) {
+            await loadCSS(`${cssBase}${module}.css`);
+        }
+
 
         // Collect all module names for auto-init
         const allModules = [];
 
-        // Load macros
-        for (const macro of window.SystemModules.macros) {
-            await loadJS(`assets/system/js/macros/${macro}.js`);
-            allModules.push(macro);
+        // Load utils first (base systems)
+        for (const module of window.SystemModules.utils) {
+            await loadJS(`assets/system/js/utils/${module}.js`);
+            allModules.push(module);
         }
 
-        // Load core modules
-        for (const module of window.SystemModules.core) {
-            await loadJS(`assets/system/js/module/${module}.js`);
+        // Load UI modules
+        for (const module of window.SystemModules.ui) {
+            await loadJS(`assets/system/js/ui/${module}.js`);
+            allModules.push(module);
+        }
+
+        // Load modal modules
+        for (const module of window.SystemModules.modal) {
+            await loadJS(`assets/system/js/modal/${module}.js`);
+            allModules.push(module);
+        }
+
+        // Load system modules
+        for (const module of window.SystemModules.system) {
+            await loadJS(`assets/system/js/system/${module}.js`);
             allModules.push(module);
         }
 

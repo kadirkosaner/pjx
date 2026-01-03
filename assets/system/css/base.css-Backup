@@ -172,7 +172,6 @@ body[data-location]::after {
 
 .map-overlay {
   display: none !important;
-  z-index: 200;
 }
 
 .map-overlay.active {
@@ -993,7 +992,12 @@ body.startscreen-active #passages {
   background: transparent;
 }
 
-/* NOTE: .phone-empty-text defined below in Phone Empty State section */
+.phone-empty-text {
+  font-size: 0.65rem;
+  color: var(--color-text-tertiary);
+  text-align: left;
+  padding-top: 0;
+}
 
 .message-item {
   display: flex;
@@ -1361,9 +1365,24 @@ body.startscreen-active #passages {
   display: block;
 }
 
-/* NOTE: .map-overlay z-index moved to base definition */
+.map-overlay {
+  z-index: 200;
+}
 
-/* NOTE: .map-full, .map-full-content defined in MAP SYSTEM region below */
+.map-full {
+  width: 90%;
+  max-width: 1200px;
+  height: 85vh;
+}
+
+.map-full-content {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
 
 .map-image-full {
   max-width: 100%;
@@ -1757,7 +1776,9 @@ body.startscreen-active #passages {
   display: block;
 }
 
-/* NOTE: .tab-content-inner defined in SETTINGS & TABS section below */
+.tab-content-inner {
+  padding: var(--spacing-lg);
+}
 
 /*#endregion */
 
@@ -2700,7 +2721,14 @@ body.startscreen-active #passages {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* NOTE: .map-full-content defined above and overridden in map location section */
+.map-full-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
 
 .map-container {
   width: 100%;
@@ -3569,6 +3597,17 @@ body.startscreen-active #passages {
   flex-direction: column;
 }
 
+/* Force full width on SugarCube's passage container for wardrobe */
+/* LOGIC FIX: Enforcing NO TOP OFFSET for all fullscreen pages */
+body.fullscreen-centered #passages {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    position: static !important; /* Forces natural flow, removing fixed layout gap */
+    top: auto !important; /* Removes 180px top gap */
+    height: auto !important;
+    overflow: visible !important;
+}
 
 /* Conditional Logic not needed as we enforce static above, but kept for safety */
 body.topbar-hidden #passages {
@@ -3683,7 +3722,7 @@ body.wardrobe-active .passage {
   background-color: #fff;
 }
 
-/* Main Grid Layout - extends base from .wardrobe-header, .wardrobe-main above */
+/* Main Grid Layout */
 .wardrobe-main {
   display: grid;
   grid-template-columns: 200px 1fr 260px; /* Match header: narrower left, wider middle */
@@ -4703,15 +4742,21 @@ body.wardrobe-active .passage {
 .game-setup-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding-top: 2rem;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border-primary);
   border-radius: 12px;
-  /* Flex layout from restored settings page */
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  padding: 2rem;
+}
+
+/* ==========================================
+   GAME SETUP PAGE LAYOUT
+========================================== */
+
+.game-setup-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 .page-title {
@@ -4864,7 +4909,18 @@ body.wardrobe-active .passage {
   padding-top: 3rem;
 }
 
-/* NOTE: .page-title and .page-subtitle defined above in GAME SETUP section */
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
 
 /* Section Headers */
 .section-title {
@@ -4946,6 +5002,10 @@ body.wardrobe-active .passage {
 }
 
 /* Centered Layout - Used for game setup screens */
+.game-setup-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
 body.layout-centered .top-bar-wrapper {
   right: 0;
@@ -4991,7 +5051,27 @@ body.no-rightbar .right-bar {
 }
 
 /* FULLSCREEN CENTERED - For welcome page etc */
-/* NOTE: body.fullscreen-centered defined in GAME START & FULLSCREEN LAYOUT section below (Logic Fix) */
+body.fullscreen-centered {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.fullscreen-centered .top-bar-wrapper {
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  right: auto !important;
+  display: block !important;
+}
+
+body.fullscreen-centered .top-bar-wrapper .center-section {
+  display: none !important;
+}
+
+body.fullscreen-centered .right-bar {
+  display: none !important;
+}
 
 /* FULLSCREEN LAYOUT - When hideTopbar AND hideRightbar are true */
 body.fullscreen-layout {
@@ -5169,9 +5249,50 @@ button.btn-secondary,
    For character creation & system toggles
 ========================================== */
 
-/* NOTE: visual-label, visual-grid defined below in Settings Page Visual Components section */
+/* Visual Description Label */
+.visual-label {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
-/* Visual & Color Grid Styles - Main definitions in Settings Page Visual Components section below */
+/* Visual Grid (Images) */
+.visual-grid {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.visual-option {
+  width: 80px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.visual-img {
+  width: 80px;
+  height: 100px;
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.visual-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 .visual-option:hover .visual-img {
   border-color: var(--color-text-secondary);
@@ -5182,9 +5303,43 @@ button.btn-secondary,
   box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
 }
 
+.visual-name {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* Color Grid */
+.color-grid {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 50px;
+  cursor: pointer;
+}
+
+.color-swatch {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--color-border-primary);
+  border-radius: 50%;
+  margin-bottom: 0.4rem;
+  transition: all var(--transition-fast);
+}
+
 .color-option.selected .color-swatch {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
+}
+
+.color-name {
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--color-text-tertiary);
 }
 
 /* Toggle Grid */
@@ -5277,7 +5432,20 @@ button.btn-secondary,
   margin-top: 0.2rem;
 }
 
-/* NOTE: .sim-group-title defined above in Simulation Grid section */
+.sim-group-title {
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 1.5rem 0 0.75rem 0;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--color-border-primary);
+  grid-column: 1 / -1;
+}
+
+.sim-group-title:first-child {
+  margin-top: 0;
+}
 
 /* Note Box */
 .note-box {
@@ -5297,9 +5465,50 @@ button.btn-secondary,
 
 /* ==========================================
    CONFIRMATION PAGE STYLES
-   NOTE: info-grid, info-card, info-card-header, info-card-body, info-line 
-   are defined above in INFO CARD COMPONENT section
 ========================================== */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.info-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.info-card-header {
+  background: var(--color-bg-tertiary);
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-card-body {
+  padding: 1.5rem;
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+
+.info-line:last-child {
+  border-bottom: none;
+}
 
 .info-line .label {
   font-size: 0.85rem;
@@ -5325,14 +5534,16 @@ button.btn-secondary,
   margin-top: 2rem;
 }
 
-
 /* ========================================================================
    MODULE: GAME START & FULLSCREEN LAYOUT (Migrated)
    ======================================================================== */
 
-/* HAMBURGER MENU STABILITY FIX: Ensure button is ALWAYS fixed and on top, even if topbar is hidden */
+/* --- HAMBURGER MENU STABILITY STABILIZER --- */
+/* Removed fixed override to allow button to follow Topbar grid flow */
+/* --- HAMBURGER MENU STABILITY STABILIZER --- */
+/* Fix: Ensure button is ALWAYS fixed and on top, even if topbar is hidden */
 #ui-bar-toggle,
-.mainmenu-btn { /* NOTE: Override for stability */
+.mainmenu-btn {
     pointer-events: auto;
     z-index: 1500;
     position: fixed !important; /* Force sticky behavior */
@@ -5343,7 +5554,22 @@ button.btn-secondary,
     height: 45px;
 }
 
-/* NOTE: .top-bar-wrapper base styles defined in TOP BAR region above. Context overrides below. */
+/* Ensure wrapper spans full width and centers content perfectly */
+/* Ensure wrapper spans full width and centers content perfectly */
+.top-bar-wrapper {
+    position: fixed !important;
+    z-index: 1400; /* Base z-index for topbar */
+    top: 20px !important; /* Fix: Add space from top as requested */
+    left: 0; 
+    right: 0 !important; /* Force full width, but use padding to constrain */
+    height: 90px; /* Explicit height to reserve space if needed */
+    pointer-events: none; /* Let clicks pass through empty areas */
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
+    align-items: center !important;
+    /* Fix: Add right padding to compensate for sidebar, effectively shifting center LEFT */
+    padding: 0 var(--rightbar-width) 0 var(--spacing-xl) !important; 
+}
 
 .top-bar-wrapper .left-section,
 .top-bar-wrapper .center-section,
@@ -5590,7 +5816,7 @@ body.fullscreen-centered .page-wrapper > div {
     top: 0; left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 4000;
+    z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5615,7 +5841,7 @@ body.fullscreen-centered .page-wrapper > div {
 
 .age-modal-content {
     position: relative;
-    z-index: 4001;
+    z-index: 10001;
     background: #0a0a0a;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0;
@@ -5716,7 +5942,12 @@ body.fullscreen-centered .page-wrapper > div {
 }
 
 /* --- SETTINGS PAGE LAYOUT (Restored) --- */
-/* NOTE: game-setup-container flex styles moved to main definition in GAME SETUP & ACCORDION STYLES */
+.game-setup-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 
 .settings-section {
     background: var(--color-bg-secondary);
@@ -5750,9 +5981,46 @@ body.fullscreen-centered .page-wrapper > div {
     background: var(--color-bg-secondary);
     border-top: 1px solid var(--color-border-primary);
 }
-/* NOTE: form-grid-2, form-input-group defined above in GAME SETUP section */
 
-/* NOTE: setup-accordion-toggle defined above in GAME SETUP section */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+@media (max-width: 600px) {
+    .form-grid-2 { grid-template-columns: 1fr; }
+}
+
+.form-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.form-input-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+.form-input-group input[type="text"] {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-secondary);
+    color: var(--color-text-primary);
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+.form-input-group input[type="text"]:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.1);
+}
+
+.setup-accordion-toggle {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+    transition: transform 0.3s;
+}
 
 /* Warning Section */
 .warning-section { margin-bottom: 1.5rem; }
@@ -5782,57 +6050,6 @@ body.fullscreen-centered .page-wrapper > div {
   gap: 0.75rem;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
-}
-
-.visual-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 2rem; 
-  width: 100%; 
-}
-
-.visual-option { 
-  cursor: pointer; 
-  border: 1px solid var(--color-border-secondary); 
-  border-radius: 8px; 
-  padding: 0.5rem; 
-  transition: all 0.2s; 
-  background: var(--color-bg-secondary); 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 0.5rem; 
-}
-
-.visual-option:hover { 
-  border-color: var(--color-text-tertiary); 
-  transform: translateY(-2px); 
-}
-
-.visual-option.selected { 
-  border-color: var(--color-accent); 
-  background: rgba(236, 72, 153, 0.1); 
-}
-
-.visual-img { 
-  width: 100%; 
-  aspect-ratio: 1; 
-  border-radius: 6px; 
-  overflow: hidden; 
-  background: #000; 
-}
-
-.visual-img img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-}
-
-.visual-name { 
-  font-size: 0.75rem; 
-  color: var(--color-text-secondary); 
-  font-weight: 500; 
 }
 
 .color-option {
@@ -5885,4 +6102,34 @@ body.fullscreen-centered .page-wrapper > div {
   line-height: 1.2;
 }
 
+.visual-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Slightly wider items */
+    gap: 0.5rem; /* Adjusted: Balanced separation */
+    margin-bottom: 2rem; 
+    width: 100%; 
+}
+.visual-option { cursor: pointer; border: 1px solid var(--color-border-secondary); border-radius: 8px; padding: 0.5rem; transition: all 0.2s; background: var(--color-bg-secondary); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.visual-option:hover { border-color: var(--color-text-tertiary); transform: translateY(-2px); }
+.visual-option.selected { border-color: var(--color-accent); background: rgba(236, 72, 153, 0.1); }
+.visual-img { width: 100%; aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: #000; }
+.visual-img img { width: 100%; height: 100%; object-fit: cover; }
+.visual-name { font-size: 0.75rem; color: var(--color-text-secondary); font-weight: 500; }
+
+.note-box { background: rgba(255, 193, 7, 0.1); border-left: 3px solid #ffc107; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #e0e0e0; display: flex; align-items: center; gap: 0.75rem; border-radius: 0 4px 4px 0; }
+.note-box.warning { background: rgba(236, 72, 153, 0.1); border-color: var(--color-accent); }
+
+.sim-grid { display: grid; gap: 1rem; }
+.sim-group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-tertiary); margin: 1.5rem 0 0.5rem 0; padding-bottom: 0.25rem; border-bottom: 1px solid var(--color-border-primary); }
+.sim-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--color-bg-tertiary); border: 1px solid var(--color-border-secondary); border-radius: 8px; transition: all 0.2s; }
+.sim-item:hover { border-color: var(--color-text-tertiary); }
+.sim-label { font-weight: 500; font-size: 0.95rem; color: var(--color-text-primary); margin-bottom: 0.2rem; }
+.sim-desc { font-size: 0.75rem; color: var(--color-text-tertiary); }
+.setting-toggle-btn { background: transparent; border: 1px solid var(--color-border-secondary); color: var(--color-text-tertiary); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; min-width: 60px; }
+.setting-toggle-btn.active { background: var(--color-accent); border-color: var(--color-accent); color: #000; }
+
+/* Page Title & Subtitle */
+.page-title { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; color: var(--color-text-primary); margin-top: 0; }
+.page-subtitle { text-align: center; color: var(--color-text-tertiary); margin-bottom: 2rem; font-size: 0.9rem; }
+.setup-header-line { width: 60px; height: 2px; background: var(--color-accent); margin: 0 auto 1rem auto; }
 

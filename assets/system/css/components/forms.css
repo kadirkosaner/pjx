@@ -1,0 +1,306 @@
+/* Forms - Game Setup, Accordions */
+   GAME SETUP & ACCORDION STYLES
+========================================== */
+
+.game-setup-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 12px;
+  /* Flex layout from restored settings page */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.page-subtitle {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.setup-header-line {
+  width: 60px;
+  height: 2px;
+  background: var(--color-accent);
+  margin: 0 auto 1rem auto;
+}
+
+/* ==========================================
+   GAME SETUP PAGE ACCORDION
+   (Welcome page styles moved to gamestart.css)
+========================================== */
+
+.setup-accordion-item {
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-bg-secondary);
+}
+
+.setup-accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.setup-accordion-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.setup-accordion-header h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.setup-accordion-toggle {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+  background-color: var(--color-accent);
+}
+
+.setup-accordion-item.active .setup-accordion-toggle {
+  transform: rotate(180deg);
+}
+
+.setup-accordion-content {
+  max-height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  /* No transition - instant open/close */
+}
+
+.setup-accordion-item.active .setup-accordion-content {
+  max-height: none !important;
+  padding: 1.5rem !important;
+}
+
+.setup-accordion-body {
+  padding: 0;
+  border-top: none;
+}
+
+.form-input-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-input-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.form-input-group input[type="\u0022text\u0022"] {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+}
+
+.form-input-group input[type="\u0022text\u0022"]:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.settings-info-note {
+  background: rgba(236, 72, 153, 0.1);
+  border-left: 3px solid var(--color-accent);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.settings-select {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.settings-select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* ==========================================
+   GLOBAL UI COMPONENTS
+========================================== */
+
+/* Page Layout */
+.page-wrapper {
+  padding-top: 3rem;
+}
+
+/* NOTE: .page-title and .page-subtitle defined above in GAME SETUP section */
+
+/* Section Headers */
+.section-title {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+/* Setting Item Components */
+.setting-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.setting-description {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+}
+
+.setting-info-icon {
+  font-size: 0.9em;
+  opacity: 0.7;
+  cursor: help;
+}
+
+/* Flex Utilities */
+.flex-center {
+
+
+/* CUSTOM VOLUME SLIDER */
+/*#region CUSTOM VOLUME SLIDER */
+.custom-slider-container {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.custom-slider-container input[type="range"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.custom-slider-track {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  cursor: pointer;
+  overflow: visible;
+}
+
+.custom-slider-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
+  border-radius: 3px;
+  transition: width 0.08s ease-out;
+  pointer-events: none;
+}
+
+.custom-slider-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: #ec4899;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: grab;
+  transition: all 0.15s ease;
+  z-index: 10;
+}
+
+.custom-slider-track:hover .custom-slider-thumb {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
+}
+
+.custom-slider-thumb.dragging {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.custom-slider-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.15s ease;
+  z-index: 100;
+}
+
+.custom-slider-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.85);
+}
+
+.custom-slider-thumb:hover .custom-slider-tooltip,
+.custom-slider-thumb.dragging .custom-slider-tooltip {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/*#endregion */
+
