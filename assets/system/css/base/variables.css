@@ -8,7 +8,7 @@
   --topbar-offset: 180px;
   --rightbar-width: 350px;
 
-  /* Colors */
+  /* Colors - Base */
   --color-bg-primary: #0a0a0a;
   --color-bg-secondary: #0f0f0f;
   --color-bg-tertiary: #1a1a1a;
@@ -17,7 +17,33 @@
   --color-text-primary: #e0e0e0;
   --color-text-secondary: #999;
   --color-text-tertiary: #666;
+  
+  /* Colors - Accent (Pink) */
   --color-accent: #ec4899;
+  --color-accent-hover: #f472b6;
+  --color-accent-darken: #db2777;
+  
+  /* Colors - Alpha Values */
+  --color-accent-alpha-10: rgba(236, 72, 153, 0.1);
+  --color-accent-alpha-20: rgba(236, 72, 153, 0.2);
+  --color-accent-alpha-30: rgba(236, 72, 153, 0.3);
+  --color-accent-alpha-90: rgba(236, 72, 153, 0.9);
+  --white-alpha-02: rgba(255, 255, 255, 0.02);
+  --white-alpha-03: rgba(255, 255, 255, 0.03);
+  --white-alpha-05: rgba(255, 255, 255, 0.05);
+  --white-alpha-08: rgba(255, 255, 255, 0.08);
+  --white-alpha-10: rgba(255, 255, 255, 0.1);
+
+  /* Z-Index Hierarchy */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-overlay: 200;
+  --z-modal-base: 1000;
+  --z-age-verification: 4000;
+  --z-modal: 10000;
+  --z-modal-saveload: 15000;
+  --z-modal-prompt: 20000;
+  --z-notification: 30000;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -25,6 +51,12 @@
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
+  --spacing-2xl: 2.5rem;
+
+  /* Border */
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 3px;
 
   /* Border Radius */
   --radius-sm: 4px;

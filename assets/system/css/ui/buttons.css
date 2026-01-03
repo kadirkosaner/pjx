@@ -44,69 +44,69 @@
 }
 
 .btn-pink {
-  border-color: var(--color-accent) !important;
-  color: var(--color-accent) !important;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .btn-pink:hover {
-  border-color: #f472b6 !important;
-  color: #f472b6 !important;
-  background: rgba(236, 72, 153, 0.1) !important;
+  border-color: var(--color-accent-hover);
+  color: var(--color-accent-hover);
+  background: var(--color-accent-alpha-10);
 }
 
 .btn-blue {
-  border-color: #3b82f6 !important;
-  color: #3b82f6 !important;
+  border-color: #3b82f6;
+  color: #3b82f6;
 }
 
 .btn-blue:hover {
-  border-color: #60a5fa !important;
-  color: #60a5fa !important;
-  background: rgba(59, 130, 246, 0.1) !important;
+  border-color: #60a5fa;
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.1);
 }
 
 .btn-green {
-  border-color: #10b981 !important;
-  color: #10b981 !important;
+  border-color: #10b981;
+  color: #10b981;
 }
 
 .btn-green:hover {
-  border-color: #34d399 !important;
-  color: #34d399 !important;
-  background: rgba(16, 185, 129, 0.1) !important;
+  border-color: #34d399;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.1);
 }
 
 .btn-red {
-  border-color: #ef4444 !important;
-  color: #ef4444 !important;
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
 .btn-red:hover {
-  border-color: #f87171 !important;
-  color: #f87171 !important;
-  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: #f87171;
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .btn-yellow {
-  border-color: #f59e0b !important;
-  color: #f59e0b !important;
+  border-color: #f59e0b;
+  color: #f59e0b;
 }
 
 .btn-yellow:hover {
-  border-color: #fbbf24 !important;
-  color: #fbbf24 !important;
-  background: rgba(245, 158, 11, 0.1) !important;
+  border-color: #fbbf24;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.1);
 }
 
 .btn-purple {
-  border-color: #8b5cf6 !important;
-  color: #8b5cf6 !important;
+  border-color: #8b5cf6;
+  color: #8b5cf6;
 }
 
 .btn-purple:hover {
-  border-color: #a78bfa !important;
-  color: #a78bfa !important;
-  background: rgba(139, 92, 246, 0.1) !important;
+  border-color: #a78bfa;
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.1);
 }
 
 /*#endregion */
@@ -117,54 +117,46 @@
 button.btn-danger,
 .passage .btn-danger,
 .modal .btn-danger {
-  background-color: #ef4444 !important;
-  border-color: #ef4444 !important;
-  color: #fff !important;
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
 }
 
 .btn-danger:hover {
-  background-color: #dc2626 !important;
-  border-color: #dc2626 !important;
+  background-color: #dc2626;
+  border-color: #dc2626;
 }
 
+/* Consolidated: btn-accent and btn-primary are identical */
 .btn-accent,
-button.btn-accent,
-.passage .btn-accent,
-.modal .btn-accent {
-  background-color: #ec4899 !important;
-  border-color: #ec4899 !important;
-  color: #fff !important;
-}
-
-.btn-accent:hover {
-  background-color: #db2777 !important;
-  border-color: #db2777 !important;
-}
-
 .btn-primary,
+button.btn-accent,
 button.btn-primary,
+.passage .btn-accent,
 .passage .btn-primary,
+.modal .btn-accent,
 .modal .btn-primary {
-  background-color: #ec4899 !important;
-  border-color: #ec4899 !important;
-  color: #fff !important;
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
 }
 
+.btn-accent:hover,
 .btn-primary:hover {
-  background-color: #db2777 !important;
-  border-color: #db2777 !important;
+  background-color: var(--color-accent-darken);
+  border-color: var(--color-accent-darken);
 }
 
 .btn-secondary,
 button.btn-secondary,
 .passage .btn-secondary,
 .modal .btn-secondary {
-  background-color: transparent !important;
-  border: 1px solid var(--color-border-secondary) !important;
-  color: var(--color-text-secondary) !important;
+  background-color: transparent;
+  border: 1px solid var(--color-border-secondary);
+  color: var(--color-text-secondary);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-bg-tertiary) !important;
-  color: var(--color-text-primary) !important;
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
 }

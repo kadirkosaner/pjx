@@ -24,7 +24,7 @@
 .close-btn:hover {
   border-color: var(--color-text-primary);
   color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--white-alpha-03);
 }
 
 /* Back Button */
@@ -47,7 +47,7 @@
 .back-btn:hover {
   border-color: var(--color-text-primary);
   color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--white-alpha-03);
 }
 
 .back-btn:disabled {
@@ -216,12 +216,12 @@
 
 /* ==========================================
    CONFIRMATION & PROMPT OVERLAYS
-   Higher z-index than saveload (15000)
+   Higher z-index than saveload
 ========================================== */
 #confirmation-overlay,
 #prompt-overlay,
 #save-title-overlay {
-  z-index: 20000 !important;
+  z-index: var(--z-modal-prompt);
 }
 
 /* ==========================================
@@ -233,44 +233,37 @@
 #saveload-overlay,
 #prompt-overlay,
 .modal-overlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  display: flex !important;
-  align-items: flex-start !important;
-  justify-content: center !important;
-  padding: 0 !important;
-  padding-top: 10vh !important;
-  padding-right: var(--rightbar-width) !important; /* Center relative to content */
-  padding-bottom: 10vh !important;
-  background: rgba(0, 0, 0, 0.8) !important;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10vh var(--rightbar-width) 10vh 0;
+  background: rgba(0, 0, 0, 0.8);
 }
 
-/* Override padding for mobile or fullscreen if needed (handled by media queries usually) */
+/* Override padding for mobile or fullscreen */
 body.topbar-hidden .modal-overlay, 
 body.fullscreen-layout .modal-overlay,
 body.fullscreen-centered .modal-overlay {
-    padding-right: 0 !important;
+  padding-right: 0;
 }
 
 .modal-overlay .modal {
-  max-height: 80vh !important;
+  max-height: 80vh;
 }
 
-/* FORCE Z-INDEX HIERARCHY (FINAL) */
-#saveload-overlay { z-index: 15000 !important; }
-#confirmation-overlay { z-index: 20000 !important; }
-#save-title-overlay { z-index: 20000 !important; }
-#prompt-overlay { z-index: 20000 !important; }
+/* FORCE Z-INDEX HIERARCHY */
+#saveload-overlay { z-index: var(--z-modal-saveload); }
+#confirmation-overlay { z-index: var(--z-modal-prompt); }
+#save-title-overlay { z-index: var(--z-modal-prompt); }
+#prompt-overlay { z-index: var(--z-modal-prompt); }
 
 /* ================== JOURNAL MODAL OVERRIDE =================== */
 #journal-modal {
-  max-width: 1000px !important;
-  width: 90% !important;
+  max-width: 1000px;
+  width: 90%;
 }
-
 
 /* ==========================================
    FORCE SPECIFIC MODAL WIDTHS (FINAL)
@@ -280,12 +273,12 @@ body.fullscreen-centered .modal-overlay {
 .modal-overlay[data-modal="stats-modal"] .modal,
 .modal-overlay[data-modal="journal-modal"] .modal,
 .modal-overlay[data-modal="settings-modal"] .modal {
-  max-width: 1000px !important;
-  width: 90% !important;
+  max-width: 1000px;
+  width: 90%;
 }
 
 .modal-overlay[data-modal="relations-modal"] .modal {
-  max-width: 1200px !important;
-  width: 95% !important;
+  max-width: 1200px;
+  width: 95%;
 }
 

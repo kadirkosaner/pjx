@@ -388,8 +388,8 @@ body.wardrobe-active .passage {
   color: #f97316;
 }
 .style-tag.provocative {
-  background: rgba(236, 72, 153, 0.2);
-  color: #ec4899;
+  background: var(--color-accent-alpha-20);
+  color: var(--color-accent);
 }
 
 /* Quick Outfits */

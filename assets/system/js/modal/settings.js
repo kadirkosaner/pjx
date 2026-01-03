@@ -6,8 +6,40 @@ window.SettingsInit = function (API) {
         // Open settings modal
         open: function () {
             const vars = this.API.State.variables;
-            // Use State.variables for reliable settings
             const settings = vars.videoSettings || { autoplaySet: true, loopSet: true, masterVolume: 100, videoVolume: 100 };
+
+            // Content settings data
+            const contentSettings = [
+                { key: 'maleSexual', label: 'Male Sexual Content', desc: 'Scenes with men' },
+                { key: 'femaleSexual', label: 'Female Sexual Content', desc: 'Scenes with women' },
+                { key: 'futaTrans', label: 'Trans/Futa Content', desc: 'Characters with both characteristics' },
+                { key: 'pregnancy', label: 'Pregnancy Content', desc: 'Risk of getting pregnant' },
+                { key: 'incest', label: 'Incest Content', desc: 'Family relations' },
+                { key: 'ntr', label: 'NTR / Cheating', desc: 'Betrayal content' },
+                { key: 'bdsm', label: 'BDSM Content', desc: 'Bondage and dominance' },
+                { key: 'nonConsensual', label: 'Non-Consensual Content', desc: 'Forced interactions' },
+                { key: 'publicExhibition', label: 'Public Exhibition', desc: 'Being seen in public' },
+                { key: 'lactation', label: 'Lactation Content', desc: 'Breast milk production' },
+                { key: 'feet', label: 'Foot Fetish', desc: 'Focus on feet' },
+                { key: 'watersports', label: 'Watersports', desc: 'Urine related content' },
+                { key: 'scat', label: 'Scat Content', desc: 'Feces related content' },
+                { key: 'goreViolence', label: 'Gore / Violence', desc: 'Blood and injury' }
+            ];
+
+            // Generate content controls HTML
+            const contentControlsHTML = contentSettings.map(s => `
+                <div class="settings-control">
+                    <div class="settings-control-info">
+                        <div class="settings-control-label">${s.label}</div>
+                        <div class="settings-control-desc">${s.desc}</div>
+                    </div>
+                    <button class="setting-toggle-btn ${vars.contentPreferences?.[s.key] !== false ? 'active' : ''}" 
+                            data-setting="${s.key}"
+                            data-category="content">
+                        ${vars.contentPreferences?.[s.key] !== false ? 'ON' : 'OFF'}
+                    </button>
+                </div>
+            `).join('');
 
             this.API.Modal.create({
                 id: 'settings-modal',
@@ -20,174 +52,8 @@ window.SettingsInit = function (API) {
                         content: `
                             <div class="tab-content-inner">
                                 <h3>Content Preferences</h3>
-                                <div class="settings-list" style="display: grid; gap: 20px; padding: 10px;">
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Male Sexual Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Scenes with men</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.maleSexual !== false ? 'active' : ''}" 
-                                                data-setting="maleSexual"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.maleSexual !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Female Sexual Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Scenes with women</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.femaleSexual !== false ? 'active' : ''}" 
-                                                data-setting="femaleSexual"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.femaleSexual !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Trans/Futa Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Characters with both characteristics</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.futaTrans !== false ? 'active' : ''}" 
-                                                data-setting="futaTrans"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.futaTrans !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Pregnancy Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Risk of getting pregnant</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.pregnancy !== false ? 'active' : ''}" 
-                                                data-setting="pregnancy"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.pregnancy !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Incest Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Family relations</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.incest !== false ? 'active' : ''}" 
-                                                data-setting="incest"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.incest !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">NTR / Cheating</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Betrayal content</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.ntr !== false ? 'active' : ''}" 
-                                                data-setting="ntr"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.ntr !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">BDSM Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Bondage and dominance</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.bdsm !== false ? 'active' : ''}" 
-                                                data-setting="bdsm"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.bdsm !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Non-Consensual Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Forced interactions</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.nonConsensual !== false ? 'active' : ''}" 
-                                                data-setting="nonConsensual"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.nonConsensual !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Public Exhibition</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Being seen in public</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.publicExhibition !== false ? 'active' : ''}" 
-                                                data-setting="publicExhibition"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.publicExhibition !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Lactation Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Breast milk production</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.lactation !== false ? 'active' : ''}" 
-                                                data-setting="lactation"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.lactation !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Foot Fetish</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Focus on feet</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.feet !== false ? 'active' : ''}" 
-                                                data-setting="feet"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.feet !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Watersports</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Urine related content</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.watersports !== false ? 'active' : ''}" 
-                                                data-setting="watersports"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.watersports !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Scat Content</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Feces related content</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.scat !== false ? 'active' : ''}" 
-                                                data-setting="scat"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.scat !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
-
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Gore / Violence</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Blood and injury</div>
-                                        </div>
-                                        <button class="setting-toggle-btn ${vars.contentPreferences?.goreViolence !== false ? 'active' : ''}" 
-                                                data-setting="goreViolence"
-                                                data-category="content">
-                                            ${vars.contentPreferences?.goreViolence !== false ? 'ON' : 'OFF'}
-                                        </button>
-                                    </div>
+                                <div class="settings-list">
+                                    ${contentControlsHTML}
                                 </div>
                             </div>
                         `
@@ -198,11 +64,11 @@ window.SettingsInit = function (API) {
                         content: `
                             <div class="tab-content-inner">
                                 <h3>Video Settings</h3>
-                                <div class="settings-list" style="display: grid; gap: 20px; padding: 10px;">
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Video Autoplay</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Automatically play videos in passages</div>
+                                <div class="settings-list">
+                                    <div class="settings-control">
+                                        <div class="settings-control-info">
+                                            <div class="settings-control-label">Video Autoplay</div>
+                                            <div class="settings-control-desc">Automatically play videos in passages</div>
                                         </div>
                                         <button class="setting-toggle-btn ${settings.autoplaySet ? 'active' : ''}" 
                                                 data-setting="autoplaySet">
@@ -210,10 +76,10 @@ window.SettingsInit = function (API) {
                                         </button>
                                     </div>
 
-                                    <div class="settings-control" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
-                                        <div>
-                                            <div style="font-weight: 500; margin-bottom: 4px;">Video Loop</div>
-                                            <div style="font-size: 0.8rem; color: #777;">Automatically repeat videos when they end</div>
+                                    <div class="settings-control">
+                                        <div class="settings-control-info">
+                                            <div class="settings-control-label">Video Loop</div>
+                                            <div class="settings-control-desc">Automatically repeat videos when they end</div>
                                         </div>
                                         <button class="setting-toggle-btn ${settings.loopSet ? 'active' : ''}" 
                                                 data-setting="loopSet">
@@ -223,14 +89,14 @@ window.SettingsInit = function (API) {
                                 </div>
 
                                 <h3 style="margin-top: 2rem;">Volume Settings</h3>
-                                <div class="settings-list" style="display: grid; gap: 20px; padding: 10px;">
-                                    <div class="settings-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; align-items: stretch;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                            <div>
-                                                <div style="font-weight: 500; margin-bottom: 4px;">Master Volume</div>
-                                                <div style="font-size: 0.8rem; color: #777;">Global volume for all sounds</div>
+                                <div class="settings-list">
+                                    <div class="volume-control-wrapper">
+                                        <div class="volume-control-header">
+                                            <div class="volume-control-info">
+                                                <div class="volume-control-label">Master Volume</div>
+                                                <div class="volume-control-desc">Global volume for all sounds</div>
                                             </div>
-                                            <span class="volume-value" data-volume="masterVolume" style="font-size: 1rem; font-weight: 600; color: #ec4899; min-width: 50px; text-align: right;">${settings.masterVolume !== undefined ? settings.masterVolume : 100}%</span>
+                                            <span class="volume-value" data-volume="masterVolume">${settings.masterVolume !== undefined ? settings.masterVolume : 100}%</span>
                                         </div>
                                         <div class="custom-slider-container" data-slider="masterVolume">
                                             <div class="custom-slider-track">
@@ -242,13 +108,13 @@ window.SettingsInit = function (API) {
                                         </div>
                                     </div>
 
-                                    <div class="settings-control" style="display: flex; flex-direction: column; gap: 10px; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; align-items: stretch;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                            <div>
-                                                <div style="font-weight: 500; margin-bottom: 4px;">Video Volume</div>
-                                                <div style="font-size: 0.8rem; color: #777;">Volume for video playback only</div>
+                                    <div class="volume-control-wrapper">
+                                        <div class="volume-control-header">
+                                            <div class="volume-control-info">
+                                                <div class="volume-control-label">Video Volume</div>
+                                                <div class="volume-control-desc">Volume for video playback only</div>
                                             </div>
-                                            <span class="volume-value" data-volume="videoVolume" style="font-size: 1rem; font-weight: 600; color: #ec4899; min-width: 50px; text-align: right;">${settings.videoVolume !== undefined ? settings.videoVolume : 100}%</span>
+                                            <span class="volume-value" data-volume="videoVolume">${settings.videoVolume !== undefined ? settings.videoVolume : 100}%</span>
                                         </div>
                                         <div class="custom-slider-container" data-slider="videoVolume">
                                             <div class="custom-slider-track">
@@ -266,7 +132,6 @@ window.SettingsInit = function (API) {
                 ]
             });
 
-            // Set up event listeners with delay to ensure DOM is ready
             setTimeout(() => {
                 this.initEvents();
             }, 100);
@@ -276,7 +141,6 @@ window.SettingsInit = function (API) {
             const self = this;
             console.log('[Settings] Initializing toggle events');
 
-            // Unbind first to prevent multiple listeners
             $(document).off('click.settings-toggle', '.setting-toggle-btn');
             $(document).on('click.settings-toggle', '.setting-toggle-btn', function (e) {
                 e.preventDefault();
@@ -286,7 +150,6 @@ window.SettingsInit = function (API) {
                 self.toggleSetting(key);
             });
 
-            // Custom slider interactions
             this.initCustomSliders();
 
             console.log('[Settings] Event listeners attached. Found buttons:', $('.setting-toggle-btn').length);
@@ -306,28 +169,21 @@ window.SettingsInit = function (API) {
 
                 let isDragging = false;
 
-                // Update slider position
                 const updateSlider = (clientX) => {
                     const trackRect = track[0].getBoundingClientRect();
                     const trackWidth = trackRect.width;
                     let position = clientX - trackRect.left;
 
-                    // Clamp between 0 and trackWidth
                     position = Math.max(0, Math.min(position, trackWidth));
-
-                    // Calculate percentage
                     const percentage = Math.round((position / trackWidth) * 100);
 
-                    // Update visuals
                     fill.css('width', percentage + '%');
                     thumb.css('left', percentage + '%');
                     tooltip.text(percentage + '%');
 
-                    // Update setting
                     self.updateVolume(sliderKey, percentage);
                 };
 
-                // Track click - jump to position
                 track.on('mousedown', function (e) {
                     if (e.target === thumb[0] || thumb.has(e.target).length) return;
                     updateSlider(e.clientX);
@@ -335,20 +191,17 @@ window.SettingsInit = function (API) {
                     thumb.addClass('dragging');
                 });
 
-                // Thumb drag start
                 thumb.on('mousedown', function (e) {
                     e.preventDefault();
                     isDragging = true;
                     thumb.addClass('dragging');
                 });
 
-                // Document mouse move - drag
                 $(document).on('mousemove.slider-' + sliderKey, function (e) {
                     if (!isDragging) return;
                     updateSlider(e.clientX);
                 });
 
-                // Document mouse up - stop dragging
                 $(document).on('mouseup.slider-' + sliderKey, function () {
                     if (isDragging) {
                         isDragging = false;
@@ -358,18 +211,14 @@ window.SettingsInit = function (API) {
             });
         },
 
-        // Toggle a specific setting
         toggleSetting: function (key) {
             console.log('[Settings] toggleSetting called for:', key);
 
             const vars = this.API.State.variables;
-            
-            // Determine which settings object to use
             const btn = $(`.setting-toggle-btn[data-setting="${key}"]`);
             const category = btn.data('category');
             
             if (category === 'content') {
-                // Content Preferences
                 if (!vars.contentPreferences) {
                     vars.contentPreferences = { incest: true, romantic: true, sexual: true, gore: true, violence: true, scat: false };
                 }
@@ -377,11 +226,9 @@ window.SettingsInit = function (API) {
                 const settings = vars.contentPreferences;
                 console.log('[Settings] Current value:', settings[key]);
                 
-                // Toggle the value
                 settings[key] = !settings[key];
                 console.log('[Settings] New value:', settings[key]);
                 
-                // Re-render button state
                 if (btn.length) {
                     const isActive = settings[key];
                     btn.toggleClass('active', isActive);
@@ -391,7 +238,6 @@ window.SettingsInit = function (API) {
                 
                 console.log(`[Settings] ${key} final value: ${settings[key]}`);
             } else {
-                // Video Settings (default)
                 if (!vars.videoSettings) {
                     vars.videoSettings = { autoplaySet: true, loopSet: true, masterVolume: 100, videoVolume: 100 };
                 }
@@ -399,11 +245,9 @@ window.SettingsInit = function (API) {
                 const settings = vars.videoSettings;
                 console.log('[Settings] Current value:', settings[key]);
                 
-                // Toggle the value
                 settings[key] = !settings[key];
                 console.log('[Settings] New value:', settings[key]);
                 
-                // Re-render button state
                 if (btn.length) {
                     const isActive = settings[key];
                     btn.toggleClass('active', isActive);
@@ -415,11 +259,9 @@ window.SettingsInit = function (API) {
             }
         },
 
-        // Update volume setting
         updateVolume: function (key, value) {
             console.log('[Settings] updateVolume called for:', key, 'value:', value);
 
-            // Use State.variables for reliable settings
             const vars = this.API.State.variables;
             if (!vars.videoSettings) {
                 vars.videoSettings = { autoplaySet: true, loopSet: true, masterVolume: 100, videoVolume: 100 };
@@ -428,7 +270,6 @@ window.SettingsInit = function (API) {
             const settings = vars.videoSettings;
             settings[key] = value;
 
-            // Update displayed percentage
             $(`.volume-value[data-volume="${key}"]`).text(value + '%');
 
             console.log(`[Settings] ${key} updated to: ${value}%`);

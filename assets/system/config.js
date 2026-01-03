@@ -58,7 +58,8 @@ window.SystemCSS = {
         'modals',       // Modal/overlay system
         'tabs',         // Tab navigation
         'forms',        // Inputs, selects, sliders
-        'navigation'    // Navigation cards (hover accordion)
+        'navigation',   // Navigation cards (hover accordion)
+        'settings'      // Settings modal controls
     ],
 
     // Screens - Full page layouts
@@ -83,6 +84,7 @@ window.SystemCSS = {
     utils: [
         'notifications', // Toast notifications
         'tooltips',      // Tooltip popups
-        'animations'     // @keyframes
+        'animations',    // @keyframes
+        'utilities'      // Utility classes (flex, spacing, text, etc.)
     ]
 };
