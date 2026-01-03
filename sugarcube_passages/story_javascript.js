@@ -51,38 +51,45 @@ $(document).one(':storyready', async function () {
         // Load config first to get module definitions
         await loadJS("assets/system/config.js");
 
-        // Load CSS modules from config
+        // Load CSS - SAFE MIGRATION STRATEGY
+        // base.css is the source of truth, split files are loaded AFTER
+        // As split progresses, styles are removed from base.css
+        
+        // 1. Load base.css (main source of truth)
+        await loadCSS("assets/system/css/base.css");
+
+        // 2. Load split CSS files (will override base.css as migration progresses)
         const cssBase = "assets/system/css/";
         
-        // Core CSS - MUST load first
+        // Core CSS
         for (const module of window.SystemCSS.core) {
-            await loadCSS(`${cssBase}core/${module}.css`);
+            try { await loadCSS(`${cssBase}core/${module}.css`); } catch (e) { }
         }
 
         // Components CSS
         for (const module of window.SystemCSS.components) {
-            await loadCSS(`${cssBase}components/${module}.css`);
+            try { await loadCSS(`${cssBase}components/${module}.css`); } catch (e) { }
         }
 
         // Features CSS
         for (const module of window.SystemCSS.features) {
-            await loadCSS(`${cssBase}features/${module}.css`);
+            try { await loadCSS(`${cssBase}features/${module}.css`); } catch (e) { }
         }
 
         // Pages CSS
         for (const module of window.SystemCSS.pages) {
-            await loadCSS(`${cssBase}pages/${module}.css`);
+            try { await loadCSS(`${cssBase}pages/${module}.css`); } catch (e) { }
         }
 
         // Utilities CSS - Load last
         for (const module of window.SystemCSS.utilities) {
-            await loadCSS(`${cssBase}utilities/${module}.css`);
+            try { await loadCSS(`${cssBase}utilities/${module}.css`); } catch (e) { }
         }
 
-        // Existing CSS files
-        for (const module of window.SystemCSS.existing) {
-            await loadCSS(`${cssBase}${module}.css`);
-        }
+        // 3. Existing CSS files
+        await loadCSS("assets/system/css/dialog.css");
+        await loadCSS("assets/system/css/debug.css");
+        await loadCSS("assets/system/css/icons.css");
 
 
         // Collect all module names for auto-init
